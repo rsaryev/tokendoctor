@@ -15,7 +15,9 @@ env -u CLAUDECODE -u CLAUDE_CODE_ENTRYPOINT -u CLAUDE_CODE_SESSION_ID -u CLAUDE_
   asciinema rec --headless --window-size 110x36 --overwrite \
     -c "expect site/scripts/record-demo.exp $PWD" site/scripts/demo.raw.cast
 python3 site/scripts/polish-cast.py site/scripts/demo.raw.cast site/public/demo.cast
-agg --theme monokai --font-size 16 site/public/demo.cast demo.gif   # optional, for the README
+# The README GIF, black ground and the landing player's palette:
+agg --theme 0a0a0a,e6e6e6,1a1a1a,ef7a6d,8bd49c,e7c97a,8fb6e8,c3a6f0,7fd0d6,cfcfcf,6b6b6b,f39185,a3e0b1,f0d897,a9c8f0,d3bdf5,9adde2,ffffff \
+  --font-size 14 --speed 1.25 --fps-cap 15 --last-frame-duration 4 site/public/demo.cast docs/demo.gif
 ```
 
 `record-demo.exp` starts `claude --model sonnet` in the folder it is given, types
