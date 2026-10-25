@@ -33,7 +33,7 @@ export function HomePage() {
         </p>
         <InstallCommand commands={INSTALL} />
         <p className="hero-under">
-          Claude Code plugin · 31 checks · runs locally · <a href={DOCS_URL}>Read the docs</a>
+          Claude Code plugin · 31 checks · a status line that warns before limits run out · runs locally · <a href={DOCS_URL}>Read the docs</a>
         </p>
       </div>
       <div id="demo" className="hero-demo">

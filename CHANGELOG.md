@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.1
+
+- A compact status line, no bar: `Opus 5.5 · api main* · 120k/367k · cache 1h · 5h 51% · week 35% · $24`.
+  Tokens are shown against where Claude Code actually compacts (the window less about 33K), coloured
+  from half full. `cache 1h` is how long the prompt cache stays warm, `cache cold in 3m` in its last
+  minutes, `cache cold, resend 350k` once cold. A limit adds `→ 100% in 48m` only when, at the recent
+  pace (5h: the last hour, week: the last day; kept in `~/.claude/tokendoctor/pace.log`), it runs out
+  before it resets.
+- The `no-statusline` fix sets `refreshInterval: 30` so the countdowns move while you are idle.
+
 ## 0.4.0
 
 - `/tokendoctor:optimize`: an agent that measures, proposes and applies setting changes through five
