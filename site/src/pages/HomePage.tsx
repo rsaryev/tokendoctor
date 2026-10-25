@@ -27,22 +27,22 @@ export function HomePage() {
           ))}
         </h1>
         <p className="hero-lede">
-          An audit for your Claude Code setup. It finds the settings that cost you money or silently
-          do nothing, and fixes them only after showing you the exact change. No hooks, and about 46
-          tokens added to a session.
+          See where your Claude Code tokens actually go, fix the settings that waste them, and watch
+          the trend. It reads your local session logs, audits your setup against the docs, and changes
+          a setting only after you approve the exact diff.
         </p>
         <InstallCommand commands={INSTALL} />
         <p className="hero-under">
-          Claude Code plugin · 27 checks · <a href={DOCS_URL}>Read the docs</a>
+          Claude Code plugin · 31 checks · runs locally · <a href={DOCS_URL}>Read the docs</a>
         </p>
       </div>
       <div id="demo" className="hero-demo">
         <DemoFilm />
         <p className="demo-caption">
           <span>
-            <code>/tokendoctor:audit</code> on a config with real mistakes
+            <code>/tokendoctor:sessions</code> and <code>/tokendoctor:audit</code> on a real setup
           </span>
-          <span>Recorded from its output</span>
+          <span>Recorded live with asciinema</span>
         </p>
       </div>
     </section>

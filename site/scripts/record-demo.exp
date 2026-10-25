@@ -1,0 +1,16 @@
+set timeout 400
+set send_human {.06 .12 1 .03 .25}
+proc wait {n} { expect -timeout $n eof {} timeout {} }
+cd [lindex $argv 0]
+spawn claude --model sonnet
+wait 6
+send -h "/tokendoctor:sessions 30"
+wait 1
+send "\r"
+wait 80
+send "!"
+wait 1
+send -h "tokendoctor-sessions --by day --days 10"
+wait 1
+send "\r"
+wait 25

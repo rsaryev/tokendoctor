@@ -1,9 +1,9 @@
 # tokendoctor
 
-> tokendoctor is a Claude Code plugin that audits a setup for settings that waste tokens or
-> silently do nothing, and applies fixes only after showing the exact change. It checks
-> configuration against documented Claude Code behaviour with 27 rules; it does not measure
-> savings. It adds no hooks and no MCP servers, and about 46 tokens to a session.
+> tokendoctor is a Claude Code plugin that shows where tokens actually go (from local session
+> transcripts, with a daily trend), audits a setup with 31 checks tied to the Claude Code docs, and
+> changes a setting only after the person approves the exact diff. Everything runs locally; it reads
+> usage figures and file paths, never message text.
 
 ## Install
 
@@ -12,9 +12,11 @@
 
 ## Use
 
+- `/tokendoctor:sessions [days]` measures spend from local transcripts: main thread against subagents, spend with a very full context, subagent types, cache rebuilds. `tokendoctor-sessions --by day|week` shows the trend.
 - `/tokendoctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only.
+- `/tokendoctor:optimize [focus]` proposes setting changes backed by the measurements and applies the ones the person picks, each through a dialog that shows the change.
 - `/tokendoctor:apply <finding-id>` shows a dry run, asks for confirmation, then writes. An existing file is copied to `<file>.tokendoctor-<timestamp>.bak` first.
-- From a shell: `tokendoctor-audit [--project <dir>] [--json]` and `tokendoctor-apply <finding-id> [--scope user|project|local] [--write]`.
+- From a shell: `tokendoctor-sessions`, `tokendoctor-audit`, `tokendoctor-set`, `tokendoctor-apply`.
 
 ## Links
 

@@ -1,47 +1,36 @@
-import { useMemo, useRef } from 'react'
-import { useSession } from './useSession'
+import { useEffect, useRef } from 'react'
+import 'asciinema-player/dist/bundle/asciinema-player.css'
 
 /**
- * The product demo, the recorded audit, replayed in a terminal. A visitor can type /help into it to take over.
+ * The product demo: a real Claude Code session, recorded with asciinema and replayed as text, so
+ * it stays crisp, selectable and a few kilobytes. Waits for the model are trimmed in the file
+ * itself (scripts/polish-cast.py), with a pause after each answer to read it, so the player adds
+ * no idle limit of its own. The player loads in the browser only.
  */
 export function DemoFilm() {
   const root = useRef<HTMLDivElement>(null)
-  const screen = useRef<HTMLDivElement>(null)
-  const input = useRef<HTMLInputElement>(null)
-  const refs = useMemo(() => ({ root, screen, input }), [])
-  const session = useSession(refs)
 
-  return (
-    <div
-      ref={root}
-      className={`demo-film demo-term${session.busy ? ' is-busy' : ''}`}
-      onClick={session.focus}
-      aria-label="tokendoctor auditing a Claude Code setup, replayed from a recorded run"
-    >
-      <div ref={screen} className="screen" role="log" aria-live="off">
-        {session.lines.map((line) => (
-          <div key={line.id} className={`l ${line.kind}`}>
-            {line.text}
-          </div>
-        ))}
-        <label className="entry">
-          <span className="ps" aria-hidden="true">
-            ›
-          </span>
-          <input
-            ref={input}
-            type="text"
-            value={session.input}
-            onChange={session.onChange}
-            onKeyDown={session.onKeyDown}
-            autoComplete="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            enterKeyHint="send"
-            aria-label="Type /help"
-          />
-        </label>
-      </div>
-    </div>
-  )
+  useEffect(() => {
+    let player: { dispose: () => void } | undefined
+    let alive = true
+    void import('asciinema-player').then((AsciinemaPlayer) => {
+      if (!alive || !root.current) return
+      player = AsciinemaPlayer.create('/demo.cast', root.current, {
+        autoPlay: true,
+        loop: true,
+        preload: true,
+        fit: 'width',
+        speed: 1.25,
+        controls: 'auto',
+        theme: 'tokendoctor',
+        terminalFontFamily: "'Fragment Mono', ui-monospace, monospace",
+      })
+    })
+    return () => {
+      alive = false
+      player?.dispose()
+    }
+  }, [])
+
+  return <div ref={root} className="demo-film demo-cast" aria-label="tokendoctor in a real Claude Code session, recorded with asciinema" />
 }

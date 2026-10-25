@@ -174,3 +174,31 @@
   background: var(--landing-panel);
   color: var(--foreground);
 }
+
+/* The asciinema player in the film's frame, in the page's own ground and palette. */
+.demo-cast {
+  aspect-ratio: auto;
+}
+.demo-cast .ap-wrapper {
+  background: transparent;
+}
+.asciinema-player-theme-tokendoctor {
+  --term-color-foreground: #e6e6e6;
+  --term-color-background: #0f0f0f;
+  --term-color-0: #1a1a1a;
+  --term-color-1: #ef7a6d;
+  --term-color-2: #8bd49c;
+  --term-color-3: #e7c97a;
+  --term-color-4: #8fb6e8;
+  --term-color-5: #c3a6f0;
+  --term-color-6: #7fd0d6;
+  --term-color-7: #cfcfcf;
+  --term-color-8: #6b6b6b;
+  --term-color-9: #f39185;
+  --term-color-10: #a3e0b1;
+  --term-color-11: #f0d897;
+  --term-color-12: #a9c8f0;
+  --term-color-13: #d3bdf5;
+  --term-color-14: #9adde2;
+  --term-color-15: #ffffff;
+}
