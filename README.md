@@ -15,6 +15,8 @@ and changes a setting only after you approve the exact diff.
 
 Everything runs on your machine. It reads usage figures and file paths, never your messages.
 
+![tokendoctor in a real Claude Code session: /tokendoctor:sessions, then the daily trend](docs/demo.gif)
+
 ## Install
 
 ```bash
