@@ -1,21 +1,43 @@
-# tokendoctor
+<p align="center">
+  <img src="docs/logo.svg" width="72" height="72" alt="tokendoctor">
+</p>
 
-[tokendoctor.dev](https://tokendoctor.dev) · [Changelog](CHANGELOG.md)
+<h1 align="center">tokendoctor</h1>
 
-A Claude Code plugin that shows where your tokens actually go, finds the settings that waste them,
-and changes a setting only after you approve the exact diff.
+<p align="center">
+  <strong>See where your Claude Code tokens go, and stop wasting them</strong>
+</p>
 
-- **Measure.** `/tokendoctor:sessions` reads your local transcripts: main thread against subagents,
-  how much was spent with a very full context, which subagent types cost the most, cache rebuilds.
-  A background hook keeps daily totals, so `--by day` shows whether a change helped.
-- **Audit.** `/tokendoctor:audit` checks your settings against documented Claude Code behaviour
-  (31 checks), each finding linked to the docs page it rests on.
-- **Tune.** `/tokendoctor:optimize` proposes changes backed by your own numbers and applies the
-  ones you pick, through a dialog that shows each change.
+<p align="center">
+  A Claude Code plugin that measures your real spend, audits your setup against the docs, and changes a setting only after you approve the exact diff. Everything runs on your machine.
+</p>
 
-Everything runs on your machine. It reads usage figures and file paths, never your messages.
+<p align="center">
+  <a href="https://tokendoctor.dev">Website</a> ·
+  <a href="#install">Install</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
-![tokendoctor in a real Claude Code session: /tokendoctor:sessions, then the daily trend](docs/demo.gif)
+<p align="center">
+  <img src="docs/demo.gif" alt="tokendoctor in a real Claude Code session: /tokendoctor:sessions, then the daily trend" width="880">
+</p>
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <strong>Measure</strong><br>
+      <code>/tokendoctor:sessions</code> reads your local transcripts: main thread against subagents, spend with a very full context, cache rebuilds. A daily history shows whether a change helped.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Audit</strong><br>
+      <code>/tokendoctor:audit</code> runs 31 checks against documented Claude Code behaviour. Each finding links to the docs page it rests on.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Tune</strong><br>
+      <code>/tokendoctor:optimize</code> proposes changes backed by your own numbers and applies the ones you pick, each through a dialog that shows it.
+    </td>
+  </tr>
+</table>
 
 ## Install
 
@@ -24,20 +46,35 @@ claude plugin marketplace add rsaryev/tokendoctor
 claude plugin install tokendoctor@tokendoctor
 ```
 
-To try it for one session without installing, clone the repository and run
-`claude --plugin-dir /path/to/tokendoctor`.
-
-Update with `claude plugin marketplace update tokendoctor` and
-`claude plugin update tokendoctor@tokendoctor`, then restart Claude Code.
+Update with `claude plugin marketplace update tokendoctor` and `claude plugin update tokendoctor@tokendoctor`, then restart Claude Code. To try it without installing, clone the repository and run `claude --plugin-dir /path/to/tokendoctor`.
 
 ## Use
 
 | Command | What it does |
 | --- | --- |
-| `/tokendoctor:sessions [days]` | Read-only. Measures where tokens actually went in your local session transcripts (last 30 days by default): main thread against subagents, how much was spent with a very full context, which subagent types cost the most, cache rebuilds and their causes. Reads usage figures, timestamps, tool names and file paths, never message text. |
-| `/tokendoctor:audit` | Read-only. Lists findings by severity with a one-line explanation and a link to the documentation page each is based on. |
-| `/tokendoctor:optimize [focus]` | An agent that reads the metrics (this session, the daily trend, the audit), proposes up to five setting changes with the evidence for each, and applies the ones you pick. It can change any setting on [the tunable list](lib/tunables.mjs) — set or not — and any `/config` row, live where Claude Code allows it. Every change opens a dialog that shows it and runs only on **Apply**; with no one to ask (a `-p` run) nothing changes. Hooks and permissions are never on the list. |
-| `/tokendoctor:apply <finding-id>` | Shows a dry run of the fix, asks you to confirm, then writes it. An existing file is copied to `<file>.tokendoctor-<timestamp>.bak` first. |
+| `/tokendoctor:sessions [days]` | Where tokens went over the last 30 days (or `days`), with findings. Read-only. |
+| `/tokendoctor:audit` | Setting checks by severity, each linked to the docs. Read-only. |
+| `/tokendoctor:optimize [focus]` | Proposes up to five changes from your numbers and applies the ones you pick. |
+| `/tokendoctor:apply <finding-id>` | Applies one audit fix after a dry run, with a backup of the file. |
+
+`optimize` changes only settings on [the tunable list](lib/tunables.mjs) and `/config` rows. Every change opens a dialog that shows it and runs only on **Apply**; with no one to ask, as in a `-p` run, nothing changes. Hooks and permissions are never on the list.
+
+<details>
+<summary><strong>From a shell</strong></summary>
+
+The plugin's `bin/` directory is on the Bash tool's PATH while it is enabled:
+
+```bash
+tokendoctor-audit [--project <dir>] [--json]
+tokendoctor-sessions [--days <n>] [--project <dir>] [--by day|week] [--json]
+tokendoctor-set --list | <key> <value>|--unset [--scope user|project|local] [--write]
+tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
+```
+
+</details>
+
+<details>
+<summary><strong>What it costs to keep installed</strong></summary>
 
 The skills are user-invoked only (`disable-model-invocation`). `claude plugin details
 tokendoctor@tokendoctor` estimates about 160 tokens of always-on cost for the four of them. The
@@ -47,20 +84,12 @@ hook runs `tokendoctor-record` in the background when a session starts. The hook
 prints nothing, so it adds no tokens. It appends each finished day's totals to
 `~/.claude/tokendoctor/history.jsonl`, so the trend outlives Claude Code's transcript cleanup.
 
-The same commands run from a shell, because the plugin's `bin/` directory is on the Bash tool's PATH
-while it is enabled:
+</details>
 
-```bash
-tokendoctor-audit [--project <dir>] [--json]
-tokendoctor-sessions [--days <n>] [--project <dir>] [--by day|week] [--json]
-tokendoctor-set --list | <key> <value>|--unset [--scope user|project|local] [--write]
-tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
-```
+<details>
+<summary><strong>The 31 setting checks</strong></summary>
 
-## What it checks
-
-Errors are settings that are wrong or ignored, warnings are likely to cost real money, and info is
-worth a look. Rules that depend on a Claude Code release are skipped on older versions.
+Errors are settings that are wrong or ignored, warnings are likely to cost real money, and info is worth a look. Rules that depend on a Claude Code release are skipped on older versions.
 
 | Finding | Severity | What it catches |
 | --- | --- | --- |
@@ -103,7 +132,10 @@ or ship `settings.json` keys such as `autoCompactWindow`, `env` or `permissions`
 copies the template into `~/.claude/agents/` or `.claude/agents/` and edits your settings files
 itself, with a backup.
 
-`/tokendoctor:sessions` reports these from your transcripts:
+</details>
+
+<details>
+<summary><strong>What the session report finds</strong></summary>
 
 | Finding | Severity | What it catches |
 | --- | --- | --- |
@@ -113,7 +145,10 @@ itself, with a backup.
 | `idle-cache-rebuilds` | info | The prompt cache rebuilt after it expired during a break. |
 | `images-read-repeatedly` | info | The same image read three or more times. |
 
-## Limits
+</details>
+
+<details>
+<summary><strong>Limits</strong></summary>
 
 - It reads user, project and local settings files, `~/.claude.json` (only the MCP server names, to
   count them) and your skill and agent folders. It cannot see managed (organisation) settings.
@@ -125,7 +160,10 @@ itself, with a backup.
   applied, so the reports speak in shares, not dollars. Sessions on other machines and transcripts
   Claude Code has already cleaned up are not counted, except for days already in the history file.
 
-## Develop
+</details>
+
+<details>
+<summary><strong>Develop</strong></summary>
 
 ```bash
 npm test               # node's built-in test runner, no dependencies
@@ -141,3 +179,9 @@ Rules are pure functions over a snapshot (`lib/rules.mjs`); reading the disk liv
 `lib/collect.mjs` and writing in `lib/apply.mjs`. Adding a rule means adding one entry and its test.
 Session analysis is in `lib/sessions.mjs` and `lib/history.mjs`, the settings `tokendoctor-set` may
 change in `lib/tunables.mjs`, and the optimize tools in `hooks/register.ts`.
+
+</details>
+
+## License
+
+MIT
