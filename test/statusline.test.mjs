@@ -46,6 +46,22 @@ test('a cold cache is marked, and a full bar is capped at ten blocks', { skip: !
   assert.match(out, /cache 50% cold/)
 })
 
+test('rate limits show when present', { skip: !hasJq }, () => {
+  const out = render(payload({ rate_limits: { five_hour: { used_percentage: 7.4 }, seven_day: { used_percentage: 28 } } }), { CLAUDE_STATUSLINE_COMPACT_AT: '400000' })
+  assert.match(out, /cache 98%  5h 7%  7d 28%  \$10\.59$/)
+})
+
+test('the environment variable and per-model settings set the compaction point', { skip: !hasJq }, () => {
+  assert.match(render(payload(), { CLAUDE_CODE_AUTO_COMPACT_WINDOW: '250k' }), / 150k\/250k/)
+  writeFileSync(join(dir, 'config', 'settings.json'), JSON.stringify({ autoCompactWindow: 300000, modelSettings: { 'claude-sonnet-5-5': { autoCompactWindow: 500000 } } }))
+  assert.match(render(payload({ model: { id: 'claude-sonnet-5-5', display_name: 'Sonnet 5.5' } })), / 150k\/500k/)
+})
+
+test('right after /compact the count shows -- instead of a stale number', { skip: !hasJq }, () => {
+  const out = render(payload({ context_window: { total_input_tokens: 300000, context_window_size: 1000000, current_usage: null } }), { CLAUDE_STATUSLINE_COMPACT_AT: '400000' })
+  assert.match(out, /░{10} --\/400k/)
+})
+
 test('without a setting the bar falls back to the model window', { skip: !hasJq }, () => {
   assert.match(render(payload({ context_window: { total_input_tokens: 100000, context_window_size: 200000 } })), /█{5}░{5} 100k\/200k/)
 })

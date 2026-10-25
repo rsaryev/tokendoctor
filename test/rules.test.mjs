@@ -53,7 +53,7 @@ test('unset compact window warns and offers a user-level fix', () => {
   delete s.settings.user.autoCompactWindow
   const f = only(s, 'compact-window-unset')
   assert.equal(f.severity, 'warn')
-  assert.deepEqual(f.fixes[0].ops[0], { op: 'set', key: 'autoCompactWindow', value: 300000 })
+  assert.deepEqual(f.fixes[0].ops[0], { op: 'set', key: 'autoCompactWindow', value: 400000 })
 })
 
 test('a window set in modelSettings, the env var or settings counts as set', () => {
@@ -207,7 +207,7 @@ test('cache and team variables are flagged', () => {
   assert.ok(!ids({ ...clean(), env: { ...clean().env, DISABLE_PROMPT_CACHING: '0' } }).includes('prompt-caching-disabled'))
 })
 
-test('an expensive default model, inheriting agents, duplicate skills and a missing status line', () => {
+test('an expensive default model, inheriting agents, duplicate skills', () => {
   const s = clean({
     agents: { user: [{ name: 'Explore', model: 'haiku' }, { name: 'reviewer', model: null }], project: [] },
     userSkillNames: ['a', 'b'],
@@ -299,4 +299,48 @@ test('a missing status line is fixed by installing the script and pointing statu
   assert.match(f.detail, /jq/)
   assert.match(f.detail, /token-weather/)
   assert.match(f.detail, /2\.1\.287/)
+})
+
+test('every variable that blocks feature flags is named for the advisor', () => {
+  for (const [k, v] of [['DO_NOT_TRACK', '1'], ['DISABLE_GROWTHBOOK', 'true'], ['CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC', '0']]) {
+    const s = clean()
+    s.settings.user.advisorModel = 'opus'
+    s.env[k] = v
+    assert.match(only(s, 'advisor-inactive').detail, new RegExp(k))
+  }
+  const off = clean()
+  off.settings.user.advisorModel = 'opus'
+  off.env.DO_NOT_TRACK = '0'
+  assert.ok(!ids(off).includes('advisor-inactive'))
+})
+
+test('auto-compaction turned off is reported, with a fix only for the setting', () => {
+  const env = clean()
+  env.env.DISABLE_AUTO_COMPACT = '1'
+  assert.deepEqual(only(env, 'auto-compact-off').fixes, [])
+  const setting = clean()
+  setting.settings.project.autoCompactEnabled = false
+  assert.deepEqual(only(setting, 'auto-compact-off').fixes, [{ scope: 'project', ops: [{ op: 'unset', key: 'autoCompactEnabled' }] }])
+})
+
+test('idle compaction turned off is reported', () => {
+  const s = clean()
+  s.settings.user.idleCompaction = false
+  assert.equal(only(s, 'idle-compaction-off').fixes[0].ops[0].key, 'idleCompaction')
+})
+
+test('tool search turned off warns when MCP servers are configured', () => {
+  const s = clean()
+  s.env.ENABLE_TOOL_SEARCH = 'false'
+  assert.equal(only(s, 'tool-search-off').severity, 'warn')
+  s.env.ENABLE_TOOL_SEARCH = 'auto'
+  assert.ok(!ids(s).includes('tool-search-off'))
+})
+
+test('a raised bash output limit is reported, and the setting wins over the variable', () => {
+  const s = clean()
+  s.env.BASH_MAX_OUTPUT_LENGTH = '150000'
+  assert.match(only(s, 'bash-output-raised').detail, /BASH_MAX_OUTPUT_LENGTH is 150000/)
+  s.settings.user.bashOutputMaxChars = 20000
+  assert.ok(!ids(s).includes('bash-output-raised'))
 })

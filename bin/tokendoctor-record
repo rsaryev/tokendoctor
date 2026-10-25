@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+// Records finished days into <config>/tokendoctor/history.jsonl. Run by the plugin's async
+// SessionStart hook; prints nothing, so nothing reaches the conversation.
+import { configDir } from '../lib/collect.mjs'
+import { recordHistory } from '../lib/history.mjs'
+
+try {
+  recordHistory(configDir())
+} catch {}

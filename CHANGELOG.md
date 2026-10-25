@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.4.0
+
+- `/tokendoctor:optimize`: an agent that measures, proposes and applies setting changes through five
+  tools from the plugin's hooks module (`metrics`, `settings`, `config_list`, `config_set`,
+  `set_setting`). Changes run only after the person picks Apply in a dialog that shows the diff.
+- `tokendoctor-set` changes any setting on the tunable list (`lib/tunables.mjs`), dry run first.
+- `/tokendoctor:sessions` and `tokendoctor-sessions`: measure where tokens went from the local
+  transcripts, with findings `late-compaction`, `subagents-on-top-model`, `long-sessions`,
+  `idle-cache-rebuilds` and `images-read-repeatedly`. Read-only; never reads message text.
+- `tokendoctor-sessions --by day|week` shows the trend. An async SessionStart hook records each finished
+  day to `~/.claude/tokendoctor/history.jsonl`, so the trend outlives transcript cleanup.
+- New findings: `auto-compact-off`, `idle-compaction-off`, `tool-search-off`, `bash-output-raised`.
+- `advisor-inactive` also names `DO_NOT_TRACK`, `DISABLE_GROWTHBOOK` and
+  `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`, which turn off the feature-flag fetch the advisor needs.
+- `instructions-long` says Explore and Plan start without CLAUDE.md; `context-surface` says
+  `skillOverrides` does not apply to plugin skills.
+- The status line reads `CLAUDE_CODE_AUTO_COMPACT_WINDOW` (`400k` form too) and
+  `modelSettings.<model>.autoCompactWindow`, shows 5h and 7d rate limits on Pro and Max, and shows `--`
+  right after /compact instead of a stale count.
+- The status line counts the tokens in context from `current_usage` (cache reads and writes included),
+  falling back to `total_input_tokens`, and reads every field in one `jq` pass.
+- `main-model-expensive` no longer suggests running Sonnet with an Opus advisor.
+- `compact-window-unset` now sets `autoCompactWindow` to 400,000 instead of 300,000.
+
 ## 0.3.0
 
 - Renamed to `tokendoctor`, matching the repository and the domain. Install with
