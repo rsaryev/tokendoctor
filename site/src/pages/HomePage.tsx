@@ -28,8 +28,8 @@ export function HomePage() {
         </h1>
         <p className="hero-lede">
           An audit for your Claude Code setup. It finds the settings that cost you money or silently
-          do nothing, and fixes them only after showing you the exact change. No hooks, no always-on
-          text.
+          do nothing, and fixes them only after showing you the exact change. No hooks, and about 46
+          tokens added to a session.
         </p>
         <InstallCommand commands={INSTALL} />
         <p className="hero-under">

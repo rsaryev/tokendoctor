@@ -29,7 +29,8 @@ Update with `claude plugin marketplace update token-doctor` and
 | `/token-doctor:apply <finding-id>` | Shows a dry run of the fix, asks you to confirm, then writes it. An existing file is copied to `<file>.token-doctor-<timestamp>.bak` first. |
 
 Both skills are user-invoked only (`disable-model-invocation`), so their descriptions are not loaded
-into your sessions' context. The plugin adds no hooks, no MCP servers and no always-on text.
+into your sessions' context. The plugin adds no hooks and no MCP servers, and `claude plugin details
+token-doctor@token-doctor` projects about 46 tokens of always-on cost (the two skill names).
 
 The same checks run from a shell, because the plugin's `bin/` directory is on the Bash tool's PATH
 while it is enabled:

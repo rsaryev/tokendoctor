@@ -3,7 +3,7 @@
 > token-doctor is a Claude Code plugin that audits a setup for settings that waste tokens or
 > silently do nothing, and applies fixes only after showing the exact change. It checks
 > configuration against documented Claude Code behaviour with 27 rules; it does not measure
-> savings. It adds no hooks, no MCP servers and no always-on text.
+> savings. It adds no hooks and no MCP servers, and about 46 tokens to a session.
 
 ## Install
 
