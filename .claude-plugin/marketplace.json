@@ -1,0 +1,14 @@
+{
+  "name": "token-doctor",
+  "owner": {
+    "name": "rsaryev"
+  },
+  "description": "Audit a Claude Code setup for token waste and ignored settings.",
+  "plugins": [
+    {
+      "name": "token-doctor",
+      "source": "./",
+      "description": "Audit a Claude Code setup for token waste and ignored settings; apply fixes after a dry run."
+    }
+  ]
+}

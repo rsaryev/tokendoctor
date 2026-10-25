@@ -1,0 +1,53 @@
+/* What the Localix landing resolves from the product's design tokens (apps/ui), so this copy is
+   standalone: a 14px root, a near-black ground, the soft greys and the three state colours. */
+:root {
+  color-scheme: dark;
+  font-size: 14px;
+  --background: #070707;
+  --foreground: oklch(0.96 0 0);
+  --text-soft: oklch(0.72 0 0);
+  --text-faint: oklch(0.62 0 0);
+  --border-subtle: color-mix(in oklch, var(--foreground) 9%, transparent);
+  --ok: oklch(0.8 0.14 150);
+  --bad: oklch(0.7 0.16 25);
+  --ask: oklch(0.86 0.1 85);
+  --info: oklch(0.78 0.09 230);
+  --font-mono: 'Fragment Mono', ui-monospace, 'Cascadia Code', monospace;
+  --radius-sm: calc(0.625rem * 0.6);
+  --chrome-control-touch: 40px;
+  --dur-moderate: 260ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.6, 1);
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-text-soft: var(--text-soft);
+  --color-text-faint: var(--text-faint);
+  --color-border-subtle: var(--border-subtle);
+}
+html,
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+h1,
+p {
+  margin: 0;
+}
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+.focus-ring:focus-visible,
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}

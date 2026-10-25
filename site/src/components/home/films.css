@@ -1,0 +1,176 @@
+/* The demo's frame: a window as plain as a real one, a slightly lighter ground and a soft shadow,
+   no frame of its own. */
+.demo-film {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1680 / 946;
+  border-radius: var(--landing-radius);
+  background-color: #0f0f0f;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.03) inset,
+    0 40px 90px -40px rgb(0 0 0 / 0.95);
+}
+.demo-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* One quiet line under the film says what it shows, in the mono of the hero's own under-line. */
+.demo-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  justify-content: space-between;
+  margin: 0.9rem 0.25rem 0;
+  color: var(--text-faint);
+  font: 400 var(--home-small) / 1.5 var(--font-mono);
+}
+.demo-caption code {
+  color: var(--text-soft);
+}
+
+/* The terminal that plays in the film's frame. */
+.demo-term {
+  cursor: text;
+}
+.demo-term .screen {
+  position: absolute;
+  inset: 0;
+  padding: clamp(0.875rem, 2.2vw, 1.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  font: 400 clamp(0.6875rem, 0.55rem + 0.35vw, 0.8125rem) / 1.7 var(--font-mono);
+  font-variant-ligatures: none;
+}
+.demo-term .screen::-webkit-scrollbar {
+  display: none;
+}
+.demo-term .l {
+  min-height: 1.7em;
+  color: var(--text-soft);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  animation: demo-in 220ms var(--landing-ease-out) both;
+}
+@keyframes demo-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+.demo-term .l.cmd {
+  color: var(--foreground);
+  margin-top: 0.6em;
+}
+.demo-term .l.cmd:first-child {
+  margin-top: 0;
+}
+.demo-term .l.dim {
+  color: var(--text-faint);
+}
+.demo-term .l.error {
+  color: var(--bad);
+}
+.demo-term .l.warn {
+  color: var(--ask);
+}
+.demo-term .l.info {
+  color: var(--info);
+}
+.demo-term .l.ok {
+  color: var(--ok);
+}
+.demo-term .l.del {
+  margin-inline: calc(-1 * clamp(0.875rem, 2.2vw, 1.5rem));
+  padding-inline: clamp(0.875rem, 2.2vw, 1.5rem);
+  background: color-mix(in oklch, var(--bad) 12%, transparent);
+  color: var(--foreground);
+}
+.demo-term .entry {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 1.7em;
+}
+.demo-term .ps {
+  color: var(--text-faint);
+}
+.demo-term.is-busy .ps {
+  animation: demo-pulse 1.2s ease-in-out infinite;
+}
+@keyframes demo-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+.demo-term .entry input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+}
+
+/* The install block: a hairline frame in the hero's one-action measure. */
+.install {
+  display: flex;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: clamp(1.75rem, 2.6vw, 3rem);
+  border: 1px solid var(--landing-line);
+  border-radius: 9px;
+  background: var(--landing-panel);
+}
+.install code {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.7rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  color: var(--foreground);
+  font: 400 clamp(0.6875rem, 0.6rem + 0.2vw, 0.8125rem) / 1.4 var(--font-mono);
+}
+.install code::-webkit-scrollbar {
+  display: none;
+}
+.install-line {
+  white-space: nowrap;
+}
+.install-line > span {
+  color: var(--text-faint);
+}
+.install-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.9rem;
+  border: 0;
+  border-left: 1px solid var(--landing-line);
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  color: var(--text-soft);
+  font: 500 0.8125rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+.install-copy span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.install-copy:hover {
+  background: var(--landing-panel);
+  color: var(--foreground);
+}

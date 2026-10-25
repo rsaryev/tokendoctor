@@ -1,0 +1,39 @@
+/* The product shell locks the page (overflow:hidden, height:100%) — a marketing
+   page must scroll. Make `html` the SOLE scroller (body/#root flow normally) so
+   in-page nav and `scroll-margin-top` resolve against one unambiguous scrollport. */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+/* The landing is a flat, deep black page. */
+:root[data-site='landing'][data-theme='dark'] {
+  --font-sans: 'Localix Landing Sans', Arial, sans-serif;
+  --font-heading: 'Localix Landing Heading', Arial, sans-serif;
+  background: #070707;
+
+  /* One frame language for every framed surface on the page: films, scenes, and cards. */
+  --landing-radius: 14px;
+  --landing-line: color-mix(in oklch, var(--foreground) 9%, transparent);
+  --landing-panel: color-mix(in oklch, var(--foreground) 2.5%, transparent);
+  --landing-shadow: 0 48px 120px -56px color-mix(in oklch, var(--foreground) 18%, transparent);
+  /* A strong ease-out for what arrives,  */
+  --landing-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* A gentle spring, about 4% overshoot, for things that arrive (`journey/useSequence.ts`). */
+  --ease-spring: linear(
+    0,
+    0.087 3%,
+    0.33 6.6%,
+    0.616 10.8%,
+    0.832 15.2%,
+    0.97 19.9%,
+    1.035 24.6%,
+    1.048 28.6%,
+    1.04 33%,
+    1.011 41.8%,
+    0.996 51.5%,
+    1
+  );
+}

@@ -1,0 +1,20 @@
+{
+  "name": "token-doctor",
+  "displayName": "token-doctor",
+  "version": "0.2.3",
+  "description": "Audits a Claude Code setup for settings that waste tokens or silently do nothing, and applies fixes only after showing the exact change.",
+  "author": {
+    "name": "rsaryev"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tokens",
+    "cost",
+    "context",
+    "settings",
+    "audit"
+  ],
+  "icon": "./.claude-plugin/icon.png",
+  "homepage": "https://tokendoctor.dev",
+  "repository": "https://github.com/rsaryev/tokendoctor"
+}

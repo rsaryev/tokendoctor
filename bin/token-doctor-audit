@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+// Read-only audit of a Claude Code configuration. Usage: token-doctor-audit [--project <dir>] [--json]
+import { collect } from '../lib/collect.mjs'
+import { runRules } from '../lib/rules.mjs'
+
+const args = process.argv.slice(2)
+const flag = (name) => args.includes(name)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+
+const snapshot = collect(value('--project') ?? process.cwd())
+const findings = runRules(snapshot)
+
+if (flag('--json')) {
+  const { settings: _settings, ...facts } = snapshot
+  console.log(JSON.stringify({ facts, findings }, null, 2))
+} else if (!findings.length) {
+  console.log('No findings.')
+} else {
+  for (const f of findings) {
+    console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}${f.fixes ? `\n  fix: token-doctor-apply ${f.id}` : ''}\n`)
+  }
+}
