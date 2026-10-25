@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0
+
+- Renamed to `tokendoctor`, matching the repository and the domain. Install with
+  `claude plugin marketplace add rsaryev/tokendoctor` and `claude plugin install tokendoctor@tokendoctor`.
+  The skills are `/tokendoctor:audit` and `/tokendoctor:apply`; the shell commands are `tokendoctor-audit`
+  and `tokendoctor-apply`; the status line script installs as `tokendoctor-statusline.sh` and backups end
+  in `.tokendoctor-<timestamp>.bak`.
+- This changes the plugin's id: remove `token-doctor` (`claude plugin marketplace remove token-doctor`)
+  and install again.
+
 ## 0.2.3
 
 - The repository moved to github.com/rsaryev/tokendoctor. Install with

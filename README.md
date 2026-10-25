@@ -1,4 +1,4 @@
-# token-doctor
+# tokendoctor
 
 [tokendoctor.dev](https://tokendoctor.dev) · [Changelog](CHANGELOG.md)
 
@@ -12,32 +12,32 @@ it never promises a percentage: use `/usage` and `/context` before and after to 
 
 ```bash
 claude plugin marketplace add rsaryev/tokendoctor
-claude plugin install token-doctor@token-doctor
+claude plugin install tokendoctor@tokendoctor
 ```
 
 To try it for one session without installing, clone the repository and run
 `claude --plugin-dir /path/to/tokendoctor`.
 
-Update with `claude plugin marketplace update token-doctor` and
-`claude plugin update token-doctor@token-doctor`, then restart Claude Code.
+Update with `claude plugin marketplace update tokendoctor` and
+`claude plugin update tokendoctor@tokendoctor`, then restart Claude Code.
 
 ## Use
 
 | Command | What it does |
 | --- | --- |
-| `/token-doctor:audit` | Read-only. Lists findings by severity with a one-line explanation and a link to the documentation page each is based on. |
-| `/token-doctor:apply <finding-id>` | Shows a dry run of the fix, asks you to confirm, then writes it. An existing file is copied to `<file>.token-doctor-<timestamp>.bak` first. |
+| `/tokendoctor:audit` | Read-only. Lists findings by severity with a one-line explanation and a link to the documentation page each is based on. |
+| `/tokendoctor:apply <finding-id>` | Shows a dry run of the fix, asks you to confirm, then writes it. An existing file is copied to `<file>.tokendoctor-<timestamp>.bak` first. |
 
 Both skills are user-invoked only (`disable-model-invocation`), so their descriptions are not loaded
 into your sessions' context. The plugin adds no hooks and no MCP servers, and `claude plugin details
-token-doctor@token-doctor` projects about 46 tokens of always-on cost (the two skill names).
+tokendoctor@tokendoctor` projects about 46 tokens of always-on cost (the two skill names).
 
 The same checks run from a shell, because the plugin's `bin/` directory is on the Bash tool's PATH
 while it is enabled:
 
 ```bash
-token-doctor-audit [--project <dir>] [--json]
-token-doctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
+tokendoctor-audit [--project <dir>] [--json]
+tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
 ```
 
 ## What it checks
@@ -73,7 +73,7 @@ worth a look. Rules that depend on a Claude Code release are skipped on older ve
 | `every-tool-hooks` | info | Hooks matching `*` on a tool event (Pre/PostToolUse, PostToolUseFailure, PermissionRequest) start a process per call. Latency, not tokens. Fix drops them after a dry run; read the warning first if a tool shows agent status from them. |
 | `fast-mode-enabled` | warn | `fastMode: true` saved as a default, so every session pays the higher fast-mode rate. Fix sets `fastModePerSessionOptIn`. |
 | `code-intelligence-missing` | info | The project has files for a language with an official language-server plugin (`typescript-lsp`, `pyright-lsp`, `gopls-lsp`, …) and it is not enabled. |
-| `no-statusline` | info | No status line. Fix installs `token-doctor-statusline.sh` (model, folder, branch, a context bar against your auto-compact window, cache hit rate, cost; needs `jq`) and points `statusLine` at it. The finding also mentions the `token-weather` mod from [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods/token-weather) as an alternative (needs Claude Code 2.1.287+, shared as-is). |
+| `no-statusline` | info | No status line. Fix installs `tokendoctor-statusline.sh` (model, folder, branch, a context bar against your auto-compact window, cache hit rate, cost; needs `jq`) and points `statusLine` at it. The finding also mentions the `token-weather` mod from [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods/token-weather) as an alternative (needs Claude Code 2.1.287+, shared as-is). |
 
 `templates/statusline.sh` is the status line script the fix installs into your Claude config folder.
 `templates/agents/` holds three generic subagents (`Explore`, `test-runner`, `docs-lookup`), each

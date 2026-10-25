@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Applies one finding's fix. Dry run by default; --write backs up and writes.
-// Usage: token-doctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
+// Usage: tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
 import { describePlan, planFix, writePlan } from '../lib/apply.mjs'
 import { collect } from '../lib/collect.mjs'
 import { runRules } from '../lib/rules.mjs'
@@ -17,7 +17,7 @@ if (scope && !['user', 'project', 'local'].includes(scope)) {
 const snapshot = collect(value('--project') ?? process.cwd())
 const finding = runRules(snapshot).find((f) => f.id === id)
 if (!finding) {
-  console.error(`No current finding "${id}". Run token-doctor-audit to list them.`)
+  console.error(`No current finding "${id}". Run tokendoctor-audit to list them.`)
   process.exit(1)
 }
 if (!finding.fixes) {

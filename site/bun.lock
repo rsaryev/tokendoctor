@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "token-doctor-site",
+      "name": "tokendoctor-site",
       "dependencies": {
         "@tailwindcss/vite": "^4.3.3",
         "react": "^19.3.1",

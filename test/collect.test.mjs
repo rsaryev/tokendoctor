@@ -8,7 +8,7 @@ import { collect } from '../lib/collect.mjs'
 let dir
 let project
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'token-doctor-collect-'))
+  dir = mkdtempSync(join(tmpdir(), 'tokendoctor-collect-'))
   project = join(dir, 'project')
   mkdirSync(project)
   process.env.CLAUDE_CONFIG_DIR = join(dir, 'config')

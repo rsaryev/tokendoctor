@@ -295,7 +295,7 @@ test('a missing status line is fixed by installing the script and pointing statu
   assert.equal(f.fixes[1].scope, 'user')
   assert.equal(f.fixes[1].ops[0].key, 'statusLine')
   assert.equal(f.fixes[1].ops[0].value.type, 'command')
-  assert.match(f.fixes[1].ops[0].value.command, /token-doctor-statusline\.sh$/)
+  assert.match(f.fixes[1].ops[0].value.command, /tokendoctor-statusline\.sh$/)
   assert.match(f.detail, /jq/)
   assert.match(f.detail, /token-weather/)
   assert.match(f.detail, /2\.1\.287/)

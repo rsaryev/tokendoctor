@@ -40,7 +40,7 @@ export function HomePage() {
         <DemoFilm />
         <p className="demo-caption">
           <span>
-            <code>/token-doctor:audit</code> on a config with real mistakes
+            <code>/tokendoctor:audit</code> on a config with real mistakes
           </span>
           <span>Recorded from its output</span>
         </p>

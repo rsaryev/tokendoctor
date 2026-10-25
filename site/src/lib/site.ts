@@ -8,4 +8,4 @@ export const REPOSITORY_URL = 'https://github.com/rsaryev/tokendoctor'
 export const DOCS_URL = `${REPOSITORY_URL}#readme`
 
 /** The two commands that install the plugin. */
-export const INSTALL = ['claude plugin marketplace add rsaryev/tokendoctor', 'claude plugin install token-doctor@token-doctor']
+export const INSTALL = ['claude plugin marketplace add rsaryev/tokendoctor', 'claude plugin install tokendoctor@tokendoctor']

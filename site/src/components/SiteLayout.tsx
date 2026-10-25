@@ -21,7 +21,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           className={`${HOME_SHELL} flex flex-wrap items-center justify-between gap-4 pt-7 pb-10 text-[0.8125rem] text-text-faint`}
         >
           <p className="m-0">
-            <span className="text-text-soft">token-doctor</span> is MIT-licensed and open source.
+            <span className="text-text-soft">tokendoctor</span> is MIT-licensed and open source.
           </p>
           <nav aria-label="Footer" className="site-footer-nav flex items-center gap-5">
             {FOOTER_LINKS.map(({ label, href }) => (

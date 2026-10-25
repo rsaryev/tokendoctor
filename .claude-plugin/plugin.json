@@ -1,7 +1,7 @@
 {
-  "name": "token-doctor",
-  "displayName": "token-doctor",
-  "version": "0.2.3",
+  "name": "tokendoctor",
+  "displayName": "tokendoctor",
+  "version": "0.3.0",
   "description": "Audits a Claude Code setup for settings that waste tokens or silently do nothing, and applies fixes only after showing the exact change.",
   "author": {
     "name": "rsaryev"

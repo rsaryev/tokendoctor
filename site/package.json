@@ -1,8 +1,8 @@
 {
-  "name": "token-doctor-site",
+  "name": "tokendoctor-site",
   "version": "0.0.0",
   "private": true,
-  "description": "The token-doctor landing page, tokendoctor.dev. A standalone copy of the Localix landing's shell.",
+  "description": "The tokendoctor landing page, tokendoctor.dev. A standalone copy of the Localix landing's shell.",
   "license": "MIT",
   "type": "module",
   "scripts": {

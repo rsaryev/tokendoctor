@@ -117,7 +117,7 @@ export function useSession(refs: DemoRefs) {
       if (entry === '/help') HELP.forEach((t) => line('dim', t))
       else if (entry === '/clear') clear()
       else if (entry === AUDIT) AUDIT_OUT.forEach((o) => line(o.kind, o.text))
-      else if (entry.startsWith('/token-doctor:apply')) APPLY_OUT.forEach((o) => line(o.kind, o.text))
+      else if (entry.startsWith('/tokendoctor:apply')) APPLY_OUT.forEach((o) => line(o.kind, o.text))
       else line('dim', 'This page replays a recorded run. Install the plugin to audit your own setup.')
     },
     [clear, line],

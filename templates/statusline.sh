@@ -1,12 +1,12 @@
 #!/bin/bash
-# token-doctor status line: model, folder, git branch, a context bar, prompt-cache state and cost.
+# tokendoctor status line: model, folder, git branch, a context bar, prompt-cache state and cost.
 #   Sonnet 5.5 in api on main  ██████░░░░ 190k/300k  cache 98%  $1.42
 # The bar measures against the auto-compact window (autoCompactWindow in your settings, or
 # CLAUDE_STATUSLINE_COMPACT_AT), not the model's full window, so a full bar means compaction is
 # near. "cold" after the cache percentage means the next message re-reads the whole context.
 # Needs jq. Reads the JSON Claude Code pipes in (docs: statusline, context_window, prompt_cache).
 input=$(cat)
-command -v jq >/dev/null 2>&1 || { echo "token-doctor status line needs jq"; exit 0; }
+command -v jq >/dev/null 2>&1 || { echo "tokendoctor status line needs jq"; exit 0; }
 
 MODEL=$(jq -r '.model.display_name // "?"' <<<"$input")
 DIR=$(jq -r '.workspace.current_dir // "."' <<<"$input")

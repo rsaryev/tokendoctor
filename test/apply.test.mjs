@@ -8,7 +8,7 @@ import { applyOps, describePlan, diffLines, planFix, writePlan } from '../lib/ap
 let dir
 let project
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'token-doctor-'))
+  dir = mkdtempSync(join(tmpdir(), 'tokendoctor-'))
   project = join(dir, 'project')
   mkdirSync(project)
   process.env.CLAUDE_CONFIG_DIR = join(dir, 'config')
@@ -54,7 +54,7 @@ test('a settings fix backs the old file up and writes the new one', () => {
   assert.equal(result.written, true)
   assert.deepEqual(JSON.parse(readFileSync(path, 'utf8')), { model: 'sonnet', autoCompactWindow: 300000 })
   assert.equal(readFileSync(result.backup, 'utf8'), '{\n  "model": "sonnet"\n}\n')
-  assert.match(result.backup, /settings\.json\.token-doctor-2026-01-02T03-04-05-000Z\.bak$/)
+  assert.match(result.backup, /settings\.json\.tokendoctor-2026-01-02T03-04-05-000Z\.bak$/)
 })
 
 test('a fix for a file that does not exist creates it without a backup', () => {
@@ -137,7 +137,7 @@ test('dropHooks removes only the matching entries and empties no event it did no
 test('the status line script is installed once, executable, and never overwritten', () => {
   const plan = planFix({ scope: 'user', script: 'statusline.sh' }, project)
   assert.equal(plan.kind, 'script')
-  assert.equal(plan.path, join(process.env.CLAUDE_CONFIG_DIR, 'token-doctor-statusline.sh'))
+  assert.equal(plan.path, join(process.env.CLAUDE_CONFIG_DIR, 'tokendoctor-statusline.sh'))
   assert.equal(writePlan(plan).written, true)
   assert.ok((statSync(plan.path).mode & 0o111) !== 0, 'executable')
   assert.match(readFileSync(plan.path, 'utf8'), /^#!\/bin\/bash/)

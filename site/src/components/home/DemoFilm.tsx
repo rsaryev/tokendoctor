@@ -16,7 +16,7 @@ export function DemoFilm() {
       ref={root}
       className={`demo-film demo-term${session.busy ? ' is-busy' : ''}`}
       onClick={session.focus}
-      aria-label="token-doctor auditing a Claude Code setup, replayed from a recorded run"
+      aria-label="tokendoctor auditing a Claude Code setup, replayed from a recorded run"
     >
       <div ref={screen} className="screen" role="log" aria-live="off">
         {session.lines.map((line) => (

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Read-only audit of a Claude Code configuration. Usage: token-doctor-audit [--project <dir>] [--json]
+// Read-only audit of a Claude Code configuration. Usage: tokendoctor-audit [--project <dir>] [--json]
 import { collect } from '../lib/collect.mjs'
 import { runRules } from '../lib/rules.mjs'
 
@@ -17,6 +17,6 @@ if (flag('--json')) {
   console.log('No findings.')
 } else {
   for (const f of findings) {
-    console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}${f.fixes ? `\n  fix: token-doctor-apply ${f.id}` : ''}\n`)
+    console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}${f.fixes ? `\n  fix: tokendoctor-apply ${f.id}` : ''}\n`)
   }
 }

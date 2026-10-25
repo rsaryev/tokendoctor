@@ -10,7 +10,7 @@ const script = join(dirname(fileURLToPath(import.meta.url)), '..', 'templates', 
 const hasJq = spawnSync('jq', ['--version']).status === 0
 let dir
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'token-doctor-sl-'))
+  dir = mkdtempSync(join(tmpdir(), 'tokendoctor-sl-'))
   mkdirSync(join(dir, 'config'))
 })
 afterEach(() => rmSync(dir, { recursive: true, force: true }))

@@ -1,6 +1,6 @@
-# token-doctor
+# tokendoctor
 
-> token-doctor is a Claude Code plugin that audits a setup for settings that waste tokens or
+> tokendoctor is a Claude Code plugin that audits a setup for settings that waste tokens or
 > silently do nothing, and applies fixes only after showing the exact change. It checks
 > configuration against documented Claude Code behaviour with 27 rules; it does not measure
 > savings. It adds no hooks and no MCP servers, and about 46 tokens to a session.
@@ -8,13 +8,13 @@
 ## Install
 
 - `claude plugin marketplace add rsaryev/tokendoctor`
-- `claude plugin install token-doctor@token-doctor`
+- `claude plugin install tokendoctor@tokendoctor`
 
 ## Use
 
-- `/token-doctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only.
-- `/token-doctor:apply <finding-id>` shows a dry run, asks for confirmation, then writes. An existing file is copied to `<file>.token-doctor-<timestamp>.bak` first.
-- From a shell: `token-doctor-audit [--project <dir>] [--json]` and `token-doctor-apply <finding-id> [--scope user|project|local] [--write]`.
+- `/tokendoctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only.
+- `/tokendoctor:apply <finding-id>` shows a dry run, asks for confirmation, then writes. An existing file is copied to `<file>.tokendoctor-<timestamp>.bak` first.
+- From a shell: `tokendoctor-audit [--project <dir>] [--json]` and `tokendoctor-apply <finding-id> [--scope user|project|local] [--write]`.
 
 ## Links
 
