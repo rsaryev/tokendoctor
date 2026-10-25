@@ -2,7 +2,7 @@
   "name": "tokendoctor",
   "displayName": "tokendoctor",
   "version": "0.4.0",
-  "description": "Audits a Claude Code setup for settings that waste tokens or silently do nothing, and applies fixes only after showing the exact change.",
+  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
   "author": {
     "name": "rsaryev"
   },

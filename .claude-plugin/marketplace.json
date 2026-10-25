@@ -3,12 +3,12 @@
   "owner": {
     "name": "rsaryev"
   },
-  "description": "Audit a Claude Code setup for token waste and ignored settings.",
+  "description": "Measure, audit and tune Claude Code token use.",
   "plugins": [
     {
       "name": "tokendoctor",
       "source": "./",
-      "description": "Audit a Claude Code setup for token waste and ignored settings; apply fixes after a dry run."
+      "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff."
     }
   ]
 }

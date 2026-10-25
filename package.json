@@ -2,7 +2,7 @@
   "name": "tokendoctor",
   "version": "0.4.0",
   "private": true,
-  "description": "Claude Code plugin that audits a setup for token waste and ignored settings.",
+  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
   "type": "module",
   "license": "MIT",
   "scripts": {
