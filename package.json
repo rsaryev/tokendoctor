@@ -1,0 +1,13 @@
+{
+  "name": "tokendoctor",
+  "version": "0.5.0",
+  "private": true,
+  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:mod": "claude plugin test .",
+    "validate": "claude plugin validate . --strict"
+  }
+}

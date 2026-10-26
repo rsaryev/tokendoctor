@@ -1,0 +1,24 @@
+{
+  "description": "Records daily token totals for /tokendoctor:sessions --by. Runs in the background and adds nothing to context.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/bin/tokendoctor-record"
+            ],
+            "async": true,
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  },
+  "modules": [
+    "./register.ts"
+  ]
+}

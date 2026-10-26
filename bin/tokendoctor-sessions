@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+// Read-only measure of where tokens went, from local session transcripts.
+// Usage: tokendoctor-sessions [--days <n> | --since <YYYY-MM-DD>] [--until <YYYY-MM-DD>]
+//                             [--project <dir>] [--by day|week] [--json]
+import { configDir } from '../lib/collect.mjs'
+import { trend } from '../lib/history.mjs'
+import { loadSessions, localDay, summarize, topModelCost } from '../lib/sessions.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+
+const since = value('--since')
+const until = value('--until')
+for (const d of [since, until]) {
+  if (d !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    console.error(`Dates are local days as YYYY-MM-DD, got ${JSON.stringify(d)}`)
+    process.exit(1)
+  }
+}
+// --since sets the window's start; --days counts back from today.
+const days = since ? Math.ceil((Date.now() - new Date(`${since}T00:00:00`)) / 864e5) : Number(value('--days') ?? 30)
+const period = since || until ? `${since ?? `the last ${days} days`}${until ? ` to ${until}` : ' to today'}` : `the last ${days} days`
+const by = value('--by')
+
+if (by) {
+  const rows = trend(configDir(), days).filter((r) => (!since || r.date >= since) && (!until || r.date <= until))
+  printTrend(by === 'week' ? weekly(rows) : rows)
+  process.exit(0)
+}
+
+// Monday of the row's week, in local time.
+function weekly(rows) {
+  const out = {}
+  for (const r of rows) {
+    const d = new Date(`${r.date}T12:00:00`)
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7))
+    const x = (out[localDay(d)] ??= { date: localDay(d), cost: 0, mainCost: 0, bigContextCost: 0, turns: 0, sessions: 0, byModel: {} })
+    for (const k of ['cost', 'mainCost', 'bigContextCost', 'turns', 'sessions']) x[k] += r[k]
+    for (const [m, c] of Object.entries(r.byModel)) x.byModel[m] = (x.byModel[m] ?? 0) + c
+  }
+  return Object.values(out)
+}
+
+function printTrend(rows) {
+  if (args.includes('--json')) return console.log(JSON.stringify(rows, null, 2))
+  if (!rows.length) return console.log(`No data for ${period}.`)
+  const p = (x, of) => `${Math.round((100 * x) / (of || 1))}%`.padStart(5)
+  console.log(`${by === 'week' ? 'week of   ' : 'day       '}   cost(M IE)  subagents  >400K  opus  turns  sessions`)
+  for (const r of rows) {
+    const top = topModelCost(r.byModel)
+    console.log(
+      `${r.date}  ${(r.cost / 1e6).toFixed(1).padStart(10)}  ${p(r.cost - r.mainCost, r.cost).padStart(9)}  ${p(r.bigContextCost, r.mainCost)}  ${p(top, r.cost)}  ${String(r.turns).padStart(5)}  ${String(r.sessions).padStart(8)}`,
+    )
+  }
+}
+const sessions = loadSessions(configDir(), { days, since, until, project: value('--project') })
+const { totals: t, findings } = summarize(sessions)
+const pct = (x, of = t.cost) => `${Math.round((100 * x) / (of || 1))}%`
+const byCost = (o, f = (v) => v) => Object.entries(o).sort((a, b) => f(b[1]) - f(a[1]))
+
+if (args.includes('--json')) {
+  const top = [...sessions].sort((a, b) => b.cost - a.cost).slice(0, 10)
+    .map(({ project, start, turns, cost, mainCost, maxContext }) => ({ project, start, turns, cost, subagentCost: cost - mainCost, maxContext }))
+  const { compactions, ...rest } = t
+  console.log(JSON.stringify({ days, since, until, totals: { ...rest, compactions: compactions.length }, topSessions: top, findings }, null, 2))
+} else if (!sessions.length) {
+  console.log(`No sessions in ${period}.`)
+} else {
+  console.log(`${t.sessions} sessions in ${period}. Cost in input-token equivalents (cache reads 0.1, or 0.05 on Opus/Sonnet 5.5; output 5).`)
+  console.log(`Main thread ${pct(t.mainCost)}, subagents ${pct(t.cost - t.mainCost)}; with ${'>'}400K in context ${pct(t.bigContextCost, t.mainCost)} of main.`)
+  console.log(`Main thread by model: ${byCost(t.byModel).map(([m, c]) => `${m} ${pct(c)}`).join(', ')}`)
+  console.log(`Subagents: ${byCost(t.agents, (a) => a.cost).slice(0, 5).map(([k, a]) => `${k} ${a.runs} runs ${pct(a.cost)}`).join(', ') || 'none'}`)
+  console.log(`Cache rebuilds: ${byCost(t.rebuilds, (e) => e.cost).map(([k, e]) => `${k} ${e.n}`).join(', ') || 'none'}; compactions ${t.compactions.length}`)
+  console.log(`Thinking: ${pct(t.thinking, t.output)} of output tokens\n`)
+  for (const f of findings) console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}\n`)
+  if (!findings.length) console.log('No findings.')
+}

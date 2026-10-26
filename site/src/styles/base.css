@@ -1,0 +1,22 @@
+/* `html` is the only scroller (body and #root flow normally), so in-page links resolve against
+   one scrollport. */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+/* The landing is a flat, deep black page. */
+:root[data-site='landing'][data-theme='dark'] {
+  --font-sans: 'Landing Sans', Arial, sans-serif;
+  --font-heading: 'Landing Heading', Arial, sans-serif;
+  background: #070707;
+
+  /* One frame language for the framed surfaces: the demo and the install block. */
+  --landing-radius: 14px;
+  --landing-line: color-mix(in oklch, var(--foreground) 9%, transparent);
+  --landing-panel: color-mix(in oklch, var(--foreground) 2.5%, transparent);
+  /* A strong ease-out for what arrives. */
+  --landing-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}

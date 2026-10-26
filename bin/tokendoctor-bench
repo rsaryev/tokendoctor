@@ -1,0 +1,94 @@
+#!/usr/bin/env node
+// Before/after snapshots of token use. Read-only except for the snapshot file it saves.
+// Usage: tokendoctor-bench save --label <name> [--machine <name>] [--dir <dir>]
+//                               [--days <n> | --since <YYYY-MM-DD>] [--until <YYYY-MM-DD>]
+//        tokendoctor-bench compare [--dir <dir>] [--json]
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { hostname } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { BENCH_VERSION, compare, fileName, measure, MEASURES, readSnapshots } from '../lib/bench.mjs'
+import { claudeVersion, configDir } from '../lib/collect.mjs'
+import { firstDay, loadSessions, localDay, WEIGHTS_VERSION } from '../lib/sessions.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const fail = (message) => {
+  console.error(message)
+  process.exit(2)
+}
+const dir = resolve(value('--dir') ?? join(configDir(), 'tokendoctor', 'bench'))
+
+if (args[0] === 'save') save()
+else if (args[0] === 'compare') show()
+else fail('Usage: tokendoctor-bench save --label <name> [--machine <name>] [--dir <dir>] [--days <n> | --since <date>] [--until <date>]\n       tokendoctor-bench compare [--dir <dir>] [--json]')
+
+function save() {
+  const label = value('--label')
+  if (!label) fail('save needs --label, for example --label before')
+  const since = value('--since') ?? firstDay(Number(value('--days') ?? 30))
+  const until = value('--until') ?? localDay(Date.now())
+  for (const d of [since, until]) if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) fail(`Dates are local days as YYYY-MM-DD, got ${JSON.stringify(d)}`)
+  if (since > until) fail(`--since ${since} is after --until ${until}`)
+  const manifest = join(dirname(fileURLToPath(import.meta.url)), '..', '.claude-plugin', 'plugin.json')
+  const snapshot = {
+    bench: BENCH_VERSION,
+    machine: value('--machine') ?? hostname().split('.')[0],
+    label,
+    period: { since, until },
+    created: new Date().toISOString(),
+    tokendoctor: existsSync(manifest) ? JSON.parse(readFileSync(manifest, 'utf8')).version : null,
+    claudeCode: claudeVersion(),
+    weights: WEIGHTS_VERSION,
+    ...measure(loadSessions(configDir(), { since, until })),
+  }
+  mkdirSync(dir, { recursive: true })
+  const file = join(dir, fileName(snapshot))
+  writeFileSync(file, JSON.stringify(snapshot, null, 2) + '\n')
+  const t = snapshot.totals
+  console.log(`Saved ${file}`)
+  console.log(`  ${snapshot.machine}, "${label}", ${since} to ${until}: ${t.sessions} sessions, ${t.turns} main turns, ${t.subagentRuns} subagent runs on ${t.activeDays} active days`)
+  if (!t.turns) console.log('  No turns in this period: check the dates, or whether Claude Code has cleaned these transcripts up.')
+}
+
+function show() {
+  const snapshots = readSnapshots(dir)
+  if (!snapshots.length) fail(`No snapshots in ${dir}. Save one with: tokendoctor-bench save --label before`)
+  const groups = compare(snapshots)
+  if (args.includes('--json')) return console.log(JSON.stringify(groups, null, 2))
+  if (new Set(snapshots.map((s) => s.weights)).size > 1) {
+    console.log('Note: these snapshots were saved with different cost weights; save them again while the transcripts last.')
+  }
+  const fmt = (m, v) => {
+    if (v === null) return '-'
+    if (m.unit === '%') return `${(v * 100).toFixed(1)}%`
+    if (m.unit === 'M') return (v / 1e6).toFixed(1)
+    return (v / 1e3).toFixed(1)
+  }
+  // Change from the first column to the last: points for shares, percent for the rest.
+  const change = (m, a, b) => {
+    if (a === null || b === null) return ''
+    const d = m.unit === '%' ? (b - a) * 100 : a ? ((b - a) / a) * 100 : 0
+    const text = `${d > 0 ? '+' : ''}${d.toFixed(1)}${m.unit === '%' ? ' pp' : '%'}`
+    if (!m.better || Math.abs(d) < (m.unit === '%' ? 2 : 5)) return text
+    return `${text} ${(d < 0) === (m.better === 'lower') ? 'better' : 'worse'}`
+  }
+  const w = Math.max(...MEASURES.map((m) => m.label.length)) + 2
+  for (const { machine, columns } of groups) {
+    console.log(`\n${machine}`)
+    console.log(' '.repeat(w) + columns.map((c) => c.label.padStart(12)).join('') + (columns.length > 1 ? '   change' : ''))
+    console.log(' '.repeat(w) + columns.map((c) => `${c.since.slice(5)}..${c.until.slice(5)}`.padStart(12)).join(''))
+    const rows = [
+      ['active days', (c) => String(c.totals.activeDays)],
+      ['main turns', (c) => String(c.totals.turns)],
+      ['subagent runs', (c) => String(c.totals.subagentRuns)],
+    ]
+    for (const [label, f] of rows) console.log(label.padEnd(w) + columns.map((c) => f(c).padStart(12)).join(''))
+    for (const m of MEASURES) {
+      const vals = columns.map((c) => c.measures[m.key])
+      console.log(m.label.padEnd(w) + vals.map((v) => fmt(m, v).padStart(12)).join('') + (columns.length > 1 ? `   ${change(m, vals[0], vals.at(-1))}` : ''))
+    }
+  }
+  console.log('\nIE: input-token equivalents at API price ratios (cache read 0.1, or 0.05 on Opus/Sonnet 5.5; write 1.25 or 2; output 5); no per-model price is applied.')
+  console.log('Periods differ in workload, so read the per-turn and share rows, not the totals.')
+}

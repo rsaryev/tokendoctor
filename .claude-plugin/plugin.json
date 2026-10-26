@@ -1,0 +1,20 @@
+{
+  "name": "tokendoctor",
+  "displayName": "tokendoctor",
+  "version": "0.5.0",
+  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
+  "author": {
+    "name": "rsaryev"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tokens",
+    "cost",
+    "context",
+    "settings",
+    "audit"
+  ],
+  "icon": "./.claude-plugin/icon.png",
+  "homepage": "https://tokendoctor.dev",
+  "repository": "https://github.com/rsaryev/tokendoctor"
+}

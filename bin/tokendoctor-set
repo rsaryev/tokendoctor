@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+// Changes one token-related setting. Dry run by default; --write backs up and writes.
+// Usage: tokendoctor-set <key> [<value>|--unset] [--scope user|project|local] [--project <dir>] [--write]
+//        tokendoctor-set --list [--json]
+import { describePlan, planFix, writePlan } from '../lib/apply.mjs'
+import { parseValue, tunable, TUNABLES, tunableOp } from '../lib/tunables.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const listed = [...Object.entries(TUNABLES), ...['effortLevel', 'autoCompactWindow'].map((f) => [`modelSettings.<model id>.${f}`, tunable(`modelSettings.claude-x.${f}`)])]
+if (args.includes('--list') && args.includes('--json')) {
+  console.log(JSON.stringify(listed.map(([key, t]) => ({ key, live: t.live, about: t.about }))))
+  process.exit(0)
+}
+if (args.includes('--list')) {
+  for (const [k, t] of listed) console.log(`${k.padEnd(44)} ${t.live ? 'live    ' : 'restart '} ${t.about}`)
+  process.exit(0)
+}
+const positional = args.filter((a, i) => !a.startsWith('--') && !['--scope', '--project'].includes(args[i - 1]))
+const [key, raw] = positional
+const scope = value('--scope') ?? 'user'
+if (!['user', 'project', 'local'].includes(scope)) {
+  console.error('--scope must be user, project or local')
+  process.exit(2)
+}
+let op
+try {
+  if (!key || (raw === undefined && !args.includes('--unset'))) throw new Error('Usage: tokendoctor-set <key> <value>|--unset [--scope ...] [--write]')
+  op = tunableOp(key, args.includes('--unset') ? undefined : parseValue(raw))
+} catch (e) {
+  console.error(e.message)
+  process.exit(2)
+}
+
+const write = args.includes('--write')
+const plan = planFix({ scope, ops: [op] }, value('--project') ?? process.cwd())
+console.log(`${write ? 'Applying' : 'Would change'} (${plan.scope}): ${describePlan(plan)}`)
+if (write) {
+  const result = writePlan(plan)
+  console.log(result.written ? `  written${result.backup ? `, backup: ${result.backup}` : ''}` : `  skipped: ${result.reason}`)
+  console.log(tunable(key).live ? '  Claude Code picks this up from the settings file.' : '  Takes effect in the next session.')
+} else console.log('\nDry run. Re-run with --write to apply.')

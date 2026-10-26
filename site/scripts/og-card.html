@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>tokendoctor social card</title>
+<!-- The source of public/og.png: 2400×1260 (drawn at 1200×630), rendered by a headless browser (see scripts/og.mjs). -->
+<style>
+@font-face{font-family:H;src:url('../public/fonts/dm-sans.woff2');font-weight:100 1000}
+@font-face{font-family:S;src:url('../public/fonts/inter.woff2');font-weight:100 900}
+@font-face{font-family:M;src:url('../public/fonts/fragment-mono.woff2')}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#070707;color:#f4f4f4}
+.logo{position:absolute;left:80px;top:64px;width:56px;height:56px}
+.url{position:absolute;right:80px;top:78px;font:400 22px/1 M,monospace;color:#9a9a9a}
+h1{position:absolute;left:80px;top:168px;margin:0;font:700 92px/0.98 H,sans-serif;letter-spacing:-0.05em}
+.chip{display:inline-block;padding:0 .1em .04em;border-radius:.08em;background:#f4f4f4;color:#070707;transform:rotate(-1.5deg)}
+p{position:absolute;left:80px;top:372px;width:520px;margin:0;font:400 26px/1.4 S,sans-serif;color:#b3b3b3}
+.term{position:absolute;left:690px;right:-40px;top:210px;bottom:-40px;border-radius:14px;background:#0f0f0f;box-shadow:0 1px 0 rgb(255 255 255/.03) inset,0 40px 90px -40px #000;padding:28px 32px;font:400 17px/1.8 M,monospace;color:#b3b3b3;white-space:pre}
+.e{color:#ee6a5b}.w{color:#f0c36d}.i{color:#6cc1ee}.d{color:#777}.c{color:#f4f4f4}
+.fade{position:absolute;inset:auto 0 0 0;height:150px;background:linear-gradient(transparent,#070707 85%)}
+</style>
+</head>
+<body>
+<img class="logo" src="../public/logo.svg" alt="">
+<div class="url">tokendoctor.dev</div>
+<h1>Stop <span class="chip">wasting</span><br>tokens</h1>
+<p>An audit for your Claude Code setup.</p>
+<div class="term"><span class="c">› /tokendoctor:audit</span>
+<span class="e">[error] compact-threshold-undocumented</span>
+<span class="d">  autoCompactThreshold is not a setting</span>
+<span class="e">[error] compact-env-bare-number</span>
+<span class="w">[warn]  effort-max-in-settings</span>
+<span class="i">[info]  explore-default-model</span>
+<span class="i">[info]  heavy-dirs-not-denied</span>
+<span class="d">2 errors · 1 warning · 2 more</span></div>
+<div class="fade"></div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+/* The demo's frame: a window as plain as a real one, its ground a shade above the page's, so the
+   terminal reads as part of the page and the hairline gives it its edge. */
+.demo-film {
+  --demo-ground: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1680 / 946;
+  border: 1px solid var(--landing-line);
+  border-radius: var(--landing-radius);
+  background-color: var(--demo-ground);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset;
+}
+/* One quiet line under the film says what it shows, in the mono of the hero's own under-line. */
+.demo-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  justify-content: space-between;
+  margin: 0.9rem 0.25rem 0;
+  color: var(--text-faint);
+  font: 400 var(--home-small) / 1.5 var(--font-mono);
+}
+.demo-caption code {
+  color: var(--text-soft);
+}
+
+/* The install block: a hairline frame in the hero's one-action measure. */
+.install {
+  display: flex;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: clamp(1.75rem, 2.6vw, 3rem);
+  border: 1px solid var(--landing-line);
+  border-radius: 9px;
+  background: var(--landing-panel);
+}
+.install code {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.7rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  color: var(--foreground);
+  font: 400 clamp(0.6875rem, 0.6rem + 0.2vw, 0.8125rem) / 1.4 var(--font-mono);
+}
+.install code::-webkit-scrollbar {
+  display: none;
+}
+.install-line {
+  white-space: nowrap;
+}
+.install-line > span {
+  color: var(--text-faint);
+}
+.install-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.9rem;
+  border: 0;
+  border-left: 1px solid var(--landing-line);
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  color: var(--text-soft);
+  font: 500 0.8125rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+.install-copy span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.install-copy:hover {
+  background: var(--landing-panel);
+  color: var(--foreground);
+}
+
+/* The asciinema player in the film's frame, in the page's own ground and palette. */
+.demo-cast {
+  aspect-ratio: auto;
+}
+.demo-cast .ap-wrapper {
+  background: transparent;
+}
+.asciinema-player-theme-tokendoctor {
+  --term-color-foreground: #e6e6e6;
+  --term-color-background: var(--demo-ground, #0a0a0a);
+  --term-color-0: #1a1a1a;
+  --term-color-1: #ef7a6d;
+  --term-color-2: #8bd49c;
+  --term-color-3: #e7c97a;
+  --term-color-4: #8fb6e8;
+  --term-color-5: #c3a6f0;
+  --term-color-6: #7fd0d6;
+  --term-color-7: #cfcfcf;
+  --term-color-8: #6b6b6b;
+  --term-color-9: #f39185;
+  --term-color-10: #a3e0b1;
+  --term-color-11: #f0d897;
+  --term-color-12: #a9c8f0;
+  --term-color-13: #d3bdf5;
+  --term-color-14: #9adde2;
+  --term-color-15: #ffffff;
+}

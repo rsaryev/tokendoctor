@@ -1,0 +1,300 @@
+{
+  "bench": 1,
+  "machine": "work",
+  "label": "before",
+  "period": {
+    "since": "2026-09-26",
+    "until": "2026-10-25"
+  },
+  "created": "2026-10-26T09:09:41.381Z",
+  "tokendoctor": "0.5.0",
+  "claudeCode": "2.1.310",
+  "weights": 2,
+  "totals": {
+    "sessions": 69,
+    "activeDays": 19,
+    "turns": 17439,
+    "subagentRuns": 256,
+    "cost": 638668230.9499997,
+    "mainCost": 471001276.75,
+    "contextTokens": 6106303625,
+    "bigContextCost": 256424431.15,
+    "output": 13154142,
+    "thinking": 4012241,
+    "compactions": 24,
+    "compactPreTokens": 13952132,
+    "compactsMeasured": 24,
+    "byModel": {
+      "opus": 429881543.49999994,
+      "sonnet": 41119733.24999999
+    },
+    "agents": {
+      "general-purpose": {
+        "runs": 170,
+        "cost": 133939266.90000004,
+        "byModel": {
+          "opus": 129384309.00000001,
+          "sonnet": 4554957.899999999
+        }
+      },
+      "Explore": {
+        "runs": 59,
+        "cost": 24032310.350000013,
+        "byModel": {
+          "opus": 23260378.150000013,
+          "sonnet": 771932.2000000001
+        }
+      },
+      "fork": {
+        "runs": 27,
+        "cost": 9695376.949999997,
+        "byModel": {
+          "sonnet": 404404.54999999993,
+          "opus": 9290972.399999999
+        }
+      }
+    },
+    "rebuilds": {
+      "idle past the cache TTL": {
+        "n": 47,
+        "cost": 19626740.75
+      },
+      "Claude Code upgrade": {
+        "n": 6,
+        "cost": 1650457
+      },
+      "model switch": {
+        "n": 13,
+        "cost": 6908154.25
+      },
+      "compaction": {
+        "n": 23,
+        "cost": 1604592.25
+      },
+      "other": {
+        "n": 8,
+        "cost": 6353403
+      }
+    }
+  },
+  "days": [
+    {
+      "date": "2026-09-28",
+      "cost": 11483520.899999999,
+      "mainCost": 11483520.899999999,
+      "bigContextCost": 2376629.0500000003,
+      "turns": 287,
+      "sessions": 3,
+      "byModel": {
+        "opus": 11483520.899999999
+      }
+    },
+    {
+      "date": "2026-09-29",
+      "cost": 63228288.00000009,
+      "mainCost": 57586762.7,
+      "bigContextCost": 38076442.850000024,
+      "turns": 1868,
+      "sessions": 9,
+      "byModel": {
+        "opus": 63228288.00000009
+      }
+    },
+    {
+      "date": "2026-09-30",
+      "cost": 61443077.30000004,
+      "mainCost": 39020334.04999998,
+      "bigContextCost": 22896130.850000005,
+      "turns": 1379,
+      "sessions": 4,
+      "byModel": {
+        "opus": 61443077.30000004
+      }
+    },
+    {
+      "date": "2026-10-02",
+      "cost": 10860692.09999999,
+      "mainCost": 8576584.85,
+      "bigContextCost": 6453026.150000001,
+      "turns": 232,
+      "sessions": 1,
+      "byModel": {
+        "opus": 10860692.09999999
+      }
+    },
+    {
+      "date": "2026-10-05",
+      "cost": 10997443.15,
+      "mainCost": 10737202.700000001,
+      "bigContextCost": 5627551.400000002,
+      "turns": 438,
+      "sessions": 4,
+      "byModel": {
+        "sonnet": 10997443.15
+      }
+    },
+    {
+      "date": "2026-10-06",
+      "cost": 7153370.650000007,
+      "mainCost": 7153370.650000007,
+      "bigContextCost": 1838395.0499999996,
+      "turns": 294,
+      "sessions": 1,
+      "byModel": {
+        "sonnet": 4446475.000000002,
+        "opus": 2706895.6499999994
+      }
+    },
+    {
+      "date": "2026-10-07",
+      "cost": 6037974.95,
+      "mainCost": 6037974.95,
+      "bigContextCost": 4931820.2,
+      "turns": 160,
+      "sessions": 5,
+      "byModel": {
+        "opus": 6037974.95
+      }
+    },
+    {
+      "date": "2026-10-08",
+      "cost": 6488334.349999997,
+      "mainCost": 6488334.349999997,
+      "bigContextCost": 0,
+      "turns": 370,
+      "sessions": 1,
+      "byModel": {
+        "opus": 6321280.099999996,
+        "sonnet": 167054.25000000003
+      }
+    },
+    {
+      "date": "2026-10-09",
+      "cost": 4075499.05,
+      "mainCost": 4075499.05,
+      "bigContextCost": 0,
+      "turns": 197,
+      "sessions": 2,
+      "byModel": {
+        "opus": 4075499.05
+      }
+    },
+    {
+      "date": "2026-10-12",
+      "cost": 29184739.599999998,
+      "mainCost": 15274942.900000002,
+      "bigContextCost": 2879654.5500000003,
+      "turns": 786,
+      "sessions": 5,
+      "byModel": {
+        "opus": 29184739.599999998
+      }
+    },
+    {
+      "date": "2026-10-13",
+      "cost": 23787669.199999996,
+      "mainCost": 21912306.150000006,
+      "bigContextCost": 8600290.850000001,
+      "turns": 994,
+      "sessions": 4,
+      "byModel": {
+        "opus": 23787669.199999996
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "cost": 40350513.950000025,
+      "mainCost": 33472383.75000002,
+      "bigContextCost": 23251958.850000005,
+      "turns": 1111,
+      "sessions": 3,
+      "byModel": {
+        "opus": 38329115.850000024,
+        "sonnet": 2021398.0999999999
+      }
+    },
+    {
+      "date": "2026-10-15",
+      "cost": 60510471.79999999,
+      "mainCost": 40831777.5,
+      "bigContextCost": 17358492.849999994,
+      "turns": 1952,
+      "sessions": 16,
+      "byModel": {
+        "sonnet": 10421941.500000004,
+        "opus": 50088530.30000001
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "cost": 38717056.45000005,
+      "mainCost": 19534659.050000004,
+      "bigContextCost": 3997788.700000002,
+      "turns": 698,
+      "sessions": 9,
+      "byModel": {
+        "opus": 23179748.100000046,
+        "sonnet": 15537308.350000001
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "cost": 45018628.84999999,
+      "mainCost": 32097924.400000002,
+      "bigContextCost": 19578052.749999993,
+      "turns": 1205,
+      "sessions": 11,
+      "byModel": {
+        "opus": 44955395.94999999,
+        "sonnet": 63232.9
+      }
+    },
+    {
+      "date": "2026-10-20",
+      "cost": 33082238.799999975,
+      "mainCost": 29960556.14999996,
+      "bigContextCost": 19473098.09999997,
+      "turns": 1090,
+      "sessions": 3,
+      "byModel": {
+        "opus": 32255787.399999976,
+        "sonnet": 826451.3999999999
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "cost": 41988131.25000012,
+      "mainCost": 18733851.650000002,
+      "bigContextCost": 10537780.700000007,
+      "turns": 686,
+      "sessions": 5,
+      "byModel": {
+        "opus": 40506821.40000012,
+        "sonnet": 1481309.85
+      }
+    },
+    {
+      "date": "2026-10-22",
+      "cost": 59708989.8,
+      "mainCost": 59032871.29999999,
+      "bigContextCost": 36240404.650000006,
+      "turns": 2021,
+      "sessions": 7,
+      "byModel": {
+        "opus": 58820576.4,
+        "sonnet": 888413.3999999999
+      }
+    },
+    {
+      "date": "2026-10-23",
+      "cost": 84551590.80000003,
+      "mainCost": 48990419.70000002,
+      "bigContextCost": 32306913.599999987,
+      "turns": 1671,
+      "sessions": 5,
+      "byModel": {
+        "opus": 84551590.80000003
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+// Applies one finding's fix. Dry run by default; --write backs up and writes.
+// Usage: tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
+import { describePlan, planFix, writePlan } from '../lib/apply.mjs'
+import { collect } from '../lib/collect.mjs'
+import { runRules } from '../lib/rules.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const id = args.find((a, i) => !a.startsWith('--') && !['--scope', '--project'].includes(args[i - 1]))
+const scope = value('--scope')
+if (scope && !['user', 'project', 'local'].includes(scope)) {
+  console.error('--scope must be user, project or local')
+  process.exit(2)
+}
+
+const snapshot = collect(value('--project') ?? process.cwd())
+const finding = runRules(snapshot).find((f) => f.id === id)
+if (!finding) {
+  console.error(`No current finding "${id}". Run tokendoctor-audit to list them.`)
+  process.exit(1)
+}
+if (!finding.fixes) {
+  console.error(`Finding "${id}" has no automatic fix; ${finding.doc}`)
+  process.exit(1)
+}
+
+const write = args.includes('--write')
+for (const fix of finding.fixes) {
+  const plan = planFix(fix, snapshot.project, scope)
+  console.log(`${write ? 'Applying' : 'Would change'} (${plan.scope}): ${describePlan(plan)}`)
+  if (write) {
+    const result = writePlan(plan)
+    console.log(result.written ? `  written${result.backup ? `, backup: ${result.backup}` : ''}` : `  skipped: ${result.reason}`)
+  }
+}
+if (!write) console.log('\nDry run. Re-run with --write to apply.')
