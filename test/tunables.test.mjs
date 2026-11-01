@@ -15,6 +15,14 @@ test('values are checked per key and env values are written as strings', () => {
   assert.deepEqual(tunableOp('idleCompaction', undefined), { op: 'unset', key: 'idleCompaction' })
 })
 
+test('tokendoctor\'s own options are written where Claude Code keeps a plugin\'s', () => {
+  const at = 'pluginConfigs.tokendoctor@tokendoctor.options'
+  assert.deepEqual(tunableOp('tokendoctor.slide', true), { op: 'set', key: `${at}.slide`, value: true })
+  assert.deepEqual(tunableOp('tokendoctor.slideTo', 25), { op: 'set', key: `${at}.slideTo`, value: 25 })
+  assert.throws(() => tunableOp('tokendoctor.slideTo', 95), /not a valid value/)
+  assert.deepEqual(tunableOp('tokendoctor.slide', undefined), { op: 'unset', key: `${at}.slide` })
+})
+
 test('hooks, permissions and unknown keys are refused', () => {
   for (const key of ['hooks', 'permissions', 'permissions.allow', 'env.ANTHROPIC_API_KEY', 'apiKeyHelper']) {
     assert.throws(() => tunableOp(key, 'x'), /not a setting tokendoctor changes/)

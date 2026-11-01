@@ -1,0 +1,385 @@
+{
+ "when": "2026-11-01 17:50",
+ "task": "workday",
+ "tests": 307,
+ "steps": 7,
+ "model": "claude-haiku-5-5",
+ "window": 100000,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 3,
+ "note": "summary vs slide over a day of work, isolated",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.316 (Claude Code)",
+ "load": 4.3,
+ "arms": [
+  {
+   "label": "factory",
+   "profile": "factory",
+   "slide": false,
+   "slideTo": null,
+   "plugin": null,
+   "version": null
+  },
+  {
+   "label": "factory+slide",
+   "profile": "factory",
+   "slide": true,
+   "slideTo": 25,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 0.1645,
+   "requests": 31,
+   "input_tokens": 62,
+   "cache_read": 988114,
+   "cache_write": 197926,
+   "output_tokens": 210840,
+   "max_context": 62477,
+   "avg_context": 38261,
+   "compactions": 4,
+   "summaries": 4,
+   "slides": 0,
+   "compact_s": 97.4,
+   "reads": 9,
+   "rereads": 3,
+   "edits": 10,
+   "bash": 19,
+   "failed_tools": 0,
+   "label": "factory",
+   "run": 0,
+   "exit": 143,
+   "killed": "SIGTERM, marked afterwards (exit 143 at 999.9 s, the timeout was 1800 s)",
+   "wall_s": 999.9,
+   "pass": 261,
+   "fail": 46,
+   "solved": false,
+   "tampered": [],
+   "cache_pct": 83,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 52
+    },
+    {
+     "pass": 69,
+     "wall_s": 98
+    },
+    {
+     "pass": 141,
+     "wall_s": 471.7
+    },
+    {
+     "pass": 214,
+     "wall_s": 283.8
+    },
+    {
+     "pass": 261,
+     "wall_s": 94.5
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.1734,
+   "requests": 34,
+   "input_tokens": 68,
+   "cache_read": 1103023,
+   "cache_write": 211009,
+   "output_tokens": 217432,
+   "max_context": 59160,
+   "avg_context": 38650,
+   "compactions": 5,
+   "summaries": 2,
+   "slides": 3,
+   "compact_s": 47.4,
+   "reads": 11,
+   "rereads": 1,
+   "edits": 9,
+   "bash": 25,
+   "failed_tools": 7,
+   "label": "factory+slide",
+   "run": 0,
+   "exit": 143,
+   "killed": "SIGTERM, marked afterwards (exit 143 at 999.4 s, the timeout was 1800 s)",
+   "wall_s": 999.4,
+   "pass": 214,
+   "fail": 93,
+   "solved": false,
+   "tampered": [],
+   "cache_pct": 84,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 56
+    },
+    {
+     "pass": 69,
+     "wall_s": 88.2
+    },
+    {
+     "pass": 141,
+     "wall_s": 194.3
+    },
+    {
+     "pass": 214,
+     "wall_s": 613.5
+    },
+    {
+     "pass": 214,
+     "wall_s": 47.4
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.1713,
+   "requests": 38,
+   "input_tokens": 76,
+   "cache_read": 1456886,
+   "cache_write": 217564,
+   "output_tokens": 179625,
+   "max_context": 66954,
+   "avg_context": 44066,
+   "compactions": 4,
+   "summaries": 4,
+   "slides": 0,
+   "compact_s": 136.6,
+   "reads": 5,
+   "rereads": 0,
+   "edits": 11,
+   "bash": 28,
+   "failed_tools": 0,
+   "label": "factory",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1191.8,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 87,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 49.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 109.9
+    },
+    {
+     "pass": 141,
+     "wall_s": 353.3
+    },
+    {
+     "pass": 214,
+     "wall_s": 269.8
+    },
+    {
+     "pass": 261,
+     "wall_s": 231.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 165.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 11.5
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.1456,
+   "requests": 31,
+   "input_tokens": 62,
+   "cache_read": 1210395,
+   "cache_write": 226334,
+   "output_tokens": 176405,
+   "max_context": 65409,
+   "avg_context": 46348,
+   "compactions": 4,
+   "summaries": 0,
+   "slides": 4,
+   "compact_s": 0.4,
+   "reads": 4,
+   "rereads": 2,
+   "edits": 10,
+   "bash": 16,
+   "failed_tools": 0,
+   "label": "factory+slide",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 762.6,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 84,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 46.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 104
+    },
+    {
+     "pass": 141,
+     "wall_s": 227.2
+    },
+    {
+     "pass": 214,
+     "wall_s": 231.8
+    },
+    {
+     "pass": 261,
+     "wall_s": 87.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 57.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.2008,
+   "requests": 39,
+   "input_tokens": 78,
+   "cache_read": 1276395,
+   "cache_write": 229176,
+   "output_tokens": 231522,
+   "max_context": 63577,
+   "avg_context": 38606,
+   "compactions": 5,
+   "summaries": 5,
+   "slides": 0,
+   "compact_s": 102.9,
+   "reads": 6,
+   "rereads": 1,
+   "edits": 10,
+   "bash": 32,
+   "failed_tools": 1,
+   "label": "factory",
+   "run": 2,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1090.9,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 85,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 58.3
+    },
+    {
+     "pass": 69,
+     "wall_s": 117.7
+    },
+    {
+     "pass": 141,
+     "wall_s": 441.5
+    },
+    {
+     "pass": 214,
+     "wall_s": 287.8
+    },
+    {
+     "pass": 261,
+     "wall_s": 72.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 101.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 11.4
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.1386,
+   "requests": 37,
+   "input_tokens": 74,
+   "cache_read": 1396343,
+   "cache_write": 217721,
+   "output_tokens": 162173,
+   "max_context": 65371,
+   "avg_context": 43625,
+   "compactions": 4,
+   "summaries": 0,
+   "slides": 4,
+   "compact_s": 0.1,
+   "reads": 2,
+   "rereads": 1,
+   "edits": 12,
+   "bash": 26,
+   "failed_tools": 0,
+   "label": "factory+slide",
+   "run": 2,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 791.7,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 87,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 84
+    },
+    {
+     "pass": 69,
+     "wall_s": 120.8
+    },
+    {
+     "pass": 141,
+     "wall_s": 201.8
+    },
+    {
+     "pass": 214,
+     "wall_s": 231
+    },
+    {
+     "pass": 261,
+     "wall_s": 87.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 59.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.6
+    }
+   ]
+  }
+ ]
+}

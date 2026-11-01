@@ -8,7 +8,7 @@ import { parseValue, TUNABLES, tunableOp } from '../lib/tunables.mjs'
 const args = process.argv.slice(2)
 const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
 if (args.includes('--list') && args.includes('--json')) {
-  console.log(JSON.stringify(Object.entries(TUNABLES).map(([key, t]) => ({ key, live: t.live, about: t.about }))))
+  console.log(JSON.stringify(Object.entries(TUNABLES).map(([key, t]) => ({ key, path: t.path ?? key, live: t.live, about: t.about }))))
   process.exit(0)
 }
 if (args.includes('--list')) {

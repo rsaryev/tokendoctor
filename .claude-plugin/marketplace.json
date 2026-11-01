@@ -3,12 +3,12 @@
   "owner": {
     "name": "rsaryev"
   },
-  "description": "Measure, audit and tune Claude Code token use.",
+  "description": "The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
   "plugins": [
     {
       "name": "tokendoctor",
       "source": "./",
-      "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff."
+      "description": "The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine."
     }
   ]
 }

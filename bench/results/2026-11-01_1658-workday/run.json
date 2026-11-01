@@ -1,0 +1,233 @@
+{
+ "when": "2026-11-01 16:58",
+ "task": "workday",
+ "tests": 307,
+ "steps": 7,
+ "model": "claude-haiku-5-5",
+ "window": null,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 1,
+ "note": "pilot: how far a day of work grows",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.316 (Claude Code)",
+ "load": 16.2,
+ "arms": [
+  {
+   "label": "factory",
+   "profile": "factory",
+   "slide": false,
+   "slideTo": null,
+   "plugin": null,
+   "version": null
+  },
+  {
+   "label": "advised",
+   "profile": "advised",
+   "slide": false,
+   "slideTo": null,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  },
+  {
+   "label": "advised+slide",
+   "profile": "advised",
+   "slide": true,
+   "slideTo": 25,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 0.6252,
+   "requests": 30,
+   "input_tokens": 60,
+   "cache_read": 4158852,
+   "cache_write": 243710,
+   "output_tokens": 168602,
+   "max_context": 253356,
+   "avg_context": 146754,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 7,
+   "rereads": 0,
+   "edits": 13,
+   "bash": 21,
+   "failed_tools": 0,
+   "label": "factory",
+   "run": 0,
+   "exit": 0,
+   "wall_s": 997.3,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 94,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 94.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 155.8
+    },
+    {
+     "pass": 141,
+     "wall_s": 177.3
+    },
+    {
+     "pass": 214,
+     "wall_s": 316.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 133.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 107.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 13.1
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.6563,
+   "requests": 34,
+   "input_tokens": 68,
+   "cache_read": 4616163,
+   "cache_write": 259891,
+   "output_tokens": 184259,
+   "max_context": 269537,
+   "avg_context": 143415,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 7,
+   "rereads": 0,
+   "edits": 13,
+   "bash": 22,
+   "failed_tools": 0,
+   "label": "advised",
+   "run": 0,
+   "exit": 0,
+   "wall_s": 797.3,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 95,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 74.4
+    },
+    {
+     "pass": 69,
+     "wall_s": 119.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 208.8
+    },
+    {
+     "pass": 214,
+     "wall_s": 207.3
+    },
+    {
+     "pass": 261,
+     "wall_s": 96
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 15.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.6261,
+   "requests": 28,
+   "input_tokens": 56,
+   "cache_read": 3780082,
+   "cache_write": 239758,
+   "output_tokens": 166116,
+   "max_context": 249404,
+   "avg_context": 143568,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 1,
+   "rereads": 0,
+   "edits": 16,
+   "bash": 21,
+   "failed_tools": 0,
+   "label": "advised+slide",
+   "run": 0,
+   "exit": 0,
+   "wall_s": 716.4,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 94,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 47.4
+    },
+    {
+     "pass": 69,
+     "wall_s": 82.7
+    },
+    {
+     "pass": 141,
+     "wall_s": 186.6
+    },
+    {
+     "pass": 214,
+     "wall_s": 234.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 89
+    },
+    {
+     "pass": 307,
+     "wall_s": 64.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 12.2
+    }
+   ]
+  }
+ ]
+}

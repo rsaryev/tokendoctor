@@ -1,5 +1,44 @@
 # Changelog
 
+## Unreleased
+
+- `/tokendoctor`: the settings by short name, answered by the plugin with no model call. Alone it shows
+  the main six and the audit's fixes; `/tokendoctor <name>` explains one, `/tokendoctor <name> <value>`
+  applies it as typed (`400k`, `on`, `5m`, `reset`), `--project` or `--local` picks the file. Tab
+  completes names, values and fix ids.
+- `/tokendoctor fix <id>` replaces `/tokendoctor:apply`, which still works in this release.
+- `/tokendoctor undo` lists the settings changes tokendoctor wrote (kept in
+  `~/.claude/tokendoctor/changes.jsonl`), and `/tokendoctor undo <n>` puts one back, key by key, unless
+  that key changed again since. `tokendoctor-undo` does the same from a shell.
+- `model`, `advisorModel` and `env.CLAUDE_CODE_SUBAGENT_MODEL` take only a model alias or a `claude-…`
+  id; any other word used to be written as the model name.
+- `tokendoctor.slide` (off by default): where Claude Code compacts, old tool outputs are elided into
+  pointers instead of summarizing the conversation, down to `tokendoctor.slideTo` percent (default 25)
+  of where it compacts. Stale reads go first, then what edits wrote, then the oldest outputs; outputs
+  the model has not answered yet stay. On a day of work at a 100K window (`bench/`, Haiku 5.5) it
+  cost 19% less and took 33% less time than Claude Code's summary (evalkit: 35% and 28% less), with
+  every test passing both ways; a summary pauses about 73 s, a slide under 1 s.
+- The slide counts screenshots and thinking: a slid conversation carries neither, so what they took
+  counts as freed (Haiku's answers can think 40–60K tokens each). Before, a session full of screenshots (the localix-desk tools) found too little
+  text to elide and fell back to a summary. A slide now has to leave the context under 60% of where
+  Claude Code compacts, and after a summary the next compaction slides again; before, one summary
+  made every compaction after it a summary.
+- `npm run test:mod` runs the hooks module's tests on a copy without `bench/`, whose task projects
+  hold acceptance tests of their own.
+- `tokendoctor-replay` replays your past sessions as if Claude Code had compacted at a smaller
+  window and says what share of the cost it would have saved. It is an upper bound: it cannot see
+  the work a model does again after a summary (a live run had 27 files read again after one).
+- `/tokendoctor:sessions` opens with the replay: what a smaller window would have saved you.
+- README and landing: one claim (the same Claude Code for up to 40% less), the numbers it rests on, and
+  where it does not hold.
+- `test/private.test.mjs`: fails if anything git would commit holds a key, a token or a machine path.
+- `bench/`: a benchmark in the style of llx's. Claude Code does TypeScript projects against fixed
+  acceptance tests in a config folder of its own, as it ships (`factory`) and after every fix the
+  audit offers (`advised`), with or without the slide; results and history kept in git.
+- `tokendoctor-set` and the `settings` tool know the plugin's own options
+  (`pluginConfigs.tokendoctor@tokendoctor.options`).
+- `metrics` reports the compaction window and whether the slide is on.
+
 ## 0.4.1
 
 - A compact status line, no bar: `Opus 5.5 · api main* · 120k/367k · cache 1h · 5h 51% · week 35% · $24`.

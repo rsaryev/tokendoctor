@@ -116,3 +116,80 @@ test('settings shows each tunable with its current merged value, unset ones as n
   const rows = JSON.parse(String((await $.tool.call({ tool: 'mcp__tokendoctor__settings' })).result))
   expect(rows.map((r: { current: unknown }) => r.current)).toEqual([400000, 'auto', null])
 })
+
+// /tokendoctor answers here, with no model call: the settings as the engine merged them, the audit and
+// tokendoctor-set run as processes.
+function console_(on: Parameters<Parameters<typeof test>[1]>[1], merged: Record<string, unknown>) {
+  const runs: (readonly string[])[] = []
+  on('settings.read', () => ({ value: merged }))
+  on('session.usage', () => ({ value: { startedAt: 0, context: { tokens: 1, window: 1, breakdown: { autoCompactThreshold: 367000, categories: [] } }, rateLimits: [] } }) as never)
+  on('process.run', (_, e) => {
+    const [bin, ...args] = [e.argv[1]!.split('/').pop()!, ...e.argv.slice(2)]
+    runs.push([bin, ...args])
+    const stdout =
+      bin === 'tokendoctor-audit'
+        ? JSON.stringify({ findings: [{ id: 'subagents-on-top-model', severity: 'warn', title: 'Subagents run on Opus', fixes: [{ scope: 'user', ops: [] }] }] })
+        : bin === 'tokendoctor-undo'
+          ? args.includes('--json')
+            ? JSON.stringify([{ at: '2026-11-01T02:31:00Z', path: '/h/s.json', scope: 'user', changes: [{ key: 'advisorModel', after: 'opus' }], backup: null }])
+            : 'Applying (user): /h/s.json\n-   "advisorModel": "opus"\n  written\n'
+        : bin === 'tokendoctor-set'
+          ? 'Applying (user): set autoCompactWindow = 400000\n  written, backup: /h/settings.json.bak\n'
+          : args.includes('--write')
+            ? 'Applying (user): set env.CLAUDE_CODE_SUBAGENT_MODEL\n  written\n'
+            : 'Would change (user): set env.CLAUDE_CODE_SUBAGENT_MODEL = "sonnet"\n\nDry run. Re-run with --write to apply.'
+    return { value: { exitCode: 0, stdout, stderr: '' } }
+  })
+  return runs
+}
+
+test('/tokendoctor shows the main settings and the audit’s fixes', async ($, on) => {
+  console_(on, { promptCacheTtl: '1h' })
+  const r = await $.command.run({ command: 'tokendoctor' })
+  expect(r.text).toContain('default, compacts at 367K')
+  expect(r.text).toMatch(/cache\s+1h/)
+  expect(r.text).toContain('/tokendoctor fix subagents-on-top-model')
+})
+
+test('/tokendoctor <name> <value> writes what was typed, with no dialog', async ($, on) => {
+  const runs = console_(on, {})
+  let asked = 0
+  on('tool.call', { tool: 'AskUserQuestion' }, () => (asked++, { deny: 'not expected' }))
+  const r = await $.command.run({ command: 'tokendoctor', args: 'window 400k' })
+  expect(runs.find(a => a[0] === 'tokendoctor-set')).toEqual(['tokendoctor-set', 'autoCompactWindow', '400000', '--scope', 'user', '--write'])
+  expect(r.text).toBe('window: default → 400K in user settings. Applies now.\nBackup: /h/settings.json.bak')
+  expect(asked).toBe(0)
+})
+
+test('a bad value or name is answered without writing', async ($, on) => {
+  const runs = console_(on, {})
+  expect((await $.command.run({ command: 'tokendoctor', args: 'cache 2h' })).text).toContain('Try: 5m, 1h')
+  expect((await $.command.run({ command: 'tokendoctor', args: 'slid on' })).text).toContain('Did you mean slide')
+  expect(runs.some(a => a[0] === 'tokendoctor-set')).toBe(false)
+})
+
+test('/tokendoctor fix <id> shows the change and writes it only on Apply', async ($, on) => {
+  const runs = console_(on, {})
+  let answer = 'Cancel'
+  on('tool.call', { tool: 'AskUserQuestion' }, (_, e) => ({ result: { questions: e.questions, answers: { [e.questions[0]!.question]: answer } } }))
+  const no = await $.command.run({ command: 'tokendoctor', args: 'fix subagents-on-top-model' })
+  expect(no.text).toContain('Not changed.')
+  answer = 'Apply'
+  const yes = await $.command.run({ command: 'tokendoctor', args: 'fix subagents-on-top-model' })
+  expect(yes.text).toContain('written')
+  expect(runs.filter(a => a[0] === 'tokendoctor-apply')).toEqual([
+    ['tokendoctor-apply', 'subagents-on-top-model'],
+    ['tokendoctor-apply', 'subagents-on-top-model'],
+    ['tokendoctor-apply', 'subagents-on-top-model', '--write'],
+  ])
+})
+
+test('/tokendoctor undo lists the changes by number and puts one back as typed', async ($, on) => {
+  const runs = console_(on, {})
+  const list = await $.command.run({ command: 'tokendoctor', args: 'undo' })
+  expect(list.text).toMatch(/ 1 .* user\s+advisor: default → opus/)
+  const back = await $.command.run({ command: 'tokendoctor', args: 'undo 1' })
+  expect(back.text).toContain('written')
+  expect(runs.filter(a => a[0] === 'tokendoctor-undo')).toEqual([['tokendoctor-undo', '--json'], ['tokendoctor-undo', '1', '--write']])
+  expect((await $.command.run({ command: 'tokendoctor', args: 'undo last' })).text).toContain('lists them by number')
+})

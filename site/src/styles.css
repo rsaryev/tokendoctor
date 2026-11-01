@@ -5,5 +5,7 @@
 @import './styles/hero.css';
 @import './styles/home.css';
 @import './styles/navigation.css';
+@import './styles/proof.css';
+@import './styles/steps.css';
 
 @source "./";

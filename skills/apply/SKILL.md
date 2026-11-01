@@ -1,12 +1,14 @@
 ---
 name: apply
-description: Apply one tokendoctor audit fix after showing the exact change.
+description: Apply one tokendoctor audit fix after showing the exact change. Moved to /tokendoctor fix <id>, which needs no model call.
 disable-model-invocation: true
 allowed-tools: Bash(tokendoctor-apply *)
 argument-hint: <finding-id> [--scope user|project|local]
 ---
 
-Apply the fix for the audit finding named in `$ARGUMENTS`.
+Apply the fix for the audit finding named in `$ARGUMENTS`. First say in one line that
+`/tokendoctor fix <id>` does the same with no model call and that this command goes away in the next
+release.
 
 1. Run `tokendoctor-apply $ARGUMENTS` with no `--write`. It prints which files would change and a
    short -/+ summary, and changes nothing.

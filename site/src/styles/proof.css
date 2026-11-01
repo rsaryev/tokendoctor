@@ -1,0 +1,303 @@
+/* Under the hero: the proof (a chart and figures), the slide, and "your number is yours". The same
+   column, ground and type as the hero; figures in the heading face, details in soft grey. */
+.proof {
+  padding-block: clamp(3rem, 8vw, 6.5rem);
+  border-top: 1px solid var(--border-subtle);
+}
+.proof-head {
+  max-width: 46rem;
+}
+.proof-kicker {
+  color: var(--text-faint);
+  font: 400 var(--home-small) / 1.5 var(--font-mono);
+  text-transform: lowercase;
+}
+.proof-title {
+  margin: 0.6rem 0 0;
+  font: 700 clamp(1.9rem, 1.2rem + 2.4vw, 3.25rem) / 1.04 var(--font-heading);
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.proof-lede {
+  margin-top: 1rem;
+  color: var(--text-soft);
+  font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.proof-grid {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+@media (min-width: 60rem) {
+  .proof-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    align-items: start;
+  }
+}
+
+/* Figures: a large value, a label, a line of where it comes from. */
+.figures {
+  display: grid;
+  gap: 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.figures-row {
+  margin-top: 1.5rem;
+}
+@media (min-width: 48rem) {
+  .figures-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.figure {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.figure-value {
+  font: 700 clamp(2.2rem, 1.6rem + 2vw, 3.5rem) / 1 var(--font-heading);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.figure-label {
+  color: var(--foreground);
+  font-size: 1.05rem;
+}
+.figure-detail {
+  color: var(--text-faint);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* The chart, on a card: one series with an area under it, the days after the advice shaded, each
+   period's mean dashed, the drop marked; grid and axes recessive. */
+.chart {
+  margin: 0;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  border: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+  border-radius: 20px;
+  background: #0c0c0c;
+}
+.chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.chart-title {
+  color: var(--foreground);
+  font-size: 1.05rem;
+}
+.chart-sub {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+.chart-plot {
+  position: relative;
+}
+.chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.chart-grid {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+.chart-axis {
+  fill: var(--text-faint);
+  font: 400 12px var(--font-mono);
+}
+.chart-after {
+  fill: color-mix(in oklch, var(--ok) 7%, transparent);
+}
+.chart-band-label {
+  fill: var(--ok);
+  font: 400 12px var(--font-mono);
+}
+.chart-line {
+  fill: none;
+  stroke: var(--info);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.chart-gap {
+  fill: none;
+  stroke: var(--info);
+  stroke-width: 1.5;
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.chart-mean {
+  stroke: var(--text-soft);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+.chart-mean-label {
+  fill: var(--text-soft);
+  font: 400 12px var(--font-mono);
+}
+.chart-drop line,
+.chart-drop path {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-drop text {
+  fill: var(--foreground);
+  font: 700 26px var(--font-heading);
+  letter-spacing: -0.03em;
+}
+.chart-cross {
+  stroke: var(--text-faint);
+  stroke-width: 1;
+}
+.chart-dot {
+  fill: var(--info);
+  stroke: #0c0c0c;
+  stroke-width: 2;
+}
+.chart-tip {
+  position: absolute;
+  top: 0.5rem;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: #121212;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.chart-tip strong {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.chart-tip span {
+  color: var(--text-faint);
+  font: 400 12px var(--font-mono);
+}
+.chart-table {
+  margin-top: 0.75rem;
+  color: var(--text-faint);
+  font-size: 0.9rem;
+}
+.chart-table summary {
+  cursor: pointer;
+}
+.chart-table table {
+  margin-top: 0.5rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.chart-table th,
+.chart-table td {
+  padding: 0.15rem 1.25rem 0.15rem 0;
+  text-align: left;
+}
+
+/* Your number is yours: the caveats, and the one command that shows it. */
+.proof-yours {
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+@media (min-width: 60rem) {
+  .proof-yours {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+.caveats {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-soft);
+  font-size: clamp(1rem, 0.92rem + 0.25vw, 1.15rem);
+  line-height: 1.55;
+}
+.caveats li {
+  padding-left: 1.25rem;
+  position: relative;
+}
+.caveats li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--text-faint);
+}
+.yours-box {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: calc(var(--radius-sm) * 2);
+}
+.yours-text {
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+.yours-faint {
+  color: var(--text-faint);
+  font-size: 0.95rem;
+}
+.yours-text code {
+  font-family: var(--font-mono);
+  color: var(--text-soft);
+}
+.yours-cmd {
+  margin: 0;
+  color: var(--foreground);
+  font: 400 1rem / 1.4 var(--font-mono);
+}
+.yours-prompt {
+  color: var(--text-faint);
+  margin-right: 0.6ch;
+}
+.yours-box .install {
+  margin: 1.25rem 0;
+}
+.proof-subtitle {
+  margin: clamp(3rem, 6vw, 4.5rem) 0 0;
+  color: var(--foreground);
+  font: 600 clamp(1.25rem, 1rem + 0.8vw, 1.6rem) / 1.2 var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* On a phone the chart scales down to about 0.75 of its drawing: its text grows to stay legible. */
+@media (max-width: 40rem) {
+  .chart-axis,
+  .chart-band-label,
+  .chart-mean-label {
+    font-size: 16px;
+  }
+  .chart-drop text {
+    font-size: 30px;
+  }
+}
+
+/* A tablet: the chart takes the width, its three figures sit in a row under it. */
+@media (min-width: 40rem) and (max-width: 59.99rem) {
+  .proof-grid .figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

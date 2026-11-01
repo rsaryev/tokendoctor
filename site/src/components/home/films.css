@@ -1,14 +1,13 @@
-/* The demo's frame: a window as plain as a real one, a slightly lighter ground and a soft shadow,
-   no frame of its own. */
+/* The demo's frame: a window as plain as a real one, on a ground barely lighter than the page's and
+   a hairline edge, so the terminal sits in the page instead of standing out of it. */
 .demo-film {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1680 / 946;
+  border: 1px solid var(--landing-line);
   border-radius: var(--landing-radius);
-  background-color: #0f0f0f;
-  box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.03) inset,
-    0 40px 90px -40px rgb(0 0 0 / 0.95);
+  background-color: #090909;
+  box-shadow: 0 40px 90px -40px rgb(0 0 0 / 0.95);
 }
 .demo-video {
   display: block;
@@ -184,8 +183,8 @@
 }
 .asciinema-player-theme-tokendoctor {
   --term-color-foreground: #e6e6e6;
-  --term-color-background: #0f0f0f;
-  --term-color-0: #1a1a1a;
+  --term-color-background: #090909;
+  --term-color-0: #141414;
   --term-color-1: #ef7a6d;
   --term-color-2: #8bd49c;
   --term-color-3: #e7c97a;

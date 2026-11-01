@@ -1,0 +1,9 @@
+{
+  "about": "Fixed reference runs: Claude Code without tokendoctor (factory) and with the audit's fixes (advised). run.ts runs only tokendoctor's arm by default and compares it with these; run a baseline again only when Claude Code or the model changes (--arm factory, --arm advised), then point this file at the new run.",
+  "baselines": [
+    { "task": "week", "model": "claude-haiku-5-5", "window": null, "run": "2026-11-01_1819-week", "arms": ["factory", "advised"] },
+    { "task": "workday", "model": "claude-haiku-5-5", "window": 100000, "run": "2026-11-01_1750-workday", "arms": ["factory"] },
+    { "task": "evalkit", "model": "claude-haiku-5-5", "window": 100000, "run": "2026-11-01_1937-evalkit", "arms": ["factory"] },
+    { "task": "fixkit", "model": "claude-haiku-5-5", "window": 100000, "run": "2026-11-01_1715-fixkit", "arms": ["factory"] }
+  ]
+}

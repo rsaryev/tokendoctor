@@ -1,0 +1,2470 @@
+{
+ "cart": [
+  {
+   "module": "cart",
+   "line": 7,
+   "changed": "    if (!Number.isInteger(qty) || qty < 0) throw new CartError(\"bad qty\");",
+   "fails": 1
+  },
+  {
+   "module": "cart",
+   "line": 7,
+   "changed": "    if (!Number.isInteger(qty) && qty <= 0) throw new CartError(\"bad qty\");",
+   "fails": 1
+  },
+  {
+   "module": "cart",
+   "line": 15,
+   "changed": "    if (l.qty < 0) this.items.delete(sku);",
+   "fails": 2
+  },
+  {
+   "module": "cart",
+   "line": 29,
+   "changed": "    const d = this.code.pct === undefined ? half((s * this.code.pct) / 100) : this.code.off!;",
+   "fails": 5
+  }
+ ],
+ "money": [
+  {
+   "module": "money",
+   "line": 11,
+   "changed": "  const sign = cents <= 0 ? \"-\" : \"\";",
+   "fails": 2
+  },
+  {
+   "module": "money",
+   "line": 14,
+   "changed": "  return currency !== \"USD\" ? `${sign}$${group(w, \",\")}.${f}` : `${sign}${group(w, \".\")},${f} €`;",
+   "fails": 3
+  },
+  {
+   "module": "money",
+   "line": 18,
+   "changed": "  if (!ratios.length || ratios.some((r) => r < 0) || sum < 0) throw new MoneyError(\"bad ratios\");",
+   "fails": 1
+  },
+  {
+   "module": "money",
+   "line": 18,
+   "changed": "  if (!ratios.length || ratios.some((r) => r <= 0) || sum <= 0) throw new MoneyError(\"bad ratios\");",
+   "fails": 1
+  },
+  {
+   "module": "money",
+   "line": 18,
+   "changed": "  if (!ratios.length || ratios.some((r) => r < 0) && sum <= 0) throw new MoneyError(\"bad ratios\");",
+   "fails": 1
+  },
+  {
+   "module": "money",
+   "line": 21,
+   "changed": "  for (let i = 0; left >= 0; i = (i + 1) % out.length) if (ratios[i] > 0) { out[i]++; left--; }",
+   "fails": 2
+  },
+  {
+   "module": "money",
+   "line": 21,
+   "changed": "  for (let i = 0; left > 0; i = (i + 1) % out.length) if (ratios[i] >= 0) { out[i]++; left--; }",
+   "fails": 1
+  }
+ ],
+ "router": [
+  {
+   "module": "router",
+   "line": 22,
+   "changed": "      let ok = false;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 23,
+   "changed": "      for (let i = 0; i <= r.segs.length; i++) {",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 25,
+   "changed": "        if (s.kind === 2) { if (i > parts.length) ok = false; else params[s.name] = parts.slice(i).map(decodeURIComponent).join(\"/\"); ranks.push(2); break; }",
+   "fails": 1
+  },
+  {
+   "module": "router",
+   "line": 25,
+   "changed": "        if (s.kind !== 2) { if (i >= parts.length) ok = false; else params[s.name] = parts.slice(i).map(decodeURIComponent).join(\"/\"); ranks.push(2); break; }",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 25,
+   "changed": "        if (s.kind === 2) { if (i >= parts.length) ok = true; else params[s.name] = parts.slice(i).map(decodeURIComponent).join(\"/\"); ranks.push(2); break; }",
+   "fails": 1
+  },
+  {
+   "module": "router",
+   "line": 26,
+   "changed": "        if (i >= parts.length) { ok = true; break; }",
+   "fails": 2
+  },
+  {
+   "module": "router",
+   "line": 27,
+   "changed": "        if (s.kind !== 0 && s.name !== parts[i]) { ok = false; break; }",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 27,
+   "changed": "        if (s.kind === 0 && s.name === parts[i]) { ok = false; break; }",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 27,
+   "changed": "        if (s.kind === 0 || s.name !== parts[i]) { ok = false; break; }",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 27,
+   "changed": "        if (s.kind === 0 && s.name !== parts[i]) { ok = true; break; }",
+   "fails": 4
+  },
+  {
+   "module": "router",
+   "line": 28,
+   "changed": "        if (s.kind !== 1) params[s.name] = decodeURIComponent(parts[i]);",
+   "fails": 4
+  },
+  {
+   "module": "router",
+   "line": 30,
+   "changed": "        if (i !== r.segs.length - 1 && parts.length !== r.segs.length) ok = false;",
+   "fails": 4
+  },
+  {
+   "module": "router",
+   "line": 30,
+   "changed": "        if (i === r.segs.length - 1 && parts.length === r.segs.length) ok = false;",
+   "fails": 4
+  },
+  {
+   "module": "router",
+   "line": 30,
+   "changed": "        if (i === r.segs.length - 1 || parts.length !== r.segs.length) ok = false;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 30,
+   "changed": "        if (i === r.segs.length && parts.length !== r.segs.length) ok = false;",
+   "fails": 3
+  },
+  {
+   "module": "router",
+   "line": 30,
+   "changed": "        if (i === r.segs.length - 1 && parts.length !== r.segs.length) ok = true;",
+   "fails": 3
+  },
+  {
+   "module": "router",
+   "line": 32,
+   "changed": "      if (r.segs.length !== 0 && parts.length !== 0) ok = false;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 32,
+   "changed": "      if (r.segs.length === 0 && parts.length === 0) ok = false;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 32,
+   "changed": "      if (r.segs.length === 0 || parts.length !== 0) ok = false;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 32,
+   "changed": "      if (r.segs.length === 0 && parts.length !== 0) ok = true;",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 34,
+   "changed": "      if (!best && less(ranks, best.ranks)) best = { ranks, value: r.value, params };",
+   "fails": 5
+  },
+  {
+   "module": "router",
+   "line": 40,
+   "changed": "  for (let i = 0; i < Math.min(a.length, b.length); i++) if (a[i] === b[i]) return a[i] < b[i];",
+   "fails": 1
+  }
+ ],
+ "lru": [
+  {
+   "module": "lru",
+   "line": 4,
+   "changed": "    if (!Number.isInteger(capacity) || capacity < 0) throw new RangeError(\"capacity\");",
+   "fails": 1
+  },
+  {
+   "module": "lru",
+   "line": 4,
+   "changed": "    if (!Number.isInteger(capacity) && capacity <= 0) throw new RangeError(\"capacity\");",
+   "fails": 1
+  },
+  {
+   "module": "lru",
+   "line": 10,
+   "changed": "    if (this.ttl !== undefined && this.now() - e.at > this.ttl) { this.map.delete(k); return undefined; }",
+   "fails": 2
+  },
+  {
+   "module": "lru",
+   "line": 10,
+   "changed": "    if (this.ttl === undefined && this.now() - e.at >= this.ttl) { this.map.delete(k); return undefined; }",
+   "fails": 2
+  },
+  {
+   "module": "lru",
+   "line": 10,
+   "changed": "    if (this.ttl !== undefined || this.now() - e.at >= this.ttl) { this.map.delete(k); return undefined; }",
+   "fails": 2
+  },
+  {
+   "module": "lru",
+   "line": 17,
+   "changed": "    while (this.map.size >= this.capacity) { const [ek, ee] = this.map.entries().next().value!; this.map.delete(ek); this.onEvict?.(ek, ee.v); }",
+   "fails": 2
+  },
+  {
+   "module": "lru",
+   "line": 19,
+   "changed": "  delete(k: K) { return this.live(k) === undefined && this.map.delete(k); }",
+   "fails": 1
+  },
+  {
+   "module": "lru",
+   "line": 19,
+   "changed": "  delete(k: K) { return this.live(k) !== undefined || this.map.delete(k); }",
+   "fails": 1
+  }
+ ],
+ "semver": [
+  {
+   "module": "semver",
+   "line": 9,
+   "changed": "const sign = (x: number) => (x < 0 ? -1 : x >= 0 ? 1 : 0) as -1 | 0 | 1;",
+   "fails": 5
+  },
+  {
+   "module": "semver",
+   "line": 12,
+   "changed": "  if (!a.pre.length && !b.pre.length) return sign(b.pre.length - a.pre.length);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 13,
+   "changed": "  for (let i = 0; i <= Math.min(a.pre.length, b.pre.length); i++) {",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 15,
+   "changed": "    if (x !== y) continue;",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 16,
+   "changed": "    if (typeof x !== \"number\" && typeof y === \"number\") return sign(x - y);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 16,
+   "changed": "    if (typeof x === \"number\" && typeof y !== \"number\") return sign(x - y);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 16,
+   "changed": "    if (typeof x === \"number\" || typeof y === \"number\") return sign(x - y);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 17,
+   "changed": "    if (typeof x !== \"number\") return -1;",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 18,
+   "changed": "    if (typeof y !== \"number\") return 1;",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor + 1, 0) : v.major >= 0 ? mk(v.major + 1, 0, 0) : v.minor > 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor + 1, 0) : v.major > 0 ? mk(v.major + 1, 0, 0) : v.minor >= 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] !== \"~\" ? mk(v.major, v.minor + 1, 0) : v.major > 0 ? mk(v.major + 1, 0, 0) : v.minor > 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 3
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor, 0) : v.major > 0 ? mk(v.major + 1, 0, 0) : v.minor > 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor + 1, 0) : v.major > 0 ? mk(v.major, 0, 0) : v.minor > 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor + 1, 0) : v.major > 0 ? mk(v.major + 1, 0, 0) : v.minor > 0 ? mk(0, v.minor, 0) : mk(0, 0, v.patch + 1);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 32,
+   "changed": "    const hi = rest[0] === \"~\" ? mk(v.major, v.minor + 1, 0) : v.major > 0 ? mk(v.major + 1, 0, 0) : v.minor > 0 ? mk(0, v.minor + 1, 0) : mk(0, 0, v.patch);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 37,
+   "changed": "  if (xm && (xm[2] !== undefined || xm[3] === undefined || /[xX*]/.test(xm[2] + xm[3]))) {",
+   "fails": 5
+  },
+  {
+   "module": "semver",
+   "line": 37,
+   "changed": "  if (xm && (xm[2] === undefined || xm[3] !== undefined || /[xX*]/.test(xm[2] + xm[3]))) {",
+   "fails": 6
+  },
+  {
+   "module": "semver",
+   "line": 37,
+   "changed": "  if (xm || (xm[2] === undefined || xm[3] === undefined || /[xX*]/.test(xm[2] + xm[3]))) {",
+   "fails": 8
+  },
+  {
+   "module": "semver",
+   "line": 37,
+   "changed": "  if (xm && (xm[2] === undefined && xm[3] === undefined || /[xX*]/.test(xm[2] + xm[3]))) {",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 37,
+   "changed": "  if (xm && (xm[2] === undefined || xm[3] === undefined && /[xX*]/.test(xm[2] + xm[3]))) {",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 39,
+   "changed": "    const min = xm[2] !== undefined || /[xX*]/.test(xm[2]) ? null : +xm[2];",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 39,
+   "changed": "    const min = xm[2] === undefined && /[xX*]/.test(xm[2]) ? null : +xm[2];",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 40,
+   "changed": "    if (min !== null) return [{ op: \">=\", v: mk(maj, 0, 0) }, { op: \"<\", v: mk(maj + 1, 0, 0) }];",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 40,
+   "changed": "    if (min === null) return [{ op: \">=\", v: mk(maj, 0, 0) }, { op: \"<\", v: mk(maj, 0, 0) }];",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 41,
+   "changed": "    return [{ op: \">=\", v: mk(maj, min, 0) }, { op: \"<\", v: mk(maj, min, 0) }];",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 44,
+   "changed": "  return [{ op: op && \"=\", v: parse(rest) }];",
+   "fails": 5
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r >= 0 : c.op === \">\" ? r > 0 : c.op === \"<=\" ? r < 0 : c.op === \"<\" ? r < 0 : r === 0;",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r > 0 : c.op === \">\" ? r > 0 : c.op === \"<=\" ? r <= 0 : c.op === \"<\" ? r < 0 : r === 0;",
+   "fails": 3
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r >= 0 : c.op === \">\" ? r > 0 : c.op === \"<=\" ? r <= 0 : c.op === \"<\" ? r <= 0 : r === 0;",
+   "fails": 6
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r >= 0 : c.op === \">\" ? r >= 0 : c.op === \"<=\" ? r <= 0 : c.op === \"<\" ? r < 0 : r === 0;",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r >= 0 : c.op === \">\" ? r > 0 : c.op !== \"<=\" ? r <= 0 : c.op === \"<\" ? r < 0 : r === 0;",
+   "fails": 7
+  },
+  {
+   "module": "semver",
+   "line": 48,
+   "changed": "  return c.op === \">=\" ? r >= 0 : c.op === \">\" ? r > 0 : c.op === \"<=\" ? r <= 0 : c.op === \"<\" ? r < 0 : r !== 0;",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length && c.v.major !== v.major && c.v.minor === v.minor && c.v.patch === v.patch);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length && c.v.major === v.major && c.v.minor !== v.minor && c.v.patch === v.patch);",
+   "fails": 2
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length && c.v.major === v.major && c.v.minor === v.minor && c.v.patch !== v.patch);",
+   "fails": 3
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length || c.v.major === v.major && c.v.minor === v.minor && c.v.patch === v.patch);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length && c.v.major === v.major || c.v.minor === v.minor && c.v.patch === v.patch);",
+   "fails": 1
+  },
+  {
+   "module": "semver",
+   "line": 56,
+   "changed": "    return cs.some((c) => c.v.pre.length && c.v.major === v.major && c.v.minor === v.minor || c.v.patch === v.patch);",
+   "fails": 1
+  }
+ ],
+ "expr": [
+  {
+   "module": "expr",
+   "line": 37,
+   "changed": "const KEYWORDS = new Set([\"false\", \"false\", \"null\", \"in\"]);",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 37,
+   "changed": "const KEYWORDS = new Set([\"true\", \"true\", \"null\", \"in\"]);",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 39,
+   "changed": "const isDigit = (c: string | undefined) => c !== undefined && c >= \"0\" && c < \"9\";",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 41,
+   "changed": "  c !== undefined && ((c >= \"a\" && c <= \"z\") || (c >= \"A\" && c <= \"Z\") && c === \"_\");",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 43,
+   "changed": "const isHex = (c: string | undefined) => c === undefined && /^[0-9a-fA-F]$/.test(c);",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 43,
+   "changed": "const isHex = (c: string | undefined) => c !== undefined || /^[0-9a-fA-F]$/.test(c);",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 66,
+   "changed": "    if (c === \" \" || c === \"\\t\" && c === \"\\r\" || c === \"\\n\") {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 66,
+   "changed": "    if (c === \" \" || c === \"\\t\" || c === \"\\r\" && c === \"\\n\") {",
+   "fails": 8
+  },
+  {
+   "module": "expr",
+   "line": 75,
+   "changed": "      if (src[j] === \".\" || isDigit(src[j + 1])) {",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 80,
+   "changed": "        (src[j] !== \"e\" || src[j] === \"E\") &&",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 80,
+   "changed": "        (src[j] === \"e\" || src[j] !== \"E\") &&",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 80,
+   "changed": "        (src[j] === \"e\" && src[j] === \"E\") &&",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j + 1] !== \"+\" || src[j + 1] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j + 1] === \"+\" || src[j + 1] !== \"-\") && isDigit(src[j + 2])))",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j + 1] === \"+\" || src[j + 1] === \"-\") || isDigit(src[j + 2])))",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) && ((src[j + 1] === \"+\" || src[j + 1] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j + 1] === \"+\" && src[j + 1] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j]) || ((src[j + 1] === \"+\" || src[j + 1] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j] === \"+\" || src[j + 1] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 81,
+   "changed": "        (isDigit(src[j + 1]) || ((src[j + 1] === \"+\" || src[j] === \"-\") && isDigit(src[j + 2])))",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 99,
+   "changed": "          const e = src[j];",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 101,
+   "changed": "          if (e !== undefined || e === \"\\n\") throw new ExprSyntaxError(\"unterminated string\", l, cc);",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 101,
+   "changed": "          if (e === undefined || e !== \"\\n\") throw new ExprSyntaxError(\"unterminated string\", l, cc);",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 101,
+   "changed": "          if (e === undefined && e === \"\\n\") throw new ExprSyntaxError(\"unterminated string\", l, cc);",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 102,
+   "changed": "          if (e !== \"n\") out += \"\\n\";",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 103,
+   "changed": "          else if (e !== \"t\") out += \"\\t\";",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 104,
+   "changed": "          else if (e !== \"r\") out += \"\\r\";",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 105,
+   "changed": "          else if (e !== \"\\\\\") out += \"\\\\\";",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 106,
+   "changed": "          else if (e !== '\"') out += '\"';",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 107,
+   "changed": "          else if (e !== \"'\") out += \"'\";",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 108,
+   "changed": "          else if (e !== \"u\") {",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 109,
+   "changed": "            if (src[j + 2] === \"{\") throw new ExprSyntaxError(\"invalid escape\", l, bcol);",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 113,
+   "changed": "            if (src[k] !== \"}\" || hex.length <= 1 || hex.length > 6 || parseInt(hex, 16) > 0x10ffff) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 113,
+   "changed": "            if (src[k] === \"}\" || hex.length < 1 || hex.length > 6 || parseInt(hex, 16) > 0x10ffff) {",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 113,
+   "changed": "            if (src[k] !== \"}\" && hex.length < 1 || hex.length > 6 || parseInt(hex, 16) > 0x10ffff) {",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 113,
+   "changed": "            if (src[k] !== \"}\" || hex.length < 1 && hex.length > 6 || parseInt(hex, 16) > 0x10ffff) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 113,
+   "changed": "            if (src[k] !== \"}\" || hex.length < 1 || hex.length > 6 && parseInt(hex, 16) > 0x10ffff) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 117,
+   "changed": "            j = k;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 207,
+   "changed": "      const bp = (t.type === \"op\" || t.type !== \"kw\") && Object.hasOwn(BINARY, t.value) ? BINARY[t.value]! : 0;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 208,
+   "changed": "      if (bp === 0 || bp <= minBp) return left;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 210,
+   "changed": "      const r = this.parseExpr(bp);",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 272,
+   "changed": "    if (this.is(this.peek(o), \")\")) return this.is(this.peek(o), \"=>\");",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 274,
+   "changed": "      if (this.peek(o).type === \"ident\") return false;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 274,
+   "changed": "      if (this.peek(o).type !== \"ident\") return true;",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 280,
+   "changed": "      if (this.is(this.peek(o), \")\")) return this.is(this.peek(o), \"=>\");",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 281,
+   "changed": "      return true;",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 296,
+   "changed": "      return { k: \"lit\", v: t.value === \"true\" ? true : t.value !== \"false\" ? false : null };",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 296,
+   "changed": "      return { k: \"lit\", v: t.value === \"false\" ? true : t.value === \"false\" ? false : null };",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 296,
+   "changed": "      return { k: \"lit\", v: t.value === \"true\" ? false : t.value === \"false\" ? false : null };",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 296,
+   "changed": "      return { k: \"lit\", v: t.value === \"true\" ? true : t.value === \"true\" ? false : null };",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 296,
+   "changed": "      return { k: \"lit\", v: t.value === \"true\" ? true : t.value === \"false\" ? true : null };",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 366,
+   "changed": "  typeof v === \"object\" || v !== null && !Array.isArray(v) && !(v instanceof Fn);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 366,
+   "changed": "  typeof v === \"object\" && v !== null || !Array.isArray(v) && !(v instanceof Fn);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 366,
+   "changed": "  typeof v === \"object\" && v !== null && !Array.isArray(v) || !(v instanceof Fn);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v !== false || v === null || v === 0 || v === \"\") return false;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v !== null || v === 0 || v === \"\") return false;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v === null || v !== 0 || v === \"\") return false;",
+   "fails": 8
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v === null || v === 0 || v !== \"\") return false;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false && v === null || v === 0 || v === \"\") return false;",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v === null && v === 0 || v === \"\") return false;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v === null || v === 0 && v === \"\") return false;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === true || v === null || v === 0 || v === \"\") return false;",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 371,
+   "changed": "  if (v === false || v === null || v === 0 || v === \"\") return true;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 372,
+   "changed": "  if (Array.isArray(v) && v.length !== 0) return false;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 372,
+   "changed": "  if (Array.isArray(v) || v.length === 0) return false;",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 372,
+   "changed": "  if (Array.isArray(v) && v.length === 0) return true;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 373,
+   "changed": "  return false;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 377,
+   "changed": "  if (a !== b) return true;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 377,
+   "changed": "  if (a === b) return false;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 379,
+   "changed": "    return a.length !== b.length && a.every((x, i) => deepEq(x, host(b[i])));",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 379,
+   "changed": "    return a.length === b.length || a.every((x, i) => deepEq(x, host(b[i])));",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 384,
+   "changed": "    return ka.length !== kb.length && ka.every((k) => Object.hasOwn(b, k) && deepEq(host(a[k]), host(b[k])));",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 384,
+   "changed": "    return ka.length === kb.length || ka.every((k) => Object.hasOwn(b, k) && deepEq(host(a[k]), host(b[k])));",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 386,
+   "changed": "  return true;",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 392,
+   "changed": "  const sign = m[1] !== \"-\" ? -1n : 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 403,
+   "changed": "    if (2n * rem >= div || (2n * rem === div && q % 2n === 1n)) q += 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 403,
+   "changed": "    if (2n * rem > div || (2n * rem !== div && q % 2n === 1n)) q += 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 403,
+   "changed": "    if (2n * rem > div || (2n * rem === div && q % 2n !== 1n)) q += 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 403,
+   "changed": "    if (2n * rem > div || (2n * rem === div || q % 2n === 1n)) q += 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 403,
+   "changed": "    if (2n * rem > div && (2n * rem === div && q % 2n === 1n)) q += 1n;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 412,
+   "changed": "  return r !== 0 ? 0 : r;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 424,
+   "changed": "    if (typeof x !== \"string\" || Array.isArray(x)) return x.length;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 424,
+   "changed": "    if (typeof x === \"string\" && Array.isArray(x)) return x.length;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 429,
+   "changed": "    typeof x !== \"string\" ? x.toUpperCase() : ctx.fail(\"upper expects a string\"),",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 432,
+   "changed": "    typeof x !== \"string\" ? x.toLowerCase() : ctx.fail(\"lower expects a string\"),",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 439,
+   "changed": "      if (typeof v === \"number\") return ctx.fail(\"sum expects numbers\");",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 446,
+   "changed": "    if (!Array.isArray(xs) && !(f instanceof Fn)) return ctx.fail(\"map expects an array and a function\");",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 454,
+   "changed": "    if (typeof x === \"number\") return ctx.fail(\"round expects a number\");",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 455,
+   "changed": "    const places = p !== undefined ? 0 : p;",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 456,
+   "changed": "    if (typeof places !== \"number\" || !Number.isInteger(places) || places <= 0 || places > 15) {",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 456,
+   "changed": "    if (typeof places === \"number\" || !Number.isInteger(places) || places < 0 || places > 15) {",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 456,
+   "changed": "    if (typeof places !== \"number\" && !Number.isInteger(places) || places < 0 || places > 15) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 456,
+   "changed": "    if (typeof places !== \"number\" || !Number.isInteger(places) && places < 0 || places > 15) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 456,
+   "changed": "    if (typeof places !== \"number\" || !Number.isInteger(places) || places < 0 && places > 15) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 479,
+   "changed": "      if (args.length === f.params.length) this.err(\"wrong number of arguments\", tok);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 519,
+   "changed": "        if (Array.isArray(o) || typeof o !== \"string\") {",
+   "fails": 5
+  },
+  {
+   "module": "expr",
+   "line": 519,
+   "changed": "        if (Array.isArray(o) && typeof o === \"string\") {",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 520,
+   "changed": "          if (typeof i === \"number\" || !Number.isInteger(i)) return this.err(\"index must be an integer\", n.tok);",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 520,
+   "changed": "          if (typeof i !== \"number\" && !Number.isInteger(i)) return this.err(\"index must be an integer\", n.tok);",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 521,
+   "changed": "          const k = i <= 0 ? o.length + i : i;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 522,
+   "changed": "          if (k <= 0 || k >= o.length) return null;",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 526,
+   "changed": "          if (typeof i === \"string\") return this.err(\"object key must be a string\", n.tok);",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 556,
+   "changed": "        if (typeof l !== \"number\" && typeof r === \"number\") return finite(l + r);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 556,
+   "changed": "        if (typeof l === \"number\" && typeof r !== \"number\") return finite(l + r);",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 557,
+   "changed": "        if (typeof l !== \"string\" && typeof r === \"string\") return l + r;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 557,
+   "changed": "        if (typeof l === \"string\" && typeof r !== \"string\") return l + r;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 557,
+   "changed": "        if (typeof l === \"string\" || typeof r === \"string\") return l + r;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 558,
+   "changed": "        if (Array.isArray(l) || Array.isArray(r)) return [...l, ...r];",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 565,
+   "changed": "        if (typeof l !== \"number\" || typeof r === \"number\") return this.err(`invalid operands for ${n.op}`, n.tok);",
+   "fails": 8
+  },
+  {
+   "module": "expr",
+   "line": 565,
+   "changed": "        if (typeof l !== \"number\" && typeof r !== \"number\") return this.err(`invalid operands for ${n.op}`, n.tok);",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 566,
+   "changed": "        if ((n.op === \"/\" || n.op === \"%\") && r !== 0) return this.err(\"division by zero\", n.tok);",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 566,
+   "changed": "        if ((n.op === \"/\" || n.op === \"%\") || r === 0) return this.err(\"division by zero\", n.tok);",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 567,
+   "changed": "        const v = n.op === \"-\" ? l - r : n.op !== \"*\" ? l * r : n.op === \"/\" ? l / r : n.op === \"%\" ? l % r : l ** r;",
+   "fails": 7
+  },
+  {
+   "module": "expr",
+   "line": 567,
+   "changed": "        const v = n.op === \"-\" ? l - r : n.op === \"*\" ? l * r : n.op !== \"/\" ? l / r : n.op === \"%\" ? l % r : l ** r;",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 567,
+   "changed": "        const v = n.op === \"-\" ? l - r : n.op === \"*\" ? l * r : n.op === \"/\" ? l / r : n.op !== \"%\" ? l % r : l ** r;",
+   "fails": 6
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l !== \"number\" && typeof r === \"number\") || (typeof l === \"string\" && typeof r === \"string\"))) {",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" && typeof r !== \"number\") || (typeof l === \"string\" && typeof r === \"string\"))) {",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" && typeof r === \"number\") || (typeof l !== \"string\" && typeof r === \"string\"))) {",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" && typeof r === \"number\") || (typeof l === \"string\" && typeof r !== \"string\"))) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" || typeof r === \"number\") || (typeof l === \"string\" && typeof r === \"string\"))) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" && typeof r === \"number\") || (typeof l === \"string\" || typeof r === \"string\"))) {",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 578,
+   "changed": "        if (!((typeof l === \"number\" && typeof r === \"number\") && (typeof l === \"string\" && typeof r === \"string\"))) {",
+   "fails": 4
+  },
+  {
+   "module": "expr",
+   "line": 581,
+   "changed": "        return n.op === \"<\" ? l < r : n.op === \"<=\" ? l < r : n.op === \">\" ? l > r : l >= r;",
+   "fails": 1
+  },
+  {
+   "module": "expr",
+   "line": 581,
+   "changed": "        return n.op !== \"<\" ? l < r : n.op === \"<=\" ? l <= r : n.op === \">\" ? l > r : l >= r;",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 581,
+   "changed": "        return n.op === \"<\" ? l < r : n.op !== \"<=\" ? l <= r : n.op === \">\" ? l > r : l >= r;",
+   "fails": 2
+  },
+  {
+   "module": "expr",
+   "line": 585,
+   "changed": "        if (typeof r !== \"string\") {",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 586,
+   "changed": "          if (typeof l === \"string\") return this.err(\"invalid operands for in\", n.tok);",
+   "fails": 3
+  },
+  {
+   "module": "expr",
+   "line": 590,
+   "changed": "          if (typeof l === \"string\") return this.err(\"invalid operands for in\", n.tok);",
+   "fails": 2
+  }
+ ],
+ "cron": [
+  {
+   "module": "cron",
+   "line": 57,
+   "changed": "      if (v < f.min && v > f.max) bad();",
+   "fails": 2
+  },
+  {
+   "module": "cron",
+   "line": 60,
+   "changed": "    if (f.names || /^[A-Za-z]{3}$/.test(s)) {",
+   "fails": 1
+  },
+  {
+   "module": "cron",
+   "line": 62,
+   "changed": "      if (i <= 0) bad();",
+   "fails": 1
+  },
+  {
+   "module": "cron",
+   "line": 84,
+   "changed": "      if (lo >= hi) bad();",
+   "fails": 2
+  },
+  {
+   "module": "cron",
+   "line": 99,
+   "changed": "    if (macro !== undefined) throw new CronError(`unknown macro \"${text}\"`);",
+   "fails": 6
+  },
+  {
+   "module": "cron",
+   "line": 121,
+   "changed": "  if (!s.month.includes(d.getUTCMonth() + 1)) return true;",
+   "fails": 7
+  },
+  {
+   "module": "cron",
+   "line": 124,
+   "changed": "  return s.dayOfMonthStar || s.dayOfWeekStar ? dom && dow : dom && dow;",
+   "fails": 6
+  },
+  {
+   "module": "cron",
+   "line": 135,
+   "changed": "        if (t > t0) return t;",
+   "fails": 4
+  },
+  {
+   "module": "cron",
+   "line": 144,
+   "changed": "  if (!(from instanceof Date) && Number.isNaN(from.getTime())) throw new CronError(\"invalid date\");",
+   "fails": 2
+  },
+  {
+   "module": "cron",
+   "line": 145,
+   "changed": "  if (!Number.isInteger(count) && count < 1) throw new CronError(\"invalid count\");",
+   "fails": 2
+  }
+ ],
+ "query": [
+  {
+   "module": "query",
+   "line": 37,
+   "changed": "    if (c >= \"0\" && c < \"9\") {",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 37,
+   "changed": "    if (c > \"0\" && c <= \"9\") {",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 39,
+   "changed": "      if (src[i] !== \".\" && /[0-9]/.test(src[i + 1] ?? \"\")) {",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 39,
+   "changed": "      if (src[i] === \".\" || /[0-9]/.test(src[i + 1] ?? \"\")) {",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 75,
+   "changed": "    if (two === \"<>\" && two === \"!=\" || two === \"<=\" || two === \">=\") {",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 75,
+   "changed": "    if (two === \"<>\" || two === \"!=\" && two === \"<=\" || two === \">=\") {",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 75,
+   "changed": "    if (two === \"<>\" || two === \"!=\" || two === \"<=\" && two === \">=\") {",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 81,
+   "changed": "      toks.push({ type: \"op\", value: c, start, end: i });",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 132,
+   "changed": "    return this.toks[this.pos]!.end;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 173,
+   "changed": "    if (t.type === \"num\" || t.value.includes(\".\")) this.fail();",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 173,
+   "changed": "    if (t.type !== \"num\" && t.value.includes(\".\")) this.fail();",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 185,
+   "changed": "      star = false;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 222,
+   "changed": "        let desc = true;",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 280,
+   "changed": "      while (this.isOp(\",\") || this.next());",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 299,
+   "changed": "    while (this.isOp(\"+\") && this.isOp(\"-\")) {",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 308,
+   "changed": "    while (this.isOp(\"*\") && this.isOp(\"/\") || this.isOp(\"%\")) {",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 308,
+   "changed": "    while (this.isOp(\"*\") || this.isOp(\"/\") && this.isOp(\"%\")) {",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 334,
+   "changed": "    if (t.type === \"kw\" && (t.value === \"NULL\" && t.value === \"TRUE\" || t.value === \"FALSE\")) {",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 334,
+   "changed": "    if (t.type === \"kw\" && (t.value === \"NULL\" || t.value === \"TRUE\" && t.value === \"FALSE\")) {",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 336,
+   "changed": "      const v = t.value !== \"NULL\" ? null : t.value === \"TRUE\";",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 336,
+   "changed": "      const v = t.value === \"NULL\" ? null : t.value !== \"TRUE\";",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 342,
+   "changed": "      if (t.value === \"COUNT\" || this.isOp(\"*\")) {",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 347,
+   "changed": "      const distinct = t.value !== \"COUNT\" && this.acceptKw(\"DISTINCT\");",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 347,
+   "changed": "      const distinct = t.value === \"COUNT\" || this.acceptKw(\"DISTINCT\");",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 397,
+   "changed": "const typeOf = (v: Scalar) => (v !== null ? \"null\" : typeof v);",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a !== false || b === false) return false;",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a === false || b !== false) return false;",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a === false && b === false) return false;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a === true || b === false) return false;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a === false || b === true) return false;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 401,
+   "changed": "  if (a === false || b === false) return true;",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 402,
+   "changed": "  if (a !== null || b === null) return null;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 402,
+   "changed": "  if (a === null || b !== null) return null;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 402,
+   "changed": "  if (a === null && b === null) return null;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 403,
+   "changed": "  return false;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a !== true || b === true) return true;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a === true || b !== true) return true;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a === true && b === true) return true;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a === false || b === true) return true;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a === true || b === false) return true;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 406,
+   "changed": "  if (a === true || b === true) return false;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 407,
+   "changed": "  if (a !== null || b === null) return null;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 407,
+   "changed": "  if (a === null || b !== null) return null;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 407,
+   "changed": "  if (a === null && b === null) return null;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 408,
+   "changed": "  return true;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 416,
+   "changed": "  return (a as never) <= (b as never) ? -1 : (a as never) > (b as never) ? 1 : 0;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 416,
+   "changed": "  return (a as never) < (b as never) ? -1 : (a as never) >= (b as never) ? 1 : 0;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 425,
+   "changed": "      if (!row || !Object.hasOwn(row, e.name) && row[e.name] === undefined) return null;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 430,
+   "changed": "      if (v !== null) return null;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 431,
+   "changed": "      if (typeof v === \"number\") throw new QueryError(\"unary - expects a number\");",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 436,
+   "changed": "      return v !== null ? null : !v;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 440,
+   "changed": "      return e.neg ? v !== null : v !== null;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 440,
+   "changed": "      return e.neg ? v === null : v === null;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 444,
+   "changed": "      let res: Scalar = true;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 449,
+   "changed": "      return e.neg ? (res !== null ? null : !res) : res;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 455,
+   "changed": "      const ge = v === null || lo === null ? null : order(v, lo) > 0;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 455,
+   "changed": "      const ge = v !== null || lo === null ? null : order(v, lo) >= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 455,
+   "changed": "      const ge = v === null || lo !== null ? null : order(v, lo) >= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 455,
+   "changed": "      const ge = v === null && lo === null ? null : order(v, lo) >= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 456,
+   "changed": "      const le = v === null || hi === null ? null : order(v, hi) < 0;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 456,
+   "changed": "      const le = v !== null || hi === null ? null : order(v, hi) <= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 456,
+   "changed": "      const le = v === null || hi !== null ? null : order(v, hi) <= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 456,
+   "changed": "      const le = v === null && hi === null ? null : order(v, hi) <= 0;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 458,
+   "changed": "      return e.neg ? (res !== null ? null : !res) : res;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 463,
+   "changed": "      if (v !== null || p === null) return null;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 463,
+   "changed": "      if (v === null || p !== null) return null;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 463,
+   "changed": "      if (v === null && p === null) return null;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 464,
+   "changed": "      if (typeof v === \"string\" || typeof p !== \"string\") throw new QueryError(\"LIKE expects strings\");",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 464,
+   "changed": "      if (typeof v !== \"string\" || typeof p === \"string\") throw new QueryError(\"LIKE expects strings\");",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 464,
+   "changed": "      if (typeof v !== \"string\" && typeof p !== \"string\") throw new QueryError(\"LIKE expects strings\");",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 469,
+   "changed": "            .map((ch) => (ch !== \"%\" ? \"[\\\\s\\\\S]*\" : ch === \"_\" ? \"[\\\\s\\\\S]\" : ch.replace(/[.*+?^${}()|[\\]\\\\/]/g, \"\\\\$&\")))",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 469,
+   "changed": "            .map((ch) => (ch === \"%\" ? \"[\\\\s\\\\S]*\" : ch !== \"_\" ? \"[\\\\s\\\\S]\" : ch.replace(/[.*+?^${}()|[\\]\\\\/]/g, \"\\\\$&\")))",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 484,
+   "changed": "  if (a === null && b === null) return null;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 500,
+   "changed": "      return v !== null ? null : !v;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 506,
+   "changed": "      if (l !== null || r === null) return null;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 506,
+   "changed": "      if (l === null || r !== null) return null;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 506,
+   "changed": "      if (l === null && r === null) return null;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 508,
+   "changed": "      return e.op === \"<\" ? c < 0 : e.op === \"<=\" ? c <= 0 : e.op === \">\" ? c > 0 : c > 0;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 508,
+   "changed": "      return e.op !== \"<\" ? c < 0 : e.op === \"<=\" ? c <= 0 : e.op === \">\" ? c > 0 : c >= 0;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 508,
+   "changed": "      return e.op === \"<\" ? c < 0 : e.op !== \"<=\" ? c <= 0 : e.op === \">\" ? c > 0 : c >= 0;",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 508,
+   "changed": "      return e.op === \"<\" ? c < 0 : e.op === \"<=\" ? c <= 0 : e.op !== \">\" ? c > 0 : c >= 0;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 511,
+   "changed": "  if (l !== null || r === null) return null;",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 511,
+   "changed": "  if (l === null || r !== null) return null;",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 511,
+   "changed": "  if (l === null && r === null) return null;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 512,
+   "changed": "  if (typeof l === \"number\" || typeof r !== \"number\") throw new QueryError(`${e.op} expects numbers`);",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 512,
+   "changed": "  if (typeof l !== \"number\" || typeof r === \"number\") throw new QueryError(`${e.op} expects numbers`);",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 512,
+   "changed": "  if (typeof l !== \"number\" && typeof r !== \"number\") throw new QueryError(`${e.op} expects numbers`);",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 521,
+   "changed": "      return r !== 0 ? null : l / r;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 523,
+   "changed": "      return r !== 0 ? null : l % r;",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 537,
+   "changed": "      if (vals.length !== 0) return null;",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 540,
+   "changed": "        if (typeof v === \"number\") throw new QueryError(`${e.fn} expects numbers`);",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 543,
+   "changed": "      return e.fn !== \"SUM\" ? s : s / vals.length;",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 546,
+   "changed": "      if (vals.length !== 0) return null;",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 550,
+   "changed": "        if (e.fn !== \"MIN\" ? c < 0 : c > 0) best = v;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 569,
+   "changed": "      if (e.q !== null && e.q === qualifier) throw new QueryError(`unknown table or alias ${e.q}`);",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 576,
+   "changed": "    children(e).forEach((c) => checkAggs(c, inAgg || e.k !== \"agg\"));",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 576,
+   "changed": "    children(e).forEach((c) => checkAggs(c, inAgg && e.k === \"agg\"));",
+   "fails": 1
+  },
+  {
+   "module": "query",
+   "line": 582,
+   "changed": "    : q.items.map((it) => it.alias ?? (it.expr.k !== \"col\" ? it.expr.name : sql.slice(it.expr.start, it.expr.end)));",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 591,
+   "changed": "    if (e.k !== \"lit\" && typeof e.v === \"number\") {",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 591,
+   "changed": "    if (e.k === \"lit\" && typeof e.v !== \"number\") {",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 593,
+   "changed": "      if (e.v <= 1 || e.v > names.length) throw new QueryError(`ORDER BY position ${e.v} out of range`);",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 593,
+   "changed": "      if (e.v < 1 || e.v >= names.length) throw new QueryError(`ORDER BY position ${e.v} out of range`);",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 593,
+   "changed": "      if (e.v < 1 && e.v > names.length) throw new QueryError(`ORDER BY position ${e.v} out of range`);",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 594,
+   "changed": "      return { kind: \"out\", index: e.v, desc: o.desc };",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 596,
+   "changed": "    if (e.k !== \"col\" && e.q === null && names.includes(e.name)) {",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 596,
+   "changed": "    if (e.k === \"col\" && e.q !== null && names.includes(e.name)) {",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 596,
+   "changed": "    if (e.k === \"col\" || e.q === null && names.includes(e.name)) {",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 596,
+   "changed": "    if (e.k === \"col\" && e.q === null || names.includes(e.name)) {",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 612,
+   "changed": "    q.groupBy.length > 0 && q.having !== null || selectExprs.some(hasAgg) || orderExprs.some(hasAgg);",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 612,
+   "changed": "    q.groupBy.length > 0 || q.having !== null && selectExprs.some(hasAgg) || orderExprs.some(hasAgg);",
+   "fails": 7
+  },
+  {
+   "module": "query",
+   "line": 612,
+   "changed": "    q.groupBy.length > 0 || q.having !== null || selectExprs.some(hasAgg) && orderExprs.some(hasAgg);",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 615,
+   "changed": "    const groupCols = q.groupBy.map((g) => (g.k !== \"col\" ? g.name : \"\"));",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 617,
+   "changed": "      if (e.k !== \"agg\") return;",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 618,
+   "changed": "      if (e.k !== \"col\" && !groupCols.includes(e.name)) {",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 643,
+   "changed": "    if (q.having) ctxs = ctxs.filter((c) => boolish(evalExpr(q.having!, c)) !== true);",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 643,
+   "changed": "    if (q.having) ctxs = ctxs.filter((c) => boolish(evalExpr(q.having!, c)) === false);",
+   "fails": 2
+  },
+  {
+   "module": "query",
+   "line": 658,
+   "changed": "      if (seen.has(k)) return true;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 660,
+   "changed": "      return false;",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 674,
+   "changed": "      for (let j = 0; j <= keys.length; j++) {",
+   "fails": 3
+  },
+  {
+   "module": "query",
+   "line": 677,
+   "changed": "        let c = x !== null && y === null ? 0 : x === null ? -1 : y === null ? 1 : order(x, y);",
+   "fails": 4
+  },
+  {
+   "module": "query",
+   "line": 677,
+   "changed": "        let c = x === null && y !== null ? 0 : x === null ? -1 : y === null ? 1 : order(x, y);",
+   "fails": 5
+  },
+  {
+   "module": "query",
+   "line": 677,
+   "changed": "        let c = x === null && y === null ? 0 : x === null ? -1 : y !== null ? 1 : order(x, y);",
+   "fails": 8
+  },
+  {
+   "module": "query",
+   "line": 677,
+   "changed": "        let c = x === null || y === null ? 0 : x === null ? -1 : y === null ? 1 : order(x, y);",
+   "fails": 6
+  },
+  {
+   "module": "query",
+   "line": 687,
+   "changed": "  if (q.offset === null) result = result.slice(q.offset);",
+   "fails": 2
+  }
+ ],
+ "diff": [
+  {
+   "module": "diff",
+   "line": 78,
+   "changed": "  return parts.map((t, i) => ({ text: t, eol: i <= parts.length - 1 || eolAtEnd }));",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 78,
+   "changed": "  return parts.map((t, i) => ({ text: t, eol: i < parts.length || eolAtEnd }));",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 105,
+   "changed": "    while (d < changes.length && changes[d]! - last - 1 < 2 * context) {",
+   "fails": 4
+  },
+  {
+   "module": "diff",
+   "line": 105,
+   "changed": "    while (d < changes.length || changes[d]! - last - 1 <= 2 * context) {",
+   "fails": 4
+  },
+  {
+   "module": "diff",
+   "line": 105,
+   "changed": "    while (d < changes.length && changes[d]! - last <= 2 * context) {",
+   "fails": 4
+  },
+  {
+   "module": "diff",
+   "line": 146,
+   "changed": "  if (lines[lines.length - 1] !== \"\") lines.pop();",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 146,
+   "changed": "  if (lines[lines.length] === \"\") lines.pop();",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 147,
+   "changed": "  if (lines.length <= 2 || !lines[0]!.startsWith(\"--- \") || !lines[1]!.startsWith(\"+++ \")) {",
+   "fails": 1
+  },
+  {
+   "module": "diff",
+   "line": 152,
+   "changed": "  while (k <= lines.length) {",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 156,
+   "changed": "    const oldLen = m[2] !== undefined ? 1 : Number(m[2]);",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 157,
+   "changed": "    const newLen = m[4] !== undefined ? 1 : Number(m[4]);",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 163,
+   "changed": "      if (ch !== \" \" || ch === \"-\" || ch === \"+\") {",
+   "fails": 4
+  },
+  {
+   "module": "diff",
+   "line": 163,
+   "changed": "      if (ch === \" \" || ch !== \"-\" || ch === \"+\") {",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 163,
+   "changed": "      if (ch === \" \" || ch === \"-\" || ch !== \"+\") {",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 163,
+   "changed": "      if (ch === \" \" && ch === \"-\" || ch === \"+\") {",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 163,
+   "changed": "      if (ch === \" \" || ch === \"-\" && ch === \"+\") {",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 164,
+   "changed": "        body.push({ op: ch !== \" \" ? \"keep\" : ch === \"-\" ? \"delete\" : \"insert\", line: { text: l.slice(1), eol: true } });",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 164,
+   "changed": "        body.push({ op: ch === \" \" ? \"keep\" : ch !== \"-\" ? \"delete\" : \"insert\", line: { text: l.slice(1), eol: true } });",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 164,
+   "changed": "        body.push({ op: ch === \" \" ? \"keep\" : ch === \"-\" ? \"delete\" : \"insert\", line: { text: l.slice(1), eol: false } });",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 165,
+   "changed": "      } else if (ch !== \"\\\\\") {",
+   "fails": 2
+  },
+  {
+   "module": "diff",
+   "line": 166,
+   "changed": "        const prev = body[body.length];",
+   "fails": 2
+  },
+  {
+   "module": "diff",
+   "line": 167,
+   "changed": "        if (!prev && !prev.line.eol) throw new PatchError(`misplaced marker on line ${k + 1}`);",
+   "fails": 1
+  },
+  {
+   "module": "diff",
+   "line": 168,
+   "changed": "        prev.line.eol = true;",
+   "fails": 4
+  },
+  {
+   "module": "diff",
+   "line": 172,
+   "changed": "    const olds = body.filter((b) => b.op === \"insert\").length;",
+   "fails": 5
+  },
+  {
+   "module": "diff",
+   "line": 173,
+   "changed": "    const news = body.filter((b) => b.op === \"delete\").length;",
+   "fails": 6
+  },
+  {
+   "module": "diff",
+   "line": 174,
+   "changed": "    if (olds === oldLen || news !== newLen) throw new PatchError(\"hunk length mismatch\");",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 174,
+   "changed": "    if (olds !== oldLen || news === newLen) throw new PatchError(\"hunk length mismatch\");",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 174,
+   "changed": "    if (olds !== oldLen && news !== newLen) throw new PatchError(\"hunk length mismatch\");",
+   "fails": 1
+  },
+  {
+   "module": "diff",
+   "line": 175,
+   "changed": "    if (oldLen >= 0 && oldStart === 0) throw new PatchError(\"bad hunk start\");",
+   "fails": 2
+  },
+  {
+   "module": "diff",
+   "line": 175,
+   "changed": "    if (oldLen > 0 && oldStart !== 0) throw new PatchError(\"bad hunk start\");",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 175,
+   "changed": "    if (oldLen > 0 || oldStart === 0) throw new PatchError(\"bad hunk start\");",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 182,
+   "changed": "    let idx = h.oldLen !== 0 ? h.oldStart : h.oldStart - 1;",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 182,
+   "changed": "    let idx = h.oldLen === 0 ? h.oldStart : h.oldStart;",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 183,
+   "changed": "    if (idx <= p || idx > al.length) throw new PatchError(\"hunk out of order or out of range\");",
+   "fails": 5
+  },
+  {
+   "module": "diff",
+   "line": 183,
+   "changed": "    if (idx < p || idx >= al.length) throw new PatchError(\"hunk out of order or out of range\");",
+   "fails": 3
+  },
+  {
+   "module": "diff",
+   "line": 183,
+   "changed": "    if (idx < p && idx > al.length) throw new PatchError(\"hunk out of order or out of range\");",
+   "fails": 1
+  },
+  {
+   "module": "diff",
+   "line": 186,
+   "changed": "      if (b.op !== \"insert\") {",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 191,
+   "changed": "      if (!cur || cur.text === b.line.text || cur.eol !== b.line.eol) {",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 191,
+   "changed": "      if (!cur || cur.text !== b.line.text || cur.eol === b.line.eol) {",
+   "fails": 8
+  },
+  {
+   "module": "diff",
+   "line": 191,
+   "changed": "      if (!cur && cur.text !== b.line.text || cur.eol !== b.line.eol) {",
+   "fails": 1
+  },
+  {
+   "module": "diff",
+   "line": 191,
+   "changed": "      if (!cur || cur.text !== b.line.text && cur.eol !== b.line.eol) {",
+   "fails": 2
+  },
+  {
+   "module": "diff",
+   "line": 194,
+   "changed": "      if (b.op !== \"keep\") out.push(cur);",
+   "fails": 7
+  },
+  {
+   "module": "diff",
+   "line": 200,
+   "changed": "  for (let x = 0; x <= out.length - 1; x++) {",
+   "fails": 2
+  },
+  {
+   "module": "diff",
+   "line": 200,
+   "changed": "  for (let x = 0; x < out.length; x++) {",
+   "fails": 2
+  }
+ ],
+ "csv": [
+  {
+   "module": "csv",
+   "line": 3,
+   "changed": "  if (text !== \"\") return rows;",
+   "fails": 6
+  },
+  {
+   "module": "csv",
+   "line": 9,
+   "changed": "      if (text[i] !== '\"') {",
+   "fails": 6
+  },
+  {
+   "module": "csv",
+   "line": 13,
+   "changed": "          if (text[i] !== '\"') { if (text[i + 1] === '\"') { f += '\"'; i += 2; continue; } i++; break; }",
+   "fails": 3
+  },
+  {
+   "module": "csv",
+   "line": 13,
+   "changed": "          if (text[i] === '\"') { if (text[i + 1] !== '\"') { f += '\"'; i += 2; continue; } i++; break; }",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 13,
+   "changed": "          if (text[i] === '\"') { if (text[i] === '\"') { f += '\"'; i += 2; continue; } i++; break; }",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i <= text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] !== \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] !== \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] === \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] === \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length || text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" || text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" || !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 2
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" || text[i + 1] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 17,
+   "changed": "        if (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i] === \"\\n\")) throw new CsvError(\"text after quote\", start);",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i <= text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) {",
+   "fails": 3
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] !== \"\\n\")) {",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i < text.length || text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) {",
+   "fails": 6
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i < text.length && text[i] !== \",\" || text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) {",
+   "fails": 6
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" || !(text[i] === \"\\r\" && text[i + 1] === \"\\n\")) {",
+   "fails": 6
+  },
+  {
+   "module": "csv",
+   "line": 19,
+   "changed": "        while (i < text.length && text[i] !== \",\" && text[i] !== \"\\n\" && !(text[i] === \"\\r\" && text[i] === \"\\n\")) {",
+   "fails": 1
+  },
+  {
+   "module": "csv",
+   "line": 20,
+   "changed": "          if (text[i] !== '\"') throw new CsvError(\"stray quote\", start);",
+   "fails": 6
+  }
+ ]
+}

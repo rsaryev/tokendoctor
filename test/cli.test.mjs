@@ -68,3 +68,25 @@ test('both commands are executable files with a node shebang', () => {
     execFileSync('test', ['-x', bin(name)])
   }
 })
+
+test('undo lists what tokendoctor-set wrote and puts one change back, unless it changed again since', () => {
+  const settings = join(dir, 'config', 'settings.json')
+  writeFileSync(settings, JSON.stringify({ promptCacheTtl: '1h' }))
+  assert.equal(run('tokendoctor-set', ['promptCacheTtl', '"5m"', '--write']).status, 0)
+  assert.equal(run('tokendoctor-set', ['tokendoctor.slide', 'true', '--write']).status, 0)
+  const journal = JSON.parse(run('tokendoctor-undo', ['--json']).stdout)
+  assert.deepEqual(journal.map((e) => e.changes), [
+    [{ key: 'pluginConfigs.tokendoctor@tokendoctor.options.slide', after: true }],
+    [{ key: 'promptCacheTtl', before: '1h', after: '5m' }],
+  ])
+  // A dry run first, then the write; the slide comes off and the cache stays.
+  assert.match(run('tokendoctor-undo', ['1']).stdout, /Dry run/)
+  assert.equal(JSON.parse(readFileSync(settings, 'utf8')).pluginConfigs['tokendoctor@tokendoctor'].options.slide, true)
+  assert.match(run('tokendoctor-undo', ['1', '--write']).stdout, /written/)
+  const after = JSON.parse(readFileSync(settings, 'utf8'))
+  assert.equal(after.pluginConfigs['tokendoctor@tokendoctor'].options.slide, undefined)
+  assert.equal(after.promptCacheTtl, '5m')
+  // The cache changed again since change 4 (the oldest: the undo itself was noted too) wrote it: that one is kept.
+  assert.equal(run('tokendoctor-set', ['promptCacheTtl', '"1h"', '--write']).status, 0)
+  assert.match(run('tokendoctor-undo', ['4', '--write']).stdout, /kept promptCacheTtl: changed again since \(now "1h"\)\nNothing to put back/)
+})

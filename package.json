@@ -2,12 +2,12 @@
   "name": "tokendoctor",
   "version": "0.4.1",
   "private": true,
-  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
+  "description": "The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "test:mod": "claude plugin test .",
+    "test:mod": "node scripts/test-mod.mjs",
     "validate": "claude plugin validate . --strict"
   }
 }

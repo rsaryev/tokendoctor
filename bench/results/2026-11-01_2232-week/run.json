@@ -1,0 +1,319 @@
+{
+ "when": "2026-11-01 22:32",
+ "task": "week",
+ "tests": 307,
+ "steps": 27,
+ "model": "claude-haiku-5-5",
+ "window": null,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 2,
+ "note": "slide v5 against the fixed baselines",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.316 (Claude Code)",
+ "load": 7.5,
+ "arms": [
+  {
+   "label": "advised+slide",
+   "profile": "advised",
+   "slide": true,
+   "slideTo": 25,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 3.7276,
+   "requests": 211,
+   "input_tokens": 422,
+   "cache_read": 49682279,
+   "cache_write": 692687,
+   "output_tokens": 313570,
+   "max_context": 358718,
+   "avg_context": 238746,
+   "compactions": 1,
+   "summaries": 0,
+   "slides": 1,
+   "compact_s": 0,
+   "reads": 4,
+   "rereads": 0,
+   "edits": 116,
+   "bash": 184,
+   "failed_tools": 4,
+   "label": "advised+slide",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1795.5,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 99,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 54.8
+    },
+    {
+     "pass": 69,
+     "wall_s": 103.4
+    },
+    {
+     "pass": 141,
+     "wall_s": 207
+    },
+    {
+     "pass": 214,
+     "wall_s": 232.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 87.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 70.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 13.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 99.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 62.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 91.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 47.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 49.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 83.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 76.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 80.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 101
+    },
+    {
+     "pass": 307,
+     "wall_s": 30.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 79.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 53.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 51.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 6
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 1.9213,
+   "requests": 96,
+   "input_tokens": 192,
+   "cache_read": 20174573,
+   "cache_write": 518078,
+   "output_tokens": 254620,
+   "max_context": 365799,
+   "avg_context": 215550,
+   "compactions": 1,
+   "summaries": 0,
+   "slides": 1,
+   "compact_s": 0,
+   "reads": 7,
+   "rereads": 0,
+   "edits": 119,
+   "bash": 64,
+   "failed_tools": 22,
+   "label": "advised+slide",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1301.8,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 97,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 51.3
+    },
+    {
+     "pass": 69,
+     "wall_s": 108.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 191.2
+    },
+    {
+     "pass": 214,
+     "wall_s": 215.4
+    },
+    {
+     "pass": 261,
+     "wall_s": 92.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 70.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 13.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 66.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 48.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 60.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 31.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 46
+    },
+    {
+     "pass": 307,
+     "wall_s": 52.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 37.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 25.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 29.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 25.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 20.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 24.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 26.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 22.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.8
+    }
+   ]
+  }
+ ]
+}

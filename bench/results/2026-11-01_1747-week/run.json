@@ -1,0 +1,332 @@
+{
+ "when": "2026-11-01 17:47",
+ "task": "week",
+ "tests": 307,
+ "steps": 15,
+ "model": "claude-haiku-5-5",
+ "window": null,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 1,
+ "note": "pilot: a week of work, factory vs advised vs advised+slide",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.316 (Claude Code)",
+ "load": 1.8,
+ "arms": [
+  {
+   "label": "factory",
+   "profile": "factory",
+   "slide": false,
+   "slideTo": null,
+   "plugin": null,
+   "version": null
+  },
+  {
+   "label": "advised",
+   "profile": "advised",
+   "slide": false,
+   "slideTo": null,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  },
+  {
+   "label": "advised+slide",
+   "profile": "advised",
+   "slide": true,
+   "slideTo": 25,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 1.517,
+   "requests": 69,
+   "input_tokens": 138,
+   "cache_read": 16560327,
+   "cache_write": 372776,
+   "output_tokens": 213981,
+   "max_context": 382422,
+   "avg_context": 245409,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 8,
+   "rereads": 0,
+   "edits": 48,
+   "bash": 50,
+   "failed_tools": 0,
+   "label": "factory",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1032.7,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 47.8
+    },
+    {
+     "pass": 69,
+     "wall_s": 78.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 211.7
+    },
+    {
+     "pass": 214,
+     "wall_s": 208.8
+    },
+    {
+     "pass": 261,
+     "wall_s": 100.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 10.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 71.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 67.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 43.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 28.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 30
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.1
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 1.6987,
+   "requests": 91,
+   "input_tokens": 182,
+   "cache_read": 20497238,
+   "cache_write": 374531,
+   "output_tokens": 205772,
+   "max_context": 365950,
+   "avg_context": 229362,
+   "compactions": 1,
+   "summaries": 1,
+   "slides": 0,
+   "compact_s": 30.1,
+   "reads": 37,
+   "rereads": 27,
+   "edits": 50,
+   "bash": 56,
+   "failed_tools": 0,
+   "label": "advised",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1072.8,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 49.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 100.6
+    },
+    {
+     "pass": 141,
+     "wall_s": 191.7
+    },
+    {
+     "pass": 214,
+     "wall_s": 181.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 77.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 70.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 113.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 53.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 72.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 34.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 36.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 40
+    },
+    {
+     "pass": 307,
+     "wall_s": 36.4
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 1.3087,
+   "requests": 60,
+   "input_tokens": 120,
+   "cache_read": 13568178,
+   "cache_write": 336856,
+   "output_tokens": 202697,
+   "max_context": 346502,
+   "avg_context": 231753,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 11,
+   "rereads": 0,
+   "edits": 61,
+   "bash": 41,
+   "failed_tools": 0,
+   "label": "advised+slide",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 978.6,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 51.4
+    },
+    {
+     "pass": 69,
+     "wall_s": 89.5
+    },
+    {
+     "pass": 141,
+     "wall_s": 167.6
+    },
+    {
+     "pass": 214,
+     "wall_s": 207.9
+    },
+    {
+     "pass": 261,
+     "wall_s": 78.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 59.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 9.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 94.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 36.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 62.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 10.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 30.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 22.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 53
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.6
+    }
+   ]
+  }
+ ]
+}

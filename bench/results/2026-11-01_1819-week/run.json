@@ -1,0 +1,1342 @@
+{
+ "when": "2026-11-01 18:19",
+ "task": "week",
+ "tests": 307,
+ "steps": 27,
+ "model": "claude-haiku-5-5",
+ "window": null,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 3,
+ "note": "before/after: a 7-day week, factory vs advised vs advised+slide",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.316 (Claude Code)",
+ "load": 8.1,
+ "arms": [
+  {
+   "label": "factory",
+   "profile": "factory",
+   "slide": false,
+   "slideTo": null,
+   "plugin": null,
+   "version": null
+  },
+  {
+   "label": "advised",
+   "profile": "advised",
+   "slide": false,
+   "slideTo": null,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  },
+  {
+   "label": "advised+slide",
+   "profile": "advised",
+   "slide": true,
+   "slideTo": 25,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f164c95-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 3.1782,
+   "requests": 120,
+   "input_tokens": 240,
+   "cache_read": 41565205,
+   "cache_write": 670340,
+   "output_tokens": 271829,
+   "max_context": 679986,
+   "avg_context": 351965,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 69,
+   "rereads": 57,
+   "edits": 115,
+   "bash": 67,
+   "failed_tools": 1,
+   "label": "factory",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1395,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 68.9
+    },
+    {
+     "pass": 69,
+     "wall_s": 94.5
+    },
+    {
+     "pass": 141,
+     "wall_s": 198.9
+    },
+    {
+     "pass": 214,
+     "wall_s": 218
+    },
+    {
+     "pass": 261,
+     "wall_s": 83.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 74.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 12.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 69.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 46.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 69
+    },
+    {
+     "pass": 307,
+     "wall_s": 10.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 28.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 46.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 54.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 34.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 41.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 28.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 30.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 43.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7
+    },
+    {
+     "pass": 307,
+     "wall_s": 32.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 27.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.9
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 1.7858,
+   "requests": 133,
+   "input_tokens": 266,
+   "cache_read": 22698642,
+   "cache_write": 471607,
+   "output_tokens": 270051,
+   "max_context": 366588,
+   "avg_context": 174214,
+   "compactions": 1,
+   "summaries": 1,
+   "slides": 0,
+   "compact_s": 27.4,
+   "reads": 81,
+   "rereads": 61,
+   "edits": 116,
+   "bash": 63,
+   "failed_tools": 5,
+   "label": "advised",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1375,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 71.7
+    },
+    {
+     "pass": 69,
+     "wall_s": 101.9
+    },
+    {
+     "pass": 141,
+     "wall_s": 205.4
+    },
+    {
+     "pass": 214,
+     "wall_s": 194.3
+    },
+    {
+     "pass": 261,
+     "wall_s": 98.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 10.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 67.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 45.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 68.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 11.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 27.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 20.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 63.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 76.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 34.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 36.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 34
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 19.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 34.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 23.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 23.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.4
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 2.5642,
+   "requests": 150,
+   "input_tokens": 300,
+   "cache_read": 28206546,
+   "cache_write": 839489,
+   "output_tokens": 288030,
+   "max_context": 364638,
+   "avg_context": 193642,
+   "compactions": 2,
+   "summaries": 0,
+   "slides": 2,
+   "compact_s": 0,
+   "reads": 78,
+   "rereads": 57,
+   "edits": 120,
+   "bash": 79,
+   "failed_tools": 1,
+   "label": "advised+slide",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1468.1,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 97,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 65.3
+    },
+    {
+     "pass": 69,
+     "wall_s": 109.8
+    },
+    {
+     "pass": 141,
+     "wall_s": 187.2
+    },
+    {
+     "pass": 214,
+     "wall_s": 217.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 93.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 85.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 9.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 54.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 42.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 77.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 6
+    },
+    {
+     "pass": 307,
+     "wall_s": 46.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 39.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 48.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 73.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 28.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 6
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 33.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 34.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 43
+    },
+    {
+     "pass": 307,
+     "wall_s": 6
+    },
+    {
+     "pass": 307,
+     "wall_s": 37.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 59.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 3.7994,
+   "requests": 140,
+   "input_tokens": 280,
+   "cache_read": 55087993,
+   "cache_write": 602424,
+   "output_tokens": 279185,
+   "max_context": 612070,
+   "avg_context": 397791,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 38,
+   "rereads": 24,
+   "edits": 108,
+   "bash": 113,
+   "failed_tools": 3,
+   "label": "factory",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1664.7,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 99,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 68.5
+    },
+    {
+     "pass": 69,
+     "wall_s": 171.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 178.7
+    },
+    {
+     "pass": 214,
+     "wall_s": 247.7
+    },
+    {
+     "pass": 261,
+     "wall_s": 101.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 89.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 15.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 70.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 50.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 72.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 13.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 46.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 32.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 36.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 61
+    },
+    {
+     "pass": 307,
+     "wall_s": 33.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 60.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 42.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 9.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 55.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 65.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 50.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 58.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.2
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 2.8765,
+   "requests": 202,
+   "input_tokens": 404,
+   "cache_read": 38533740,
+   "cache_write": 630303,
+   "output_tokens": 292414,
+   "max_context": 362574,
+   "avg_context": 193883,
+   "compactions": 1,
+   "summaries": 1,
+   "slides": 0,
+   "compact_s": 29.8,
+   "reads": 42,
+   "rereads": 31,
+   "edits": 116,
+   "bash": 126,
+   "failed_tools": 1,
+   "label": "advised",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1633.9,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 56.5
+    },
+    {
+     "pass": 69,
+     "wall_s": 111.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 218.5
+    },
+    {
+     "pass": 214,
+     "wall_s": 211.1
+    },
+    {
+     "pass": 261,
+     "wall_s": 86
+    },
+    {
+     "pass": 307,
+     "wall_s": 68.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 22.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 69.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 48.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 62.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 37.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 81.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 41.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7
+    },
+    {
+     "pass": 307,
+     "wall_s": 101.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 64.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7
+    },
+    {
+     "pass": 307,
+     "wall_s": 51
+    },
+    {
+     "pass": 307,
+     "wall_s": 30.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 63.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 73.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 48.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 42.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 7
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 2.5224,
+   "requests": 142,
+   "input_tokens": 284,
+   "cache_read": 29310869,
+   "cache_write": 699829,
+   "output_tokens": 275684,
+   "max_context": 364570,
+   "avg_context": 211345,
+   "compactions": 1,
+   "summaries": 0,
+   "slides": 1,
+   "compact_s": 0,
+   "reads": 64,
+   "rereads": 50,
+   "edits": 120,
+   "bash": 89,
+   "failed_tools": 0,
+   "label": "advised+slide",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1347.2,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 98,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 58.3
+    },
+    {
+     "pass": 69,
+     "wall_s": 104.3
+    },
+    {
+     "pass": 141,
+     "wall_s": 145.8
+    },
+    {
+     "pass": 214,
+     "wall_s": 220.9
+    },
+    {
+     "pass": 261,
+     "wall_s": 80.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 10.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 68
+    },
+    {
+     "pass": 307,
+     "wall_s": 42.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 68
+    },
+    {
+     "pass": 307,
+     "wall_s": 5
+    },
+    {
+     "pass": 307,
+     "wall_s": 38.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 33.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 64.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 57.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 33.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 27.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 44
+    },
+    {
+     "pass": 307,
+     "wall_s": 47.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 28
+    },
+    {
+     "pass": 307,
+     "wall_s": 25.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 2.1526,
+   "requests": 106,
+   "input_tokens": 212,
+   "cache_read": 28087868,
+   "cache_write": 386826,
+   "output_tokens": 222256,
+   "max_context": 396472,
+   "avg_context": 268631,
+   "compactions": 0,
+   "summaries": 0,
+   "slides": 0,
+   "compact_s": 0,
+   "reads": 6,
+   "rereads": 2,
+   "edits": 114,
+   "bash": 74,
+   "failed_tools": 4,
+   "label": "factory",
+   "run": 2,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1150.1,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 99,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 45
+    },
+    {
+     "pass": 69,
+     "wall_s": 78.7
+    },
+    {
+     "pass": 141,
+     "wall_s": 168.2
+    },
+    {
+     "pass": 214,
+     "wall_s": 195.6
+    },
+    {
+     "pass": 261,
+     "wall_s": 94.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 84.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 12.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 38.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 60.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 22.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 19.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 28.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 6
+    },
+    {
+     "pass": 307,
+     "wall_s": 29.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 20.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 27.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 23.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 19.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 27.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 21.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 19.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 3.3269,
+   "requests": 250,
+   "input_tokens": 500,
+   "cache_read": 46982065,
+   "cache_write": 622411,
+   "output_tokens": 310276,
+   "max_context": 367298,
+   "avg_context": 190420,
+   "compactions": 1,
+   "summaries": 1,
+   "slides": 0,
+   "compact_s": 32.1,
+   "reads": 75,
+   "rereads": 60,
+   "edits": 111,
+   "bash": 171,
+   "failed_tools": 3,
+   "label": "advised",
+   "run": 2,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1623.6,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 99,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 51.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 84.6
+    },
+    {
+     "pass": 141,
+     "wall_s": 168.5
+    },
+    {
+     "pass": 214,
+     "wall_s": 201.2
+    },
+    {
+     "pass": 261,
+     "wall_s": 81.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 64.6
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 47.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 76.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 37.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 32.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 138.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 103.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 96.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 75.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 46.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 68.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 48.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 40.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 4.6
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 1.9599,
+   "requests": 113,
+   "input_tokens": 226,
+   "cache_read": 20974672,
+   "cache_write": 586242,
+   "output_tokens": 279683,
+   "max_context": 366304,
+   "avg_context": 190807,
+   "compactions": 1,
+   "summaries": 0,
+   "slides": 1,
+   "compact_s": 0,
+   "reads": 39,
+   "rereads": 23,
+   "edits": 117,
+   "bash": 71,
+   "failed_tools": 0,
+   "label": "advised+slide",
+   "run": 2,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 1380,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 97,
+   "advice": [
+    "compact-window-unset",
+    "explore-default-model",
+    "subagent-model-unset",
+    "no-statusline"
+   ],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 64.8
+    },
+    {
+     "pass": 69,
+     "wall_s": 107.1
+    },
+    {
+     "pass": 141,
+     "wall_s": 228.9
+    },
+    {
+     "pass": 214,
+     "wall_s": 201
+    },
+    {
+     "pass": 261,
+     "wall_s": 97.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 81.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 16.8
+    },
+    {
+     "pass": 307,
+     "wall_s": 58.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 39.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 59.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 7.4
+    },
+    {
+     "pass": 307,
+     "wall_s": 42
+    },
+    {
+     "pass": 307,
+     "wall_s": 44.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 41.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 62.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 31.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.1
+    },
+    {
+     "pass": 307,
+     "wall_s": 31.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 35
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 22.9
+    },
+    {
+     "pass": 307,
+     "wall_s": 32.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 5.7
+    },
+    {
+     "pass": 307,
+     "wall_s": 21.5
+    },
+    {
+     "pass": 307,
+     "wall_s": 22
+    },
+    {
+     "pass": 307,
+     "wall_s": 6.5
+    }
+   ]
+  }
+ ]
+}

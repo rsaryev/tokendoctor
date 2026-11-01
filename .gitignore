@@ -1,3 +1,11 @@
 node_modules/
 .DS_Store
 *.bak
+.env
+
+# Not this repository: a clone of llx kept beside the work.
+llx/
+# What a benchmark run leaves besides run.json and summary.md (transcripts, events, the code it
+# wrote) stays on this machine: Claude Code writes paths and account details into it.
+bench/results/*/*/
+bench/tasks/week/.mutants*

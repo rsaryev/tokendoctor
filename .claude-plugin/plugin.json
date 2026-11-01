@@ -2,7 +2,7 @@
   "name": "tokendoctor",
   "displayName": "tokendoctor",
   "version": "0.4.1",
-  "description": "Shows where Claude Code tokens go, audits a setup for settings that waste them, and changes a setting only after you approve the diff.",
+  "description": "The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
   "author": {
     "name": "rsaryev"
   },
@@ -16,5 +16,19 @@
   ],
   "icon": "./.claude-plugin/icon.png",
   "homepage": "https://tokendoctor.dev",
-  "repository": "https://github.com/rsaryev/tokendoctor"
+  "repository": "https://github.com/rsaryev/tokendoctor",
+  "userConfig": {
+    "slide": {
+      "type": "boolean",
+      "title": "Slide the window instead of compacting",
+      "description": "Where Claude Code would summarize the conversation, elide old tool outputs instead (they can be read again): no summary request, every prompt and answer kept word for word. /compact still summarizes.",
+      "default": false
+    },
+    "slideTo": {
+      "type": "number",
+      "title": "Slide down to (% of where Claude Code compacts)",
+      "description": "How far a slide frees the context, as a percent of the point where Claude Code compacts (20 to 90). Lower leaves less behind and more turns before the next slide.",
+      "default": 25
+    }
+  }
 }

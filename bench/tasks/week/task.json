@@ -1,0 +1,100 @@
+{
+  "kind": "implement",
+  "steps": [
+    {
+      "prompt": "Implement src/money.ts, src/cart.ts and src/csv.ts as README.md specifies (part 1). Check with `bun test test/money.test.ts test/cart.test.ts test/csv.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Now implement src/router.ts, src/lru.ts and src/semver.ts as README.md specifies (part 1). Check with `bun test test/router.test.ts test/lru.test.ts test/semver.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Next, src/expr.ts, the expression language of README.md part 2. Check with `bun test test/expr.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Next, src/query.ts, SQL over arrays of objects (README.md part 2). Check with `bun test test/query.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Next, src/diff.ts, line diffs, unified diffs and patches (README.md part 2). Check with `bun test test/diff.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Next, src/cron.ts, five-field cron in UTC (README.md part 2). Check with `bun test test/cron.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, in any module, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json. Then say in a line for each module what it does."
+    },
+    {
+      "merge": "merges/2a",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/2b",
+      "prompt": "A colleague's branch was just merged: it replaced src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/2c",
+      "prompt": "A colleague's branch was just merged: it replaced src/money.ts, src/cart.ts, src/csv.ts, src/router.ts, src/lru.ts, src/semver.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/3a",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/3b",
+      "prompt": "A colleague's branch was just merged: it replaced src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/3c",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts, src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/4a",
+      "prompt": "A colleague's branch was just merged: it replaced src/money.ts, src/cart.ts, src/csv.ts, src/router.ts, src/lru.ts, src/semver.ts, src/expr.ts, src/query.ts, src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/4b",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/5a",
+      "prompt": "A colleague's branch was just merged: it replaced src/money.ts, src/cart.ts, src/csv.ts, src/router.ts, src/lru.ts, src/semver.ts, src/expr.ts, src/query.ts, src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/5b",
+      "prompt": "A colleague's branch was just merged: it replaced src/diff.ts, src/semver.ts, src/router.ts, src/csv.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/6a",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/6b",
+      "prompt": "A colleague's branch was just merged: it replaced src/money.ts, src/cart.ts, src/csv.ts, src/router.ts, src/lru.ts, src/semver.ts, src/expr.ts, src/query.ts, src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/7a",
+      "prompt": "A colleague's branch was just merged: it replaced src/money.ts, src/cart.ts, src/csv.ts, src/router.ts, src/lru.ts, src/semver.ts, src/expr.ts, src/query.ts, src/diff.ts, src/cron.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "merge": "merges/7b",
+      "prompt": "A colleague's branch was just merged: it replaced src/expr.ts, src/query.ts, src/semver.ts with their own implementation, and tests fail now. Find and fix the bugs in their code; do not rewrite the modules from scratch. Check with `bun test`; this step is done when every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    },
+    {
+      "prompt": "Run the whole suite with `bun test` and fix whatever fails, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json."
+    }
+  ]
+}

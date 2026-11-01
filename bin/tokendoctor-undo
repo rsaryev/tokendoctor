@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+// Lists the settings changes tokendoctor wrote and reverts one. Dry run by default; --write writes.
+// Usage: tokendoctor-undo [--json]        the last 20 changes, newest first (1 is the newest)
+//        tokendoctor-undo <n> [--write]   put back the values change n replaced
+import { planOps, readJournal, valueAt, writePlan, describePlan } from '../lib/apply.mjs'
+import { readFileSync, existsSync } from 'node:fs'
+
+const args = process.argv.slice(2)
+const journal = readJournal().slice(0, 20)
+const n = args.find((a) => /^\d+$/.test(a))
+if (!n) {
+  if (args.includes('--json')) console.log(JSON.stringify(journal))
+  else if (!journal.length) console.log('No changes by tokendoctor yet.')
+  else journal.forEach((e, i) => console.log(`${String(i + 1).padStart(2)}  ${e.at}  ${e.scope}  ${e.changes.map((c) => `${c.key}: ${JSON.stringify(c.before) ?? 'unset'} → ${JSON.stringify(c.after) ?? 'unset'}`).join(', ')}`))
+  process.exit(0)
+}
+const entry = journal[Number(n) - 1]
+if (!entry) {
+  console.error(`No change ${n}: there are ${journal.length}.`)
+  process.exit(1)
+}
+// Each key goes back only while it still holds what this change wrote; a later change wins.
+const now = existsSync(entry.path) ? JSON.parse(readFileSync(entry.path, 'utf8')) : {}
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+const back = entry.changes.filter((c) => same(valueAt(now, c.key), c.after))
+const moved = entry.changes.filter((c) => !back.includes(c))
+for (const c of moved) console.log(`  kept ${c.key}: changed again since (now ${JSON.stringify(valueAt(now, c.key)) ?? 'unset'})`)
+if (!back.length) {
+  console.log('Nothing to put back.')
+  process.exit(0)
+}
+const plan = planOps(entry.path, entry.scope, back.map((c) => (c.before === undefined ? { op: 'unset', key: c.key } : { op: 'set', key: c.key, value: c.before })))
+const write = args.includes('--write')
+console.log(`${write ? 'Applying' : 'Would change'} (${plan.scope}): ${describePlan(plan)}`)
+if (write) {
+  const result = writePlan(plan)
+  console.log(result.written ? `  written${result.backup ? `, backup: ${result.backup}` : ''}` : `  skipped: ${result.reason}`)
+} else console.log('\nDry run. Re-run with --write to apply.')

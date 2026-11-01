@@ -1,9 +1,9 @@
 # tokendoctor
 
-> tokendoctor is a Claude Code plugin that shows where tokens actually go (from local session
-> transcripts, with a daily trend), audits a setup with 31 checks tied to the Claude Code docs, and
-> changes a setting only after the person approves the exact diff. Everything runs locally; it reads
-> usage figures and file paths, never message text.
+> The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.
+> A Claude Code plugin: it replays your own sessions to show what they overpay, applies the fixes you
+> pick (`/tokendoctor undo` puts any back), and can slide the context window instead of summarizing
+> it. Everything runs locally; it reads usage figures and file paths, never message text.
 
 ## Install
 
@@ -12,6 +12,7 @@
 
 ## Use
 
+- `/tokendoctor` shows the main settings and the audit's fixes; `/tokendoctor <name> <value>` sets one, `/tokendoctor fix <id>` applies a fix, `/tokendoctor undo` lists every change and puts one back.
 - `/tokendoctor:sessions [days]` measures spend from local transcripts: main thread against subagents, spend with a very full context, subagent types, cache rebuilds. `tokendoctor-sessions --by day|week` shows the trend.
 - `/tokendoctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only.
 - `/tokendoctor:optimize [focus]` proposes setting changes backed by the measurements and applies the ones the person picks, each through a dialog that shows the change.

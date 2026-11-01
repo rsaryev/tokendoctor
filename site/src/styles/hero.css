@@ -108,7 +108,7 @@
    so without script or with reduced motion everything simply stands. */
 .reveal-ready .hero-title,
 .reveal-ready .hero-lede,
-.reveal-ready .install,
+.reveal-ready .hero-copy .install,
 .reveal-ready .hero-under,
 .reveal-ready .hero-demo {
   animation: hero-rise 700ms var(--landing-ease-out) both;
@@ -116,7 +116,7 @@
 .reveal-ready .hero-lede {
   animation-delay: 80ms;
 }
-.reveal-ready .install {
+.reveal-ready .hero-copy .install {
   animation-delay: 140ms;
 }
 .reveal-ready .hero-under {

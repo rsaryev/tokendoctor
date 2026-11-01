@@ -1,0 +1,110 @@
+/* The steps as a stack, as llx's landing has them: each card sticks under the header and the next
+   slides over it, a little lower, so the edges of those under it show. Words on the left, what
+   tokendoctor printed on the right, its lines coming in once the card is seen. */
+.steps {
+  padding-block: clamp(3rem, 8vw, 6.5rem);
+  border-top: 1px solid var(--border-subtle);
+}
+.steps-title {
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  font: 700 clamp(1.9rem, 1.2rem + 2.4vw, 3.25rem) / 1.04 var(--font-heading);
+  letter-spacing: -0.04em;
+  text-align: center;
+  text-wrap: balance;
+}
+.steps-stack {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.step-card {
+  position: sticky;
+  top: calc(var(--home-header) + 0.75rem + var(--n) * 0.85rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  min-height: clamp(19rem, 17vw, 24rem);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+  border-radius: 20px;
+  background: #0c0c0c;
+  box-shadow: 0 -24px 60px -30px rgb(0 0 0 / 0.9);
+}
+.step-kicker {
+  color: var(--text-faint);
+  font: 400 var(--home-small) / 1.5 var(--font-mono);
+}
+.step-text h3 {
+  margin: 0.5rem 0 0;
+  font: 650 clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem) / 1.1 var(--font-heading);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.step-text p:not(.step-kicker) {
+  max-width: 30em;
+  margin: 1rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.step-command {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: var(--text-soft);
+  font: 400 var(--home-small) / 1.4 var(--font-mono);
+}
+.step-command::before {
+  content: '>';
+  margin-right: 0.6ch;
+  color: var(--text-faint);
+}
+.step-panel {
+  align-self: start;
+  margin: 0;
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: #080808;
+  color: #e6e6e6;
+  font: 400 clamp(0.72rem, 0.66rem + 0.22vw, 0.84rem) / 1.7 var(--font-mono);
+}
+.step-row {
+  display: block;
+  white-space: pre;
+}
+.t-dim { color: #7a7a7a; }
+.t-hi { color: #fff; font-weight: 600; }
+.t-ok { color: var(--ok); }
+.t-bad { color: var(--bad); }
+.t-warn { color: var(--ask); }
+.t-acc { color: var(--info); }
+
+@media (min-width: 60rem) {
+  .step-card {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+}
+
+/* A card's lines come in one after another once it is seen. */
+.step-card[data-reveal] .step-row {
+  transition:
+    opacity 420ms var(--landing-ease-out),
+    transform 420ms var(--landing-ease-out);
+  transition-delay: calc(var(--i) * 90ms + 120ms);
+}
+.step-card[data-reveal='wait'] .step-row {
+  opacity: 0;
+  transform: translateY(6px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-card {
+    position: relative;
+    top: 0;
+  }
+  .step-card[data-reveal] .step-row {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

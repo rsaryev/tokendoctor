@@ -18,6 +18,6 @@ Audit the Claude Code configuration for the current project (or `$ARGUMENTS` if 
    not measure savings, so state no percentages. Point to `/usage` (usage breakdown and
    recommendations) and `/context` (what is loaded now) for measuring.
 4. Say which findings have an automatic fix (those with a `fixes` list) and offer
-   `/tokendoctor:apply <finding-id>` for them. Never edit files from this skill.
+   `/tokendoctor fix <finding-id>` for them. Never edit files from this skill.
 5. If `facts.version` is null, say the Claude Code version could not be read and that rules which
    depend on a minimum version were still applied.

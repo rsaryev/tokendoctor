@@ -1,0 +1,59 @@
+{
+  "when": "2026-11-01 21:33",
+  "task": "evalkit",
+  "tests": 238,
+  "steps": 1,
+  "model": "claude-haiku-5-5",
+  "window": 100000,
+  "effort": null,
+  "timeout_s": 1800,
+  "repeat": 3,
+  "note": "slide v4: least is half the text it sees \u2014 runs 0 and 1 stopped by hand after ~20 min, unfinished: 3 slides then 2 summaries each (60 and 72 requests). Haiku's answers thought 40-60K tokens that v4 did not count as freed, and after a summary the next compaction summarized too; v5 fixes both (2026-11-01_22xx).",
+  "machine": "Darwin arm64 26.6.2",
+  "claude": "2.1.316 (Claude Code)",
+  "load": 2.9,
+  "arms": [
+    {
+      "label": "factory+slide",
+      "profile": "factory",
+      "slide": true,
+      "slideTo": 25,
+      "plugin": "~/Documents/tokendoctor",
+      "version": "0.4.1 f164c95-dirty"
+    }
+  ],
+  "runs": [
+    {
+      "status": "success",
+      "cost_usd": 0.075,
+      "requests": 16,
+      "input_tokens": 32,
+      "cache_read": 463141,
+      "cache_write": 102370,
+      "output_tokens": 94091,
+      "max_context": 64056,
+      "avg_context": 35346,
+      "compactions": 2,
+      "summaries": 1,
+      "slides": 1,
+      "compact_s": 16.4,
+      "reads": 3,
+      "rereads": 1,
+      "edits": 5,
+      "bash": 14,
+      "failed_tools": 0,
+      "label": "factory+slide",
+      "run": 2,
+      "exit": 0,
+      "killed": null,
+      "wall_s": 429.7,
+      "pass": 238,
+      "fail": 0,
+      "solved": true,
+      "tampered": [],
+      "cache_pct": 82,
+      "advice": [],
+      "steps": []
+    }
+  ]
+}

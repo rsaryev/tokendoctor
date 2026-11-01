@@ -1,0 +1,1 @@
+{ "kind": "implement", "prompt": "Implement every module in src/ as README.md specifies. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json. Run `bun test` to check your work; the task is done when every test passes." }

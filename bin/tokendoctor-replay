@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+// What your sessions would have cost had Claude Code compacted earlier: each main conversation
+// replayed request by request at smaller windows (lib/replay.mjs). Read-only; an estimate, in shares.
+// Usage: tokendoctor-replay [--days <n>] [--project <dir>] [--window <n>[,<n>...]] [--json]
+import { configDir } from '../lib/collect.mjs'
+import { leftAfterCompaction, replay, request } from '../lib/replay.mjs'
+import { loadUsage } from '../lib/sessions.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const days = Number(value('--days') ?? 30)
+const windows = (value('--window') ?? '200000,300000,400000,600000').split(',').map((w) => Number(w.replace(/k$/i, '000')))
+
+const sessions = loadUsage(configDir(), { days, project: value('--project') })
+const all = sessions.reduce((n, s) => n + s.agents, 0)
+const rows = windows.map((window) => {
+  const t = { window, sessions: sessions.length, touched: 0, compactions: 0, real: 0, replayed: 0, agents: all }
+  for (const s of sessions) {
+    const requests = s.usage.map(request)
+    const r = replay(requests, window, leftAfterCompaction(requests))
+    t.real += r.real
+    t.replayed += r.replayed
+    t.compactions += r.compactions
+    if (r.compactions) t.touched++
+  }
+  t.saved = (t.real - t.replayed) / (t.real + t.agents)
+  return t
+})
+
+if (args.includes('--json')) {
+  console.log(JSON.stringify({ days, sessions: sessions.length, windows: rows }))
+} else {
+  const pct = (x) => `${Math.round(x * 1000) / 10}%`
+  console.log(`${sessions.length} sessions in the last ${days} days. Had Claude Code compacted at a smaller window:`)
+  for (const r of rows) {
+    console.log(`  ${String(r.window / 1000).padStart(4)}K  ${pct(r.saved).padStart(6)} of all cost saved  ` +
+      `(${r.touched} sessions affected, ${r.compactions} compactions more)`)
+  }
+  console.log('An estimate: it cannot see the work a model does again after a summary. bench/ measures that live.')
+}

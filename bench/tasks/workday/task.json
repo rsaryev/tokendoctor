@@ -1,0 +1,12 @@
+{
+  "kind": "implement",
+  "steps": [
+    "Implement src/money.ts, src/cart.ts and src/csv.ts as README.md specifies (part 1). Check with `bun test test/money.test.ts test/cart.test.ts test/csv.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Now implement src/router.ts, src/lru.ts and src/semver.ts as README.md specifies (part 1). Check with `bun test test/router.test.ts test/lru.test.ts test/semver.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Next, src/expr.ts, the expression language of README.md part 2. Check with `bun test test/expr.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Next, src/query.ts, SQL over arrays of objects (README.md part 2). Check with `bun test test/query.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Next, src/diff.ts, line diffs, unified diffs and patches (README.md part 2). Check with `bun test test/diff.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Next, src/cron.ts, five-field cron in UTC (README.md part 2). Check with `bun test test/cron.test.ts`; this step is done when those pass. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json.",
+    "Run the whole suite with `bun test` and fix whatever fails, in any module, until every test passes. The acceptance tests in test/ are fixed: do not change them, package.json or tsconfig.json. Then say in a line for each module what it does."
+  ]
+}
