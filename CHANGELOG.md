@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Tried and dropped: a decision model (Jev, or Haiku without a key) that picks each subagent's model
+  and effort from its brief. Replayed on 30 days of the author's sessions (452 subagents), it would
+  have saved under 1%: the expensive subagents had heavy work, and Jev kept them on Opus at high
+  effort. Against 74 of those briefs labeled by Opus, Jev agreed 31 times and Haiku 59. A brief alone
+  is too little to judge from; this needs finer tuning (the lead agent's own context, escalating
+  after a failure, what past runs needed) before it comes back. The code is on the local branch
+  `experiment/agents-by-task`.
 - The slide treats a Bash command that only prints files (`cat`, `sed -n '1,40p'`, `head`, `tail`,
   `nl`) as a read of them: once a later read or edit of the same file makes it stale, it goes first,
   as a stale Read does, and its pointer names the files. Turning such commands away to Read instead
