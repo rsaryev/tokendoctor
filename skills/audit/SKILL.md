@@ -2,7 +2,7 @@
 name: audit
 description: Audit this Claude Code setup for settings that waste tokens or silently do nothing.
 disable-model-invocation: true
-allowed-tools: Bash(tokendoctor-audit *)
+allowed-tools: Bash(tokendoctor-audit *), Read, Glob
 argument-hint: [project-dir]
 ---
 
@@ -19,5 +19,12 @@ Audit the Claude Code configuration for the current project (or `$ARGUMENTS` if 
    recommendations) and `/context` (what is loaded now) for measuring.
 4. Say which findings have an automatic fix (those with a `fixes` list) and offer
    `/tokendoctor fix <finding-id>` for them. Never edit files from this skill.
-5. If `facts.version` is null, say the Claude Code version could not be read and that rules which
+5. Review what Claude is told to do, not only how it is configured: read this project's memory
+   (`~/.claude/projects/<project path with / as ->/memory/`, its `MEMORY.md` and the files it
+   lists) and the instruction files (`~/.claude/CLAUDE.md`, `~/.claude/rules/`, the project's
+   `CLAUDE.md` and `.claude/rules/`). Use your own judgment: point out anything there that makes
+   Claude spend more than the work needs, contradicts the settings or another instruction, is stale,
+   or is unsafe to keep. Quote `file:line` and say how to rewrite it. Where an instruction is
+   plainly the person's own choice, show what it costs and leave the choice to them.
+6. If `facts.version` is null, say the Claude Code version could not be read and that rules which
    depend on a minimum version were still applied.

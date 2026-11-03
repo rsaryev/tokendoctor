@@ -128,7 +128,7 @@ async function main(): Promise<number> {
   if (v.help) {
     console.log(`usage: bun bench/run.ts [options]  (see bench/README.md)
   --task ${tasks.join("|")}     the task (default fixkit)
-  --arm [label=]profile[+slide[:pct]][@folder]  factory (Claude Code as it ships) or advised (with
+  --arm [label=]profile[+slide[:pct]][+reads][@folder]  factory (Claude Code as it ships) or advised (with
                                every fix tokendoctor's audit offers), +slide (to pct%, default 25);
                                tokendoctor from this repository or a folder; repeat to compare
                                (default: advised+slide, or factory+slide with --window; compared

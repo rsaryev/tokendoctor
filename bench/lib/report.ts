@@ -37,7 +37,7 @@ const profile = (a: Arm) => a.profile ?? "factory";
 const slides = (a: Arm) => a.slide ?? a.mode === "slide";
 const armName = (a: Arm) =>
   [profile(a) === "advised" ? `every fix tokendoctor's audit offers applied` : "Claude Code as it ships, empty config",
-    slides(a) ? `the slide down to ${a.slideTo}%` : null, a.version ? `tokendoctor ${a.version}` : null].filter(Boolean).join("; ");
+    slides(a) ? `the slide down to ${a.slideTo}%` : null, a.reads ? "Bash prints of files sent to Read" : null, a.version ? `tokendoctor ${a.version}` : null].filter(Boolean).join("; ");
 const shownWindow = (w: number | null) => (w ? k(w) : "each profile's own");
 
 type Baseline = { task: string; model: string; window: number | null; run: string; arms: string[] };
@@ -120,7 +120,7 @@ export function history(results: string): string {
       const med = (key: (r: Result) => number) => median(rs.map(key));
       rows.push([
         `[${run.when}](results/${name}/summary.md)`, run.task, run.model.replace(/^claude-/, ""), shownWindow(run.window), a.label,
-        a.version ? `${a.version}${slides(a) ? `, slide ${a.slideTo}%` : ""}` : "—", rs.length, `${rs.filter((r) => r.solved).length}/${rs.length}`,
+        a.version ? `${a.version}${slides(a) ? `, slide ${a.slideTo}%` : ""}${a.reads ? ", reads" : ""}` : "—", rs.length, `${rs.filter((r) => r.solved).length}/${rs.length}`,
         `${med((r) => r.pass)}, ${Math.min(...rs.map((r) => r.pass))} of ${run.tests}`, med((r) => r.wall_s),
         med((r) => r.cost_usd).toFixed(4), med((r) => r.requests), med((r) => r.cache_pct),
         `${med((r) => r.summaries)} / ${med((r) => r.slides)}`, med((r) => r.compact_s), med((r) => r.rereads),

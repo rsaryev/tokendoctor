@@ -29,7 +29,13 @@ The tokendoctor tools wait behind ToolSearch: load `mcp__tokendoctor__metrics`,
    word for word. It is not a saving: measured on 60-file runs it costs the same as a summary (within
    2% on Haiku 5.5 and Sonnet 5.5), and a recall test found no detail the summary lost. Offer it only
    as a separate choice, to someone who says summaries lose what they need, and say that a model may
-   now and then read an elided file again. Leave
+   now and then read an elided file again.
+   **How tools are used.** The `usage` part of `tokendoctor-sessions --json` shows which tools fill
+   the context, Bash calls that only printed a file, the files read most and how large subagent runs
+   grow. Judge from it yourself. `bashOutputMaxChars` caps one Bash output; with the slide on, a
+   file printed through Bash that was read or changed again later is the first thing dropped. What a setting cannot fix (how subagents are briefed and sized, what they report back),
+   propose as a few lines for the project's memory or CLAUDE.md and show them; the person writes
+   them, or asks you to. Leave
    `tokendoctor.slideTo` at its default (25) unless the person asks: a higher one slides more often,
    and every slide re-sends the context once.
 4. **Ask.** Use AskUserQuestion (multiSelect) to let the person pick which changes to apply.

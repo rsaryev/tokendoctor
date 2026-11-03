@@ -17,6 +17,8 @@ const REPO = path.join(import.meta.dir, "../..");
 /** One arm: its label, its profile, whether the slide is on and how far, and the plugin it uses. */
 export type Arm = {
   label: string; profile: "factory" | "advised"; slide: boolean; slideTo: number | null;
+  /** tokendoctor.reads: Bash prints of files turned away to Read. Absent in runs from before it. */
+  reads?: boolean;
   plugin: string | null; version: string | null;
   /** run.json from before the profiles: `stock` was factory, `slide` factory+slide. */
   mode?: "stock" | "slide";
@@ -26,8 +28,9 @@ export type Arm = {
 export type Options = { model: string; window: number | null; timeout: number; effort: string | null; subagents: boolean };
 
 /**
- * The arm `spec` names: `[label=]profile[+slide[:percent]][@plugin folder]`: `factory`, `advised`,
- * `advised+slide`, `factory+slide:40`, `new=advised+slide@/tmp/tokendoctor`. The plugin, for the
+ * The arm `spec` names: `[label=]profile[+slide[:percent]][+reads][@plugin folder]`: `factory`,
+ * `advised`, `advised+slide`, `factory+slide:40`, `factory+slide+reads`,
+ * `new=advised+slide@/tmp/tokendoctor`. The plugin, for the
  * advice and the slide, is this repository unless a folder is named. `stock` and `slide` stand for
  * `factory` and `factory+slide`.
  */
@@ -35,14 +38,14 @@ export function arm(spec: string): Arm {
   const eq = spec.indexOf("="), rest = eq < 0 ? spec : spec.slice(eq + 1);
   const [head, folder] = rest.split("@") as [string, string | undefined];
   const named = head.replace(/^stock$/, "factory").replace(/^slide/, "factory+slide");
-  const m = /^(factory|advised)(\+slide(?::(\d+))?)?$/.exec(named);
-  if (!m) throw new Error(`--arm ${spec}: factory or advised, with +slide or +slide:<percent>`);
+  const m = /^(factory|advised)(\+slide(?::(\d+))?)?(\+reads)?$/.exec(named);
+  if (!m) throw new Error(`--arm ${spec}: factory or advised, with +slide or +slide:<percent>, then +reads`);
   const label = eq < 0 ? head : spec.slice(0, eq);
-  const profile = m[1] as Arm["profile"], slide = Boolean(m[2]);
-  const uses = slide || profile === "advised";
+  const profile = m[1] as Arm["profile"], slide = Boolean(m[2]), reads = Boolean(m[4]);
+  const uses = slide || reads || profile === "advised";
   const plugin = uses ? path.resolve(folder ?? REPO) : null;
   if (plugin && !fs.existsSync(path.join(plugin, ".claude-plugin", "plugin.json"))) throw new Error(`--arm ${spec}: no plugin at ${plugin}`);
-  return { label, profile, slide, slideTo: slide ? Number(m[3] ?? 25) : null, plugin, version: plugin ? version(plugin) : null };
+  return { label, profile, slide, slideTo: slide ? Number(m[3] ?? 25) : null, reads, plugin, version: plugin ? version(plugin) : null };
 }
 
 /** The plugin's version, its commit where it is a git checkout (-dirty with changes to its code). */
@@ -97,7 +100,7 @@ export function advise(a: Arm, config: string, work: string): string[] {
  * effect is allowed but an edit of the fixed files, which are put back after the run anyway.
  */
 export function command(a: Arm, o: Options, prompt: string, resume: string | null): string[] {
-  const options = { slide: a.slide, slideTo: a.slideTo ?? 25 };
+  const options = { slide: a.slide, slideTo: a.slideTo ?? 25, reads: a.reads ?? false };
   const settings = {
     ...(o.window ? { autoCompactWindow: o.window } : {}),
     // A plugin loaded from a folder keeps its options under its own name.
@@ -113,7 +116,7 @@ export function command(a: Arm, o: Options, prompt: string, resume: string | nul
     "--permission-mode", "bypassPermissions", "--strict-mcp-config",
     "--settings", JSON.stringify(settings), "--disallowedTools", ...fixed, ...solo,
     ...(o.effort ? ["--effort", o.effort] : []),
-    ...(a.slide && a.plugin ? ["--plugin-dir", a.plugin] : []),
+    ...((a.slide || a.reads) && a.plugin ? ["--plugin-dir", a.plugin] : []),
     ...(resume ? ["--resume", resume] : []),
   ];
 }

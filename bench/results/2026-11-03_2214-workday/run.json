@@ -1,0 +1,150 @@
+{
+ "when": "2026-11-03 22:14",
+ "task": "workday",
+ "tests": 307,
+ "steps": 7,
+ "model": "claude-haiku-5-5",
+ "window": 100000,
+ "effort": null,
+ "timeout_s": 1800,
+ "repeat": 2,
+ "note": "reads on: Bash prints of files sent to Read, slide v5; compare with 2026-11-01_2207-workday (factory+slide, same window) and the factory baseline",
+ "machine": "Darwin arm64 26.6.2",
+ "claude": "2.1.317 (Claude Code)",
+ "load": 3.9,
+ "arms": [
+  {
+   "label": "factory+slide+reads",
+   "profile": "factory",
+   "slide": true,
+   "slideTo": 25,
+   "reads": true,
+   "plugin": "~/Documents/tokendoctor",
+   "version": "0.4.1 f416dd5-dirty"
+  }
+ ],
+ "runs": [
+  {
+   "status": "success",
+   "cost_usd": 0.1992,
+   "requests": 56,
+   "input_tokens": 112,
+   "cache_read": 2281913,
+   "cache_write": 312102,
+   "output_tokens": 227995,
+   "max_context": 66192,
+   "avg_context": 46324,
+   "compactions": 6,
+   "summaries": 0,
+   "slides": 6,
+   "compact_s": 0.1,
+   "reads": 20,
+   "rereads": 5,
+   "edits": 15,
+   "bash": 29,
+   "failed_tools": 26,
+   "label": "factory+slide+reads",
+   "run": 0,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 988.1,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 88,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 50.6
+    },
+    {
+     "pass": 69,
+     "wall_s": 151
+    },
+    {
+     "pass": 141,
+     "wall_s": 184.2
+    },
+    {
+     "pass": 214,
+     "wall_s": 424
+    },
+    {
+     "pass": 261,
+     "wall_s": 89.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 76.2
+    },
+    {
+     "pass": 307,
+     "wall_s": 12.8
+    }
+   ]
+  },
+  {
+   "status": "success",
+   "cost_usd": 0.1743,
+   "requests": 46,
+   "input_tokens": 92,
+   "cache_read": 2035031,
+   "cache_write": 289608,
+   "output_tokens": 191957,
+   "max_context": 64495,
+   "avg_context": 50538,
+   "compactions": 5,
+   "summaries": 0,
+   "slides": 5,
+   "compact_s": 0.1,
+   "reads": 20,
+   "rereads": 7,
+   "edits": 13,
+   "bash": 27,
+   "failed_tools": 18,
+   "label": "factory+slide+reads",
+   "run": 1,
+   "exit": 0,
+   "killed": null,
+   "wall_s": 823.2,
+   "pass": 307,
+   "fail": 0,
+   "solved": true,
+   "tampered": [],
+   "cache_pct": 88,
+   "advice": [],
+   "steps": [
+    {
+     "pass": 27,
+     "wall_s": 45.9
+    },
+    {
+     "pass": 69,
+     "wall_s": 111.2
+    },
+    {
+     "pass": 141,
+     "wall_s": 169.8
+    },
+    {
+     "pass": 214,
+     "wall_s": 259.3
+    },
+    {
+     "pass": 261,
+     "wall_s": 152.3
+    },
+    {
+     "pass": 307,
+     "wall_s": 76
+    },
+    {
+     "pass": 307,
+     "wall_s": 8.7
+    }
+   ]
+  }
+ ]
+}

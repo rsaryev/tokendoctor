@@ -85,3 +85,25 @@ test('the CLI reads transcripts under the config folder and prints no message te
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test('usage counts tools, Bash prints of files, sleeps and subagent run sizes', () => {
+  const call = (id, name, input, at) => [
+    { type: 'assistant', timestamp: at, message: { id: `m-${id}`, model: 'claude-opus-5-5', role: 'assistant', usage: { input_tokens: 10, cache_read_input_tokens: 250000, output_tokens: 5 }, content: [{ type: 'tool_use', id, name, input }] } },
+    { type: 'user', timestamp: at, message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: id, content: 'x'.repeat(1000) }] } },
+  ]
+  const sub = [
+    ...call('a', 'Bash', { command: "cd /r && sed -n '1,40p' docs/A.md" }, '2026-11-01T10:00:00Z'),
+    ...call('b', 'Bash', { command: 'bun test | tail -5' }, '2026-11-01T10:01:00Z'),
+    ...call('c', 'Bash', { command: 'sleep 30; cat log' }, '2026-11-01T10:02:00Z'),
+    ...call('d', 'Read', { file_path: 'docs/A.md' }, '2026-11-01T10:03:00Z'),
+  ]
+  const s = analyzeSession(call('m', 'Read', { file_path: 'docs/A.md' }, '2026-11-01T09:59:00Z'), [{ type: 'general-purpose', rows: sub }])
+  const { usage } = summarize([s])
+  assert.deepEqual(usage.subagents.bash, { calls: 3, chars: 3000, fileReads: 1, fileReadChars: 1000, waits: 1 })
+  assert.equal(usage.subagents.tools.Read.calls, 1)
+  assert.equal(usage.main.tools.Read.chars, 1000)
+  assert.deepEqual(usage.filesReadMost[0], { path: 'docs/A.md', times: 3 })
+  assert.equal(usage.subagentRuns.runs, 1)
+  assert.equal(usage.subagentRuns.requests.max, 4)
+  assert.equal(usage.subagentRuns.over200KContext, 1)
+})

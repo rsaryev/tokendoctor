@@ -1,10 +1,12 @@
 import type { SessionMessage } from 'claude-code'
+import { fileRead } from '../lib/reads.mjs'
 
 // Slides the context window instead of summarizing it, as llx does (llx/packages/agent/src/history.rs):
 // tool outputs and large tool arguments become short pointers that say what they were and how to get
 // them back. No summary, and every prompt, answer and decision stays word for word.
 //
-// What goes first: outputs that are stale for sure (a file read again or changed later), then what an
+// What goes first: outputs that are stale for sure (a file read again or changed later, whether it was
+// read with Read or printed by a Bash `cat`, `sed -n`, `head` or `tail`), then what an
 // edit wrote (it is on disk), then everything else, oldest first, until enough is free.
 //
 // The prompt cache: any change to an old message re-sends what follows it uncached, and the API looks
@@ -149,7 +151,8 @@ function card(removed: readonly SessionMessage[], turns: number) {
   const changed = new Set<string>()
   for (const m of removed) for (const u of m.toolUses) {
     const file = fileOf(u.input)
-    if (file) (WRITERS.has(u.tool) ? changed : read).add(file)
+    if (file && WRITERS.has(u.tool)) changed.add(file)
+    for (const f of readsOf(u)) read.add(f)
   }
   const list = (files: Set<string>) => [...files].slice(-30).join(', ') || 'none'
   return [
@@ -204,16 +207,31 @@ export function dedupe(messages: readonly SessionMessage[]): SessionMessage[] {
   return out
 }
 
-/** The results of reads whose file is read again or changed by a later call. */
+/** The files a call reads: a Read's file, or the files a Bash command only prints. */
+function readsOf(u: { tool: string; input: Record<string, unknown> }): string[] {
+  if (u.tool === 'Read') {
+    const file = fileOf(u.input)
+    return file ? [file] : []
+  }
+  if (u.tool === 'Bash' && typeof u.input.command === 'string') return fileRead(u.input.command) ?? []
+  return []
+}
+
+/** One file named twice: the same path, or a relative one (a Bash print) that ends the other. */
+const sameFile = (a: string, b: string) => a === b || a.endsWith(`/${b.replace(/^\.\//, '')}`) || b.endsWith(`/${a.replace(/^\.\//, '')}`)
+
+/** The results of reads whose every file is read again or changed by a later call. */
 function staleReads(messages: readonly SessionMessage[]) {
   const stale = new Set<string>()
-  const later = new Set<string>()
+  const later: string[] = []
+  const seen = (file: string) => later.some(f => sameFile(f, file))
   for (let i = messages.length - 1; i >= 0; i--) {
     for (const u of [...messages[i]!.toolUses].reverse()) {
-      const file = fileOf(u.input)
-      if (!file) continue
-      if (u.tool === 'Read' && later.has(file)) stale.add(u.tool_use_id)
-      if (u.tool === 'Read' || WRITERS.has(u.tool)) later.add(file)
+      const reads = readsOf(u)
+      if (reads.length && reads.every(seen)) stale.add(u.tool_use_id)
+      later.push(...reads)
+      const file = WRITERS.has(u.tool) ? fileOf(u.input) : undefined
+      if (file) later.push(file)
     }
   }
   return stale
@@ -268,7 +286,8 @@ function elide(m: SessionMessage, calls: Map<string, Call>): SessionMessage | nu
 function pointer(call: Call | undefined, output: string) {
   const tool = call?.tool ?? 'the tool'
   const file = call ? fileOf(call.input) : undefined
-  const what = tool === 'Read' && file ? `${tool} of ${file}` : `${tool} output`
+  const printed = call?.tool === 'Bash' ? readsOf(call) : []
+  const what = tool === 'Read' && file ? `${tool} of ${file}` : printed.length ? `Bash print of ${printed.join(', ')}` : `${tool} output`
   // Claude Code keeps an image a tool returned as a file and names it in the result: the name stays,
   // so the model can look at it again without taking the screenshot again.
   const images = [...output.matchAll(/\[Image: source: [^\]\n]+\]/g)].map(m => m[0])

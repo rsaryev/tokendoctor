@@ -42,7 +42,7 @@ function printTrend(rows) {
   }
 }
 const sessions = loadSessions(configDir(), { days, project: value('--project') })
-const { totals: t, findings } = summarize(sessions)
+const { totals: t, findings, usage } = summarize(sessions)
 const pct = (x, of = t.cost) => `${Math.round((100 * x) / (of || 1))}%`
 const byCost = (o, f = (v) => v) => Object.entries(o).sort((a, b) => f(b[1]) - f(a[1]))
 
@@ -50,7 +50,7 @@ if (args.includes('--json')) {
   const top = [...sessions].sort((a, b) => b.cost - a.cost).slice(0, 10)
     .map(({ project, start, turns, cost, mainCost, maxContext }) => ({ project, start, turns, cost, subagentCost: cost - mainCost, maxContext }))
   const { compactions, ...rest } = t
-  console.log(JSON.stringify({ days, totals: { ...rest, compactions: compactions.length }, topSessions: top, findings }, null, 2))
+  console.log(JSON.stringify({ days, totals: { ...rest, compactions: compactions.length }, topSessions: top, findings, usage }, null, 2))
 } else if (!sessions.length) {
   console.log(`No sessions in the last ${days} days.`)
 } else {

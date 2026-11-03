@@ -25,8 +25,22 @@ none given).
 4. Connect findings to settings where they apply: `late-compaction` to `autoCompactWindow`,
    `subagents-on-top-model` to `CLAUDE_CODE_SUBAGENT_MODEL` and the Explore override. Offer
    `/tokendoctor:audit` to check and fix them. Never edit files from this skill.
-5. When asked about a trend or whether a change helped, run `tokendoctor-sessions --by day` (or
+5. Then read `usage` and draw your own conclusions from it: which tools fill the context (calls and
+   characters of output, main thread and subagents apart), Bash calls that only printed a file
+   (`fileReads`) or slept in a loop (`waits`), the files read most often, and how large subagent
+   runs grow (requests, how many passed 200K context). Recommend what would cut the spend you see,
+   in plain words with the number behind it. A recommendation is either a setting or an instruction:
+   - a setting: give the exact `/tokendoctor <name> <value>` line, which applies it as typed
+     (`/tokendoctor` alone lists them). Among them: `bash-output <n>` caps what one Bash call puts
+     in context, `slide on`, `window <n>`, `subagents <model>`;
+   - an instruction for Claude (how subagents are briefed and sized, what they report back, when to
+     read docs, how to wait on a process): draft the few lines and say where they would go (the
+     project's memory or `CLAUDE.md`).
+   Offer `/tokendoctor:optimize` to apply several at once: it shows each change and applies only
+   what the person approves. Leave choices the person made on purpose (in memory or settings) to
+   them, with what they cost.
+6. When asked about a trend or whether a change helped, run `tokendoctor-sessions --by day` (or
    `--by week`, with `--days <n>`) and compare the periods before and after. Days older than the
    transcripts come from the history the plugin's SessionStart hook records.
-6. Say what this cannot see: per-model prices, sessions on other machines, and transcripts Claude
+7. Say what this cannot see: per-model prices, sessions on other machines, and transcripts Claude
    Code has already cleaned up.

@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- The slide treats a Bash command that only prints files (`cat`, `sed -n '1,40p'`, `head`, `tail`,
+  `nl`) as a read of them: once a later read or edit of the same file makes it stale, it goes first,
+  as a stale Read does, and its pointer names the files. Turning such commands away to Read instead
+  was measured and dropped: on `workday` (Haiku 5.5, 100K window, 2 runs) each refusal cost a
+  request, +24% cost and +19% time against the slide alone (bench/results/2026-11-03_2214-workday).
+- `tokendoctor-sessions --json` adds `usage`: calls and output per tool (main thread and subagents
+  apart), Bash calls that only printed a file or slept, the files read most, and how large subagent
+  runs grew. `/tokendoctor:sessions` and `/tokendoctor:optimize` draw their own recommendations from
+  it, as a `/tokendoctor <name> <value>` line or a few lines for the project's memory or CLAUDE.md.
+- `/tokendoctor:audit` also reads the project's memory and instruction files and points out what makes
+  Claude spend more than the work needs, contradicts the settings, is stale or is unsafe to keep.
+
 - `/tokendoctor`: the settings by short name, answered by the plugin with no model call. Alone it shows
   the main six and the audit's fixes; `/tokendoctor <name>` explains one, `/tokendoctor <name> <value>`
   applies it as typed (`400k`, `on`, `5m`, `reset`), `--project` or `--local` picks the file. Tab
