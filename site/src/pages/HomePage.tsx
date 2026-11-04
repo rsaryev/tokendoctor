@@ -6,9 +6,9 @@ import { HOME_SHELL } from '@/lib/shell'
 import { INSTALL } from '@/lib/site'
 import '../components/home/films.css'
 
-const HEADLINE = 'The same Claude Code for up to 37% less'
+const HEADLINE = 'The same Claude Code for up to 38% less'
 /** The word set on a white chip, as a highlight. */
-const CHIP_WORD = '37%'
+const CHIP_WORD = '38%'
 
 /**
  * The hero, one screen: the copy on the left (a heavy headline with one word on a chip, the

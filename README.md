@@ -5,7 +5,7 @@
 <h1 align="center">tokendoctor</h1>
 
 <p align="center">
-  <strong>The same Claude Code for up to 37% less</strong>
+  <strong>The same Claude Code for up to 38% less</strong>
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 | Measured on its author's six weeks of real use | |
 |---|---|
-| Cost per request at API list prices, the month before against the week after a 400K window and Sonnet for subagents | **−37%** |
+| Main-thread cost per request at API list prices, the month before against the week after a 400K window and Sonnet for subagents | **−38%** |
 | Context per request | **412K → 219K** |
 | The same sessions replayed at a 400K window: only the window changed | **−33%** of the main thread, **−20%** of all spend |
 | The slide against a summary, the same day of work ([bench](bench/README.md)) | **−19% cost, −33% time** |
@@ -198,7 +198,7 @@ does. Every prompt, answer and decision stays word for word, and there is no sum
   `autoCompactWindow` (for example 400000) and the slide works from it.
 
 In one real session, at the same size: Claude Code's summary took 367K to 35K in **65.3 s**; the slide
-took 368K to 36K in **0.04 s**. Summaries in the author's real sessions take 73 s on average.
+took 368K to 36K in **0.04 s**. Summaries in the author's real sessions take 79 s on average (109 of them, 22 September to 1 November).
 
 On [bench/](bench/README.md), Claude Code doing a TypeScript project against fixed acceptance tests,
 Haiku 5.5, a 100K window so that it compacts several times (medians). A short task with one

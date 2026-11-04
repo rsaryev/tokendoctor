@@ -17,10 +17,14 @@
   cost Claude Code reported on bench's 78 runs: equal to the cent on 77.
 - Agents run by a workflow, whose transcripts sit one folder down in `subagents/workflows/`, are
   counted. They were missed before: 1,028 transcripts, 9% of the spend on the author's history.
-- The published figures, measured again at list prices: cost per request after a 400K window and
-  Sonnet for subagents −37% (was −43% in the old weights); the month before replayed at 400K −33% of
-  the main thread and −20% of all spend (was −27 to −40%). Context per request and the bench
-  results, which use the cost Claude Code reports, do not change.
+- The published figures, measured again at list prices on the same UTC days: main-thread cost per
+  request after a 400K window and Sonnet for subagents −38% (was −43% in the old weights; −40% with
+  subagents); the month before replayed at 400K −33% of the main thread and −20% of all spend (was
+  −27 to −40%). The headline is "up to 38% less" (was 40%). Context per request (412K → 219K) and
+  the bench results, which use the cost Claude Code reports, do not change. The landing's day table
+  now has all of 1 November, which was measured that afternoon.
+- A summary compaction in the author's sessions takes 79 s on average, not 73 s: the earlier mean
+  counted slides, which take no time, as summaries.
 - The daily history file is measured again in dollars for every day whose transcripts remain; the
   old file is kept beside it as `history.jsonl.before-0.5.1`.
 

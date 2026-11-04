@@ -3,12 +3,12 @@
   "owner": {
     "name": "rsaryev"
   },
-  "description": "The same Claude Code for up to 37% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
+  "description": "The same Claude Code for up to 38% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
   "plugins": [
     {
       "name": "tokendoctor",
       "source": "./",
-      "description": "The same Claude Code for up to 37% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine."
+      "description": "The same Claude Code for up to 38% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine."
     }
   ]
 }

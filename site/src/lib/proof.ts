@@ -1,7 +1,8 @@
 /**
  * The numbers the landing's proof stands on: the author's own Claude Code use over six weeks, read
  * from local transcripts (benchmark and temporary folders left out), and the benchmark in bench/.
- * Shares and tokens only, no money. Made again with the scripts in bench/; see bench/README.md.
+ * Days are UTC days. Costs are at each model's API list price (lib/prices.mjs), main thread.
+ * Measured again on 2026-11-04 for 0.5.1; see CHANGELOG.md.
  */
 
 /** The day the compaction window went from Claude Code's 1M to 400K, as the transcripts show it. */
@@ -35,14 +36,14 @@ export const DAILY: { day: string; context: number; requests: number }[] = [
   { day: '2026-10-22', requests: 2177, context: 444 },
   { day: '2026-10-23', requests: 2430, context: 460 },
   { day: '2026-10-24', requests: 743, context: 515 },
-  { day: '2026-10-25', requests: 3285, context: 211 },
+  { day: '2026-10-25', requests: 3284, context: 211 },
   { day: '2026-10-26', requests: 2264, context: 226 },
   { day: '2026-10-27', requests: 1948, context: 208 },
   { day: '2026-10-28', requests: 3173, context: 224 },
   { day: '2026-10-29', requests: 1779, context: 210 },
   { day: '2026-10-30', requests: 318, context: 214 },
   { day: '2026-10-31', requests: 3213, context: 228 },
-  { day: '2026-11-01', requests: 1606, context: 218 },
+  { day: '2026-11-01', requests: 3292, context: 220 },
 ]
 
 /** Each period's mean over all its requests (not the mean of the days): the dashed lines. */
@@ -54,9 +55,9 @@ export const MEANS = [
 /** The headline figures, each with what it is and where it comes from. */
 export const FIGURES = [
   {
-    value: '−37%',
+    value: '−38%',
     label: 'cost per request',
-    detail: 'at API list prices, month before vs. week after',
+    detail: 'main thread at API list prices, month before vs. week after',
   },
   {
     value: '−47%',
@@ -72,7 +73,7 @@ export const FIGURES = [
 
 /** The slide against Claude Code's summary, on bench/'s day of work (Haiku 5.5, 100K window). */
 export const SLIDE = [
-  { value: '< 1 s', label: 'per compaction', detail: 'a summary takes 73 s' },
+  { value: '< 1 s', label: 'per compaction', detail: 'a summary takes 79 s' },
   { value: '−19%', label: 'cost', detail: 'same work, all tests pass' },
   { value: '−33%', label: 'time', detail: 'nothing read again' },
 ]
