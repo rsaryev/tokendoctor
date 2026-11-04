@@ -186,7 +186,7 @@ itself, with a backup.
 
 Off by default. With `/tokendoctor slide on` (or `tokendoctor-set tokendoctor.slide true --write`, or
 `/tokendoctor:optimize`), where Claude Code would compact, the plugin's hooks module elides old tool
-outputs into short pointers instead of summarizing, the way [llx](https://github.com/rsaryev/llx)
+outputs into short pointers instead of summarizing, the way [llx](https://github.com/rsaryev/llx-cli)
 does. Every prompt, answer and decision stays word for word, and there is no summary pause.
 
 - What goes first: reads made stale by a later read or edit of the same file, then what edits wrote

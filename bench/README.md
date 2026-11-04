@@ -4,7 +4,7 @@ Does tokendoctor help Claude Code on real work? Claude Code does a TypeScript pr
 against acceptance tests written in advance, which it may not change: as it ships, and after taking
 tokendoctor's advice. The tests score the work, so a run is judged by what passes, not by what the
 model says. Run it after a change to the advice or the slide (`hooks/window.ts`) and read the rows of
-[HISTORY.md](HISTORY.md). The setup follows [llx's benchmark](https://github.com/rsaryev/llx).
+[HISTORY.md](HISTORY.md). The setup follows [llx's benchmark](https://github.com/rsaryev/llx-cli).
 
 Two questions, two kinds of run:
 
