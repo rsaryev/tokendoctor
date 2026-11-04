@@ -28,8 +28,13 @@ test('collect counts each response once, splits main thread from subagent types,
   assert.equal(main.v.requests, 1, 'the repeated message id is one response')
   assert.equal(main.v.cacheRead, 1000)
   assert.equal(main.v.thinking, 5)
-  assert.equal(main.v.ie.cacheRead, 100)
-  assert.equal(main.v.ie.output, 100)
+  // Opus 5.5: 1,000 cache-read tokens at $0.20 per million, 20 output tokens at $20 per million.
+  assert.ok(Math.abs(main.v.usd.cacheRead - 1000 * 0.2e-6) < 1e-12)
+  assert.ok(Math.abs(main.v.usd.output - 20 * 20e-6) < 1e-12)
+  // Haiku 5.5 under 100K of prompt: a 5-minute write is 1.25 x $0.10.
+  const agent = rows.find((r) => r.key[4] === 'agent:Explore')
+  assert.ok(Math.abs(agent.v.usd.cacheWrite - 100 * 0.125e-6) < 1e-12)
+  assert.equal(d.unpriced, 0)
   assert.deepEqual(rows.find((r) => r.key[4] === 'agent:Explore').key.slice(2, 4), ['haiku', 'low'])
   assert.equal(d.sessions.length, 1)
   assert.equal(d.sessions[0].agents, 1)

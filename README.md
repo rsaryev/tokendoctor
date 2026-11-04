@@ -24,9 +24,9 @@
 
 | Measured on its author's six weeks of real use | |
 |---|---|
-| Cost per request, the month before against the week after a 400K window and Sonnet for subagents | **−43%** |
+| Cost per request at API list prices, the month before against the week after a 400K window and Sonnet for subagents | **−37%** |
 | Context per request | **412K → 219K** |
-| The same sessions replayed at a 400K window: only the window changed | **−27 to −40%** |
+| The same sessions replayed at a 400K window: only the window changed | **−33%** of the main thread, **−20%** of all spend |
 | The slide against a summary, the same day of work ([bench](bench/README.md)) | **−19% cost, −33% time** |
 | A week of work in [bench](bench/README.md) (27 steps), Claude Code as it ships against every fix applied and the slide | **−11 to −21% cost** (medians of 2 and 3 runs; single runs −40% to +17%), all tests pass |
 
@@ -57,7 +57,7 @@ your own sessions at smaller windows before anything changes.
 </table>
 
 <p align="center">
-  <img src="docs/dashboard.png" alt="The author's tokendoctor dashboard: 75% of the spend was Claude re-reading the conversation" width="880"><br>
+  <img src="docs/dashboard.png" alt="The author's tokendoctor dashboard: 57% of the spend was Claude re-reading the conversation" width="880"><br>
   <sub><code>/tokendoctor:dashboard</code>: every token by day, model, effort, main thread and each subagent, context size and project. One local file; this is the author's own.</sub>
 </p>
 
@@ -241,9 +241,18 @@ or worse: it saves time and money, not quality.
   to the documentation; decide for yourself.
 - Deny rules in `permissions.deny` are best-effort for search tools and do not stop a read through
   Bash.
-- Session costs are in input-token equivalents (relative API prices). Per-model prices are not
-  applied, so the reports speak in shares, not dollars. Sessions on other machines and transcripts
-  Claude Code has already cleaned up are not counted, except for days already in the history file.
+- Costs are dollars at each model's [Claude API list price](https://platform.claude.com/docs/en/about-claude/pricing)
+  (`lib/prices.mjs`: cache reads at 0.05x input on Opus 5.5 and Sonnet 5.5, 0.025x on Fable 5.1,
+  Haiku 5.5 priced by prompt length, fast mode, US-only inference, web search). On a Pro or Max plan
+  that is what the same work would cost on the API: Anthropic does not publish how plan limits weigh
+  each kind of token.
+- Claude Code bills some requests it does not write into transcripts: a summary compaction's own
+  request, titles, the small model that reads a page for WebFetch. Their cost is Claude Code's own
+  session total (its `cost-state` lines) minus the responses in the transcripts, where that total
+  holds; else the summaries are estimated from the context they read. Against the cost Claude Code
+  reported on [bench](bench/README.md)'s 78 runs: equal to the cent on 77, 7.7% over on one.
+- Sessions on other machines and transcripts Claude Code has already cleaned up are not counted,
+  except for days already in the history file.
 
 </details>
 

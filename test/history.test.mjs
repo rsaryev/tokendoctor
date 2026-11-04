@@ -31,8 +31,21 @@ const session = (name, rows) => writeFileSync(join(dir, 'projects', '-p', `${nam
 
 test('a session that crosses midnight is split by local day', () => {
   const rows = daily([analyzeSession([turn(at(2, 23)), turn(at(1, 1)), turn(at(1, 2), 'claude-sonnet-5-5')])])
-  assert.deepEqual(rows.map((r) => [r.turns, r.cost]), [[1, 1000], [2, 2000]])
-  assert.equal(rows[1].byModel.sonnet, 1000)
+  // 1,000 input tokens: $0.004 on Opus 5.5, $0.002 on Sonnet 5.5.
+  assert.deepEqual(rows.map((r) => [r.turns, r.unit, Math.round(r.cost * 1e6)]), [[1, 'usd', 4000], [2, 'usd', 6000]])
+  assert.equal(Math.round(rows[1].byModel.sonnet * 1e6), 2000)
+})
+
+test('rows written before 0.5.1 are measured again in dollars where transcripts remain', () => {
+  session('a', [turn(at(2)), turn(at(1))])
+  mkdirSync(dirname(historyPath(dir)), { recursive: true })
+  const old = (daysAgo) => JSON.stringify({ date: daily([analyzeSession([turn(at(daysAgo))])])[0].date, cost: 1000, mainCost: 1000, bigContextCost: 0, turns: 1, sessions: 1, byModel: { opus: 1000 } })
+  writeFileSync(historyPath(dir), [old(40), old(2)].join('\n') + '\n')
+  recordHistory(dir)
+  const rows = readHistory(dir)
+  assert.deepEqual(rows.map((r) => r.unit), ['ie', 'usd', 'usd'])
+  assert.equal(Math.round(rows[1].cost * 1e6), 4000)
+  assert.ok(readFileSync(`${historyPath(dir)}.before-0.5.1`, 'utf8').includes('"cost":1000'))
 })
 
 test('recording writes finished days once, never today', () => {

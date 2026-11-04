@@ -54,9 +54,9 @@ export const MEANS = [
 /** The headline figures, each with what it is and where it comes from. */
 export const FIGURES = [
   {
-    value: '−43%',
+    value: '−37%',
     label: 'cost per request',
-    detail: 'month before vs. week after',
+    detail: 'at API list prices, month before vs. week after',
   },
   {
     value: '−47%',
@@ -64,9 +64,9 @@ export const FIGURES = [
     detail: '412K → 219K tokens',
   },
   {
-    value: '−27 to −40%',
+    value: '−33%',
     label: 'same sessions, replayed',
-    detail: 'only the window changed',
+    detail: 'main thread; only the window changed',
   },
 ]
 

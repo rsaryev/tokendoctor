@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { leftAfterCompaction, replay, request, RESERVE, W } from '../lib/replay.mjs'
+import { leftAfterCompaction, replay, request, RESERVE } from '../lib/replay.mjs'
+
+// Opus 5.5's prices per token: a cache read, a 1-hour write, output.
+const P = { read: 0.2e-6, write: 8e-6, out: 20e-6 }
 
 // A session that grows by 10K a request from 30K, read from the cache, 500 tokens out each.
 const growing = (n, step = 10_000, start = 30_000) =>
-  Array.from({ length: n }, (_, i) => ({ context: start + i * step, output: 500, cost: (start + i * step) * W.read + 500 * W.out, writeWeight: W.w1 }))
+  Array.from({ length: n }, (_, i) => ({ context: start + i * step, output: 500, cost: (start + i * step) * P.read + 500 * P.out, ...P }))
 
 test('a window the session never reaches changes nothing', () => {
   const r = replay(growing(50), 1_000_000)
@@ -35,9 +38,10 @@ test('a real compaction compacts the replayed session too', () => {
   assert.equal(leftAfterCompaction(s), 35_000)
 })
 
-test('a request is read from its usage as the API reports it', () => {
-  const r = request({ input_tokens: 10, cache_read_input_tokens: 1000, cache_creation_input_tokens: 200, cache_creation: { ephemeral_1h_input_tokens: 200 }, output_tokens: 50 })
+test('a request is read from its usage as the API reports it, at its model price', () => {
+  const r = request({ input_tokens: 10, cache_read_input_tokens: 1000, cache_creation_input_tokens: 200, cache_creation: { ephemeral_1h_input_tokens: 200 }, output_tokens: 50 }, 'claude-opus-5-5')
   assert.equal(r.context, 1210)
-  assert.equal(r.cost, 10 + 100 + 400 + 250)
-  assert.equal(r.writeWeight, W.w1)
+  assert.ok(Math.abs(r.cost - (10 * 4 + 1000 * 0.2 + 200 * 8 + 50 * 20) / 1e6) < 1e-12)
+  assert.ok(Math.abs(r.write - 8e-6) < 1e-15)
+  assert.equal(request({ input_tokens: 10 }, 'unknown').cost, 0)
 })

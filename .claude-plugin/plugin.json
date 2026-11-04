@@ -1,7 +1,7 @@
 {
   "name": "tokendoctor",
   "displayName": "tokendoctor",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.",
   "author": {
     "name": "rsaryev"

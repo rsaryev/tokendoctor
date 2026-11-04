@@ -11,7 +11,7 @@
   color-scheme: dark;
   --page: #070707; --raise: #111110; --ink: #ededeb; --ink-2: #a8a7a0; --muted: #807f79;
   --line: rgba(255,255,255,0.08); --track: rgba(255,255,255,0.05); --focus: #6da7ec;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #9b72d9; --s6: #8c8b85;
   --q1: #104281; --q2: #184f95; --q3: #1c5cab; --q4: #256abf; --q5: #3987e5; --q6: #6da7ec; --q7: #9ec5f4;
   --o1: #184f95; --o2: #256abf; --o3: #3987e5; --o4: #86b6ef;
   --sans: 'TD Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -22,7 +22,7 @@
     color-scheme: light;
     --page: #fbfbf9; --raise: #ffffff; --ink: #141413; --ink-2: #52514e; --muted: #77756f;
     --line: rgba(20,20,19,0.10); --track: rgba(20,20,19,0.05); --focus: #2a78d6;
-    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #8457cc; --s6: #6f6e69;
     --q1: #cde2fb; --q2: #9ec5f4; --q3: #6da7ec; --q4: #3987e5; --q5: #256abf; --q6: #184f95; --q7: #0d366b;
     --o1: #86b6ef; --o2: #5598e7; --o3: #2a78d6; --o4: #184f95;
   }
@@ -31,7 +31,7 @@
   color-scheme: light;
   --page: #fbfbf9; --raise: #ffffff; --ink: #141413; --ink-2: #52514e; --muted: #77756f;
   --line: rgba(20,20,19,0.10); --track: rgba(20,20,19,0.05); --focus: #2a78d6;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #8457cc; --s6: #6f6e69;
   --q1: #cde2fb; --q2: #9ec5f4; --q3: #6da7ec; --q4: #3987e5; --q5: #256abf; --q6: #184f95; --q7: #0d366b;
   --o1: #86b6ef; --o2: #5598e7; --o3: #2a78d6; --o4: #184f95;
 }
@@ -61,7 +61,7 @@ h1 { font: 600 clamp(28px, 4.2vw, 46px)/1.08 var(--heading); letter-spacing: -0.
 .anatomy span:first-child { border-radius: 12px 0 0 12px; }
 .anatomy span:last-child { border-radius: 0 12px 12px 0; }
 .anatomy span:only-child { border-radius: 12px; }
-.parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 14px; }
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-top: 14px; }
 .part .name { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13.5px; }
 .part .name i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
 .part .share { font: 600 24px/1.2 var(--heading); letter-spacing: -0.01em; margin-top: 4px; font-variant-numeric: tabular-nums; }
@@ -148,14 +148,23 @@ footer { color: var(--muted); font-size: 12.5px; margin-top: 48px; padding-top: 
 <div id="tip" role="tooltip"></div>
 <script>
 const DATA = /*__TOKENDOCTOR_DATA__*/null;
-const KINDS = [['cacheRead', 'Cache read', 's1', 'the conversation read back from the cache'], ['cacheWrite', 'Cache write', 's2', 'new context written to the cache'], ['output', 'Output', 's3', 'what Claude wrote, thinking included'], ['input', 'Input', 's4', 'uncached input']];
+// Kinds of cost: [key, name, color, what it is, how its amount reads].
+const KINDS = [
+  ['cacheRead', 'Cache read', 's1', 'the conversation read back from the cache', (t) => `${num(t.cacheRead)} tokens`],
+  ['cacheWrite', 'Cache write', 's2', 'new context written to the cache', (t) => `${num(t.cacheWrite)} tokens`],
+  ['output', 'Output', 's3', 'what Claude wrote, thinking included', (t) => `${num(t.output)} tokens`],
+  ['input', 'Input', 's4', 'uncached input', (t) => `${num(t.input)} tokens`],
+  ['hidden', 'Not in transcripts', 's5', 'billed but not written down: summaries, titles, WebFetch reads', (t) => plural(t.summaries, 'summary compaction', 'summary compactions')],
+  ['search', 'Web search', 's6', '$10 per 1,000 searches', (t) => plural(t.searches, 'search', 'searches')],
+];
+const TOKENS = ['input', 'cacheWrite', 'cacheRead', 'output', 'thinking', 'searches', 'summaries'];
 const MODEL_ORDER = ['opus', 'sonnet', 'haiku', 'fable'];
 const EFFORT_ORDER = ['low', 'medium', 'high', 'xhigh', 'max', 'unknown'];
 const state = { range: 'all', thread: 'all', project: 'all' };
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const num = (n) => n >= 1e12 ? (n / 1e12).toFixed(n >= 1e13 ? 0 : 1) + 'T' : n >= 1e9 ? (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + 'B' : n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K' : String(Math.round(n));
-const ie = (n) => num(n) + ' IE';
+const money = (n) => n >= 1e6 ? '$' + (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : n >= 1e4 ? '$' + (n / 1e3).toFixed(n >= 1e5 ? 0 : 1) + 'K' : n >= 100 ? '$' + Math.round(n).toLocaleString('en-US') : n >= 1 ? '$' + n.toFixed(2) : n > 0 ? (n < 0.01 ? '<$0.01' : '$' + n.toFixed(2)) : '$0';
 const share = (x, of) => !of ? 0 : 100 * x / of;
 const pct = (x, of) => { const p = share(x, of); return of ? (p > 0 && p < 1 ? '<1' : Math.round(p)) + '%' : '–'; };
 const v = (name) => `var(--${name})`;
@@ -190,13 +199,14 @@ const filtered = () => {
   return DATA.rows.filter((r) => r[F.day] >= c && (state.project === 'all' || r[F.project] === state.project) &&
     (state.thread === 'all' || (state.thread === 'main' ? !isAgent(r[F.thread]) : isAgent(r[F.thread]))));
 };
-const blank = () => ({ requests: 0, input: 0, cacheWrite: 0, cacheRead: 0, output: 0, thinking: 0, ie: 0, ieBy: { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }, main: 0, agents: 0 });
+const blank = () => ({ requests: 0, input: 0, cacheWrite: 0, cacheRead: 0, output: 0, thinking: 0, searches: 0, summaries: 0, usd: 0, usdBy: Object.fromEntries(KINDS.map(([k]) => [k, 0])), main: 0, agents: 0 });
 function sumInto(acc, r) {
   const x = r[r.length - 1];
-  acc.requests += x.requests; acc.thinking += x.thinking;
+  acc.requests += x.requests;
+  for (const k of TOKENS) acc[k] += x[k] ?? 0;
   let c = 0;
-  for (const [k] of KINDS) { acc[k] += x[k]; acc.ieBy[k] += x.ie[k]; c += x.ie[k]; }
-  acc.ie += c;
+  for (const [k] of KINDS) { const d = x.usd[k] ?? 0; acc.usdBy[k] += d; c += d; }
+  acc.usd += c;
   if (isAgent(r[F.thread])) acc.agents += c; else acc.main += c;
   return acc;
 }
@@ -206,7 +216,7 @@ const group = (rows, key) => {
   return m;
 };
 const total = (rows) => rows.reduce(sumInto, blank());
-const ranked = (m) => [...m].sort((a, b) => b[1].ie - a[1].ie);
+const ranked = (m) => [...m].sort((a, b) => b[1].usd - a[1].usd);
 
 // Controls
 function seg(id, options, key) {
@@ -223,6 +233,8 @@ const HEADLINE = {
   cacheWrite: (p) => `${p} of your spend was writing new context into the cache.`,
   output: (p) => `${p} of your spend was Claude's own writing.`,
   input: (p) => `${p} of your spend was uncached input.`,
+  hidden: (p) => `${p} of your spend was requests the transcripts leave out.`,
+  search: (p) => `${p} of your spend was web searches.`,
 };
 
 function dayChart(rows) {
@@ -231,16 +243,16 @@ function dayChart(rows) {
   const first = allDays.find((d) => d >= c);
   const span = [];
   for (let d = first; d && d <= lastDay; d = dayAdd(d, 1)) span.push(d);
-  if (!span.length || !span.some((d) => by.get(d)?.ie > 0)) return '<p class="cap">No spend in this view.</p>';
+  if (!span.length || !span.some((d) => by.get(d)?.usd > 0)) return '<p class="cap">No spend in this view.</p>';
   const W = 1088, H = 260, L = 44, B = 26, T = 6;
-  const max = Math.max(1, ...span.map((d) => by.get(d)?.ie ?? 0));
+  const max = Math.max(1, ...span.map((d) => by.get(d)?.usd ?? 0));
   const p10 = Math.pow(10, Math.floor(Math.log10(max / 4)));
   const tick = [1, 2, 2.5, 5, 10].map((m) => m * p10).find((t) => max / t <= 4.5);
   const top = Math.ceil(max / tick) * tick;
   const y = (n) => T + (H - T - B) * (1 - n / top);
   const bw = (W - L) / span.length, gap = Math.max(1, Math.min(6, bw * 0.28));
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spend by day">`;
-  for (let t = tick; t <= top + 1e-9; t += tick) s += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="${v('line')}"/><text x="${L - 10}" y="${y(t) + 4}" text-anchor="end">${num(t)}</text>`;
+  for (let t = tick; t <= top + 1e-9; t += tick) s += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="${v('line')}"/><text x="${L - 10}" y="${y(t) + 4}" text-anchor="end">${money(t)}</text>`;
   s += `<line x1="${L}" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="${v('muted')}" stroke-opacity="0.5"/>`;
   const every = Math.ceil(span.length / 9);
   span.forEach((d, i) => {
@@ -250,7 +262,7 @@ function dayChart(rows) {
     if (g.main > 0) s += bar(x, ym, w, y(0) - ym, g.agents > 0 ? 0 : 3, 's1');
     if (g.agents > 0) s += bar(x, ya, w, Math.max(0.5, ym - ya - (g.main > 0 ? 2 : 0)), 3, 's2');
     if (i % every === 0) s += `<text x="${x + w / 2}" y="${H - 6}" text-anchor="middle">${day(d)}</text>`;
-    const t = `<b>${day(d)}</b>` + row('s1', 'Main thread', ie(g.main)) + row('s2', 'Subagents', ie(g.agents)) + row('', 'Total', ie(g.ie)) + row('', 'Requests', num(g.requests));
+    const t = `<b>${day(d)}</b>` + row('s1', 'Main thread', money(g.main)) + row('s2', 'Subagents', money(g.agents)) + row('', 'Total', money(g.usd)) + row('', 'Requests', num(g.requests));
     s += `<rect class="hit" x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}" data-tip="${esc(t)}"/>`;
   });
   return s + '</svg>';
@@ -263,15 +275,15 @@ function bar(x, y, w, h, r, color) {
 
 // A table with an inline bar: main thread and subagents stacked when `split`, else one color.
 function table(entries, { name, split, extra = [], of }) {
-  const top = Math.max(1, ...entries.map(([, g]) => g.ie));
-  const all = of ?? entries.reduce((s, [, g]) => s + g.ie, 0);
+  const top = Math.max(1, ...entries.map(([, g]) => g.usd));
+  const all = of ?? entries.reduce((s, [, g]) => s + g.usd, 0);
   const head = `<thead><tr><th>${name}</th><th class="barcell"></th><th>Cost</th><th>Share</th>${extra.map((e) => `<th>${e[0]}</th>`).join('')}</tr></thead>`;
   const body = entries.map(([k, g, color]) => {
-    const t = `<b>${esc(k)}</b>` + (split ? row('s1', 'Main thread', ie(g.main)) + row('s2', 'Subagents', ie(g.agents)) : '') + row('', 'Cost', ie(g.ie)) + row('', 'Requests', num(g.requests)) + row('', 'Cache read', num(g.cacheRead) + ' tokens') + row('', 'Output', num(g.output) + ' tokens');
+    const t = `<b>${esc(k)}</b>` + (split ? row('s1', 'Main thread', money(g.main)) + row('s2', 'Subagents', money(g.agents)) : '') + row('', 'Cost', money(g.usd)) + row('', 'Requests', num(g.requests)) + row('', 'Cache read', num(g.cacheRead) + ' tokens') + row('', 'Output', num(g.output) + ' tokens');
     const fill = split
       ? (g.main > 0 ? `<span style="width:${share(g.main, top)}%;background:${v('s1')}"></span>` : '') + (g.agents > 0 ? `<span style="width:${share(g.agents, top)}%;background:${v('s2')}"></span>` : '')
-      : `<span style="width:${share(g.ie, top)}%;background:${v(color ?? 's1')}"></span>`;
-    return `<tr data-tip="${esc(t)}"><td class="name" title="${esc(k)}">${esc(k)}</td><td class="barcell"><div class="track">${fill}</div></td><td>${ie(g.ie)}</td><td>${pct(g.ie, all)}</td>${extra.map((e) => `<td>${e[1](g)}</td>`).join('')}</tr>`;
+      : `<span style="width:${share(g.usd, top)}%;background:${v(color ?? 's1')}"></span>`;
+    return `<tr data-tip="${esc(t)}"><td class="name" title="${esc(k)}">${esc(k)}</td><td class="barcell"><div class="track">${fill}</div></td><td>${money(g.usd)}</td><td>${pct(g.usd, all)}</td>${extra.map((e) => `<td>${e[1](g)}</td>`).join('')}</tr>`;
   }).join('');
   return `<table>${head}<tbody>${body}</tbody></table>`;
 }
@@ -299,7 +311,7 @@ function heat(grid) {
     s += `<text x="${L - 10}" y="${T + wd * ch + ch / 2 + 4}" text-anchor="end">${WEEKDAYS[wd].slice(0, 3)}</text>`;
     r.forEach((x, h) => {
       const fill = x > 0 ? v(steps[Math.min(6, Math.floor(7 * Math.sqrt(x / max)))]) : v('track');
-      s += `<rect x="${L + h * cw + 1.5}" y="${T + wd * ch + 1.5}" width="${cw - 3}" height="${ch - 3}" rx="4" fill="${fill}" data-tip="${esc(`<b>${WEEKDAYS[wd]}, ${String(h).padStart(2, '0')}:00</b>` + row('', 'Cost', ie(x)))}"/>`;
+      s += `<rect x="${L + h * cw + 1.5}" y="${T + wd * ch + 1.5}" width="${cw - 3}" height="${ch - 3}" rx="4" fill="${fill}" data-tip="${esc(`<b>${WEEKDAYS[wd]}, ${String(h).padStart(2, '0')}:00</b>` + row('', 'Cost', money(x)))}"/>`;
     });
   });
   for (let h = 0; h < 24; h += 3) s += `<text x="${L + h * cw + cw / 2}" y="${H - 4}" text-anchor="middle">${String(h).padStart(2, '0')}:00</text>`;
@@ -318,56 +330,56 @@ function draw() {
   $('meta').textContent = days.length ? `${when}, ${plural(days.length, 'active day')}, ${plural(t.requests, 'request')}, ${plural(sess.length, 'session')}` : 'Nothing in this period.';
 
   // Diagnosis: the headline, the anatomy of the spend, and its parts.
-  const kinds = [...KINDS].sort((a, b) => t.ieBy[b[0]] - t.ieBy[a[0]]);
-  $('headline').textContent = t.ie ? HEADLINE[kinds[0][0]](pct(t.ieBy[kinds[0][0]], t.ie)) : 'No usage in this period.';
-  $('anatomy').setAttribute('aria-label', kinds.map(([k, n]) => `${n} ${pct(t.ieBy[k], t.ie)}`).join(', '));
-  $('anatomy').innerHTML = KINDS.filter(([k]) => t.ieBy[k] > 0).map(([k, n, col]) =>
-    `<span style="flex:${share(t.ieBy[k], t.ie)} 1 0;background:${v(col)}" data-tip="${esc(`<b>${n}</b>` + row('', 'Share of cost', pct(t.ieBy[k], t.ie)) + row('', 'Cost', ie(t.ieBy[k])) + row('', 'Tokens', num(t[k])))}"></span>`).join('');
-  $('parts').innerHTML = KINDS.map(([k, n, col, what]) =>
-    `<div class="part"><div class="name"><i style="background:${v(col)}"></i>${n}</div><div class="share">${pct(t.ieBy[k], t.ie)}</div><div class="note">${num(t[k])} tokens, ${what}</div></div>`).join('');
+  const kinds = [...KINDS].sort((a, b) => t.usdBy[b[0]] - t.usdBy[a[0]]);
+  $('headline').textContent = t.usd ? HEADLINE[kinds[0][0]](pct(t.usdBy[kinds[0][0]], t.usd)) : 'No usage in this period.';
+  $('anatomy').setAttribute('aria-label', kinds.map(([k, n]) => `${n} ${pct(t.usdBy[k], t.usd)}`).join(', '));
+  $('anatomy').innerHTML = KINDS.filter(([k]) => t.usdBy[k] > 0).map(([k, n, col]) =>
+    `<span style="flex:${share(t.usdBy[k], t.usd)} 1 0;background:${v(col)}" data-tip="${esc(`<b>${n}</b>` + row('', 'Share of cost', pct(t.usdBy[k], t.usd)) + row('', 'Cost', money(t.usdBy[k])) + row('', 'Tokens', num(t[k])))}"></span>`).join('');
+  $('parts').innerHTML = KINDS.filter(([k]) => t.usdBy[k] > 0 || ['cacheRead', 'cacheWrite', 'output', 'input'].includes(k)).map(([k, n, col, what, amount]) =>
+    `<div class="part"><div class="name"><i style="background:${v(col)}"></i>${n}</div><div class="share">${pct(t.usdBy[k], t.usd)}</div><div class="note">${amount(t)}, ${what}</div></div>`).join('');
 
   const models = group(rows, 'model');
   const topModel = ranked(models)[0];
   const ctx = group(rows.filter((r) => !isAgent(r[F.thread])), 'context');
-  const mainIe = [...ctx.values()].reduce((s, g) => s + g.ie, 0);
-  const over200 = (ctx.get('400K+')?.ie ?? 0) + (ctx.get('200–400K')?.ie ?? 0);
+  const mainUsd = [...ctx.values()].reduce((s, g) => s + g.usd, 0);
+  const over200 = (ctx.get('400K+')?.usd ?? 0) + (ctx.get('200–400K')?.usd ?? 0);
   const prompt = t.input + t.cacheRead + t.cacheWrite;
   $('vitals').innerHTML = [
-    [ie(t.ie), '<abbr title="Input-token equivalents: tokens weighted by the API\'s relative prices (input 1, cache read 0.1, cache write 1.25 or 2, output 5)">input-token equivalents</abbr> spent'],
-    [pct(t.agents, t.ie), 'went to subagents'],
-    [topModel ? pct(topModel[1].ie, t.ie) : '–', topModel ? `on ${MODEL_LABEL(topModel[0])}` : 'top model'],
-    [pct(over200, mainIe), 'of the main thread above 200K context'],
+    [money(t.usd), '<abbr title="Each response priced at its model\'s Claude API list price. On a Pro or Max plan this is what the same work would cost on the API, not what it took from the plan\'s limits.">at API list prices</abbr>'],
+    [pct(t.agents, t.usd), 'went to subagents'],
+    [topModel ? pct(topModel[1].usd, t.usd) : '–', topModel ? `on ${MODEL_LABEL(topModel[0])}` : 'top model'],
+    [pct(over200, mainUsd), 'of the main thread above 200K context'],
     [pct(t.cacheRead, prompt), 'of prompt tokens came from the cache'],
   ].map(([val, k]) => `<div class="vital"><div class="v">${val}</div><div class="k">${k}</div></div>`).join('');
 
   // Findings, each headed by what it shows.
   const byDay = ranked(group(rows, 'day'))[0];
-  $('h-days').textContent = byDay ? `The heaviest day was ${day(byDay[0])}, with ${pct(byDay[1].ie, t.ie)} of the period's spend.` : 'No days in this period.';
+  $('h-days').textContent = byDay ? `The heaviest day was ${day(byDay[0])}, with ${pct(byDay[1].usd, t.usd)} of the period's spend.` : 'No days in this period.';
   $('days-legend').innerHTML = legendMA;
   $('days').innerHTML = dayChart(rows);
 
-  $('h-models').textContent = topModel ? `${MODEL_LABEL(topModel[0])} did ${pct(topModel[1].ie, t.ie)} of the work, by cost.` : 'No usage in this view.';
+  $('h-models').textContent = topModel ? `${MODEL_LABEL(topModel[0])} did ${pct(topModel[1].usd, t.usd)} of the work, by cost.` : 'No usage in this view.';
   $('models-legend').innerHTML = legendMA;
-  $('models').innerHTML = table([...models].sort((a, b) => MODEL_ORDER.indexOf(a[0]) - MODEL_ORDER.indexOf(b[0])).map(([k, g]) => [MODEL_LABEL(k), g]), { name: 'Model', split: true, of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
+  $('models').innerHTML = table([...models].sort((a, b) => MODEL_ORDER.indexOf(a[0]) - MODEL_ORDER.indexOf(b[0])).map(([k, g]) => [MODEL_LABEL(k), g]), { name: 'Model', split: true, of: t.usd, extra: [['Requests', (g) => num(g.requests)]] });
 
   const efforts = group(rows, 'effort');
-  const highUp = ['high', 'xhigh', 'max'].reduce((s, k) => s + (efforts.get(k)?.ie ?? 0), 0);
-  $('h-efforts').textContent = t.ie ? `${pct(highUp, t.ie)} of the spend ran at high effort or above.` : 'No usage in this view.';
-  $('efforts').innerHTML = table([...efforts].sort((a, b) => EFFORT_ORDER.indexOf(a[0]) - EFFORT_ORDER.indexOf(b[0])), { name: 'Effort', of: t.ie, extra: [['Thinking', (g) => num(g.thinking)]] });
+  const highUp = ['high', 'xhigh', 'max'].reduce((s, k) => s + (efforts.get(k)?.usd ?? 0), 0);
+  $('h-efforts').textContent = t.usd ? `${pct(highUp, t.usd)} of the spend ran at high effort or above.` : 'No usage in this view.';
+  $('efforts').innerHTML = table([...efforts].sort((a, b) => EFFORT_ORDER.indexOf(a[0]) - EFFORT_ORDER.indexOf(b[0])), { name: 'Effort', of: t.usd, extra: [['Thinking', (g) => num(g.thinking)]] });
 
   const threads = ranked(group(rows, (r) => r[F.thread] === 'main' ? 'Main thread' : r[F.thread] === 'sidechain' ? 'subagent (older transcripts)' : r[F.thread].replace('agent:', '')));
   const topAgent = threads.find(([k]) => k !== 'Main thread');
-  $('h-threads').textContent = t.agents ? `Subagents took ${pct(t.agents, t.ie)}, most of it ${topAgent[0]}.` : 'No subagents in this view.';
-  $('threads').innerHTML = table(threads.slice(0, 8), { name: 'Thread', of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
+  $('h-threads').textContent = t.agents ? `Subagents took ${pct(t.agents, t.usd)}, most of it ${topAgent[0]}.` : 'No subagents in this view.';
+  $('threads').innerHTML = table(threads.slice(0, 8), { name: 'Thread', of: t.usd, extra: [['Requests', (g) => num(g.requests)]] });
 
   const order = ['<100K', '100–200K', '200–400K', '400K+'], ramp = ['o1', 'o2', 'o3', 'o4'];
-  $('h-contexts').textContent = mainIe ? `${pct(over200, mainIe)} of main-thread spend went out above 200K tokens of context.` : 'No main-thread requests in this view.';
+  $('h-contexts').textContent = mainUsd ? `${pct(over200, mainUsd)} of main-thread spend went out above 200K tokens of context.` : 'No main-thread requests in this view.';
   $('contexts').innerHTML = table(order.filter((k) => ctx.has(k)).map((k) => [k, ctx.get(k), ramp[order.indexOf(k)]]), { name: 'Context', extra: [['Requests', (g) => num(g.requests)]] });
 
   const proj = ranked(group(rows, 'project'));
-  $('h-projects').textContent = proj[0] ? `${proj[0][0]} took ${pct(proj[0][1].ie, t.ie)} of the spend.` : 'No usage in this view.';
+  $('h-projects').textContent = proj[0] ? `${proj[0][0]} took ${pct(proj[0][1].usd, t.usd)} of the spend.` : 'No usage in this view.';
   $('projects-legend').innerHTML = legendMA;
-  $('projects').innerHTML = table(proj.slice(0, 12), { name: 'Project', split: true, of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
+  $('projects').innerHTML = table(proj.slice(0, 12), { name: 'Project', split: true, of: t.usd, extra: [['Requests', (g) => num(g.requests)]] });
 
   const grid = heatGrid();
   let best = [0, 0, 0];
@@ -375,10 +387,10 @@ function draw() {
   $('h-heat').textContent = best[0] ? `The busiest hour is ${WEEKDAYS[best[1]]} at ${String(best[2]).padStart(2, '0')}:00.` : 'No activity in this period.';
   $('heat').innerHTML = heat(grid);
 
-  const periodIe = sess.reduce((s, x) => s + x.ie, 0);
-  $('h-sessions').textContent = sess[0] ? `The largest session took ${pct(sess[0].ie, periodIe)} of all session spend.` : 'No sessions in this period.';
+  const periodUsd = sess.reduce((s, x) => s + x.usd, 0);
+  $('h-sessions').textContent = sess[0] ? `The largest session took ${pct(sess[0].usd, periodUsd)} of all session spend.` : 'No sessions in this period.';
   $('sessions').innerHTML = `<table><thead><tr><th>Session</th><th>Project</th><th>Day</th><th>Requests</th><th>Subagents</th><th>Cost</th><th>Share</th></tr></thead><tbody>` +
-    sess.slice(0, 12).map((x) => `<tr><td>${esc(x.id)}</td><td class="name">${esc(x.project)}</td><td>${day(x.day)}</td><td>${num(x.requests)}</td><td>${x.agents}</td><td>${ie(x.ie)}</td><td>${pct(x.ie, periodIe)}</td></tr>`).join('') + '</tbody></table>';
+    sess.slice(0, 12).map((x) => `<tr><td>${esc(x.id)}</td><td class="name">${esc(x.project)}</td><td>${day(x.day)}</td><td>${num(x.requests)}</td><td>${x.agents}</td><td>${money(x.usd)}</td><td>${pct(x.usd, periodUsd)}</td></tr>`).join('') + '</tbody></table>';
 
   $('foot').textContent = `Built ${new Date(DATA.generated).toLocaleString()} by tokendoctor from the transcripts on this machine; transcripts Claude Code already cleaned up are not counted. ${DATA.units}.`;
 }

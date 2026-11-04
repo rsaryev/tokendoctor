@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // What your sessions would have cost had Claude Code compacted earlier: each main conversation
-// replayed request by request at smaller windows (lib/replay.mjs). Read-only; an estimate, in shares.
+// replayed request by request at smaller windows (lib/replay.mjs). Read-only; an estimate, in shares of
+// the cost at API list prices.
 // Usage: tokendoctor-replay [--days <n>] [--project <dir>] [--window <n>[,<n>...]] [--json]
 import { configDir } from '../lib/collect.mjs'
 import { leftAfterCompaction, replay, request } from '../lib/replay.mjs'
@@ -16,7 +17,7 @@ const all = sessions.reduce((n, s) => n + s.agents, 0)
 const rows = windows.map((window) => {
   const t = { window, sessions: sessions.length, touched: 0, compactions: 0, real: 0, replayed: 0, agents: all }
   for (const s of sessions) {
-    const requests = s.usage.map(request)
+    const requests = s.usage.map(({ usage, model }) => request(usage, model))
     const r = replay(requests, window, leftAfterCompaction(requests))
     t.real += r.real
     t.replayed += r.replayed

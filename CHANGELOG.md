@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.5.1
+
+- Costs are dollars at each model's Claude API list price (`lib/prices.mjs`, from
+  platform.claude.com/docs/en/about-claude/pricing, read 2026-11-04), in the dashboard, `sessions`,
+  the replay, the findings and the daily history. Before, every model was weighed alike in
+  input-token equivalents with cache reads at 0.1x, while Opus 5.5 and Sonnet 5.5 read the cache at
+  0.05x and Fable 5.1 at 0.025x, and a Haiku token counted as much as an Opus one. On the author's
+  history that overstated cache reads (75% of the spend; at list prices 57%) and understated output
+  (10%; 16%). Thanks to the Reddit commenter who checked the weights against the pricing page.
+- Requests Claude Code bills but does not write into transcripts (a summary compaction's own
+  request, titles, WebFetch page reads) are counted: Claude Code's own session total from its
+  `cost-state` lines, minus the transcripts' responses, where that total holds (it falls on a
+  restart, and after /clear it can carry the session before); else the summaries are estimated. The
+  dashboard shows them as "Not in transcripts" (6% on the author's history). Checked against the
+  cost Claude Code reported on bench's 78 runs: equal to the cent on 77.
+- Agents run by a workflow, whose transcripts sit one folder down in `subagents/workflows/`, are
+  counted. They were missed before: 1,028 transcripts, 9% of the spend on the author's history.
+- The published figures, measured again at list prices: cost per request after a 400K window and
+  Sonnet for subagents −37% (was −43% in the old weights); the month before replayed at 400K −33% of
+  the main thread and −20% of all spend (was −27 to −40%). Context per request and the bench
+  results, which use the cost Claude Code reports, do not change.
+- The daily history file is measured again in dollars for every day whose transcripts remain; the
+  old file is kept beside it as `history.jsonl.before-0.5.1`.
+
 ## 0.5.0
 
 - The README and the landing show the dashboard: the top of the author's own, captured at 1440×900;

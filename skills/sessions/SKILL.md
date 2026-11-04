@@ -12,8 +12,11 @@ none given).
 1. Run `tokendoctor-sessions --json --days <n>` and `tokendoctor-replay --json --days <n>`. Both
    are read-only and read only usage figures, timestamps, tool names and file paths from the
    transcripts, never message text.
-2. Costs are in input-token equivalents: relative API prices, with no per-model price applied.
-   Present them as shares (percent), never as dollars.
+2. Costs are dollars at each model's Claude API list price (lib/prices.mjs). What Claude Code bills
+   but does not write into transcripts (summary compactions' own requests, titles, WebFetch page
+   reads) comes from its own session totals where they hold, else an estimate. On a Pro or Max plan
+   these are what the same work would cost on the API, not what it took from the plan's limits: lead
+   with shares (percent), and say "at API list prices" with any dollar figure.
 3. Open with the person's own number: what share of the period's cost a smaller compaction window
    would have saved, from the replay (the 400K row, and 200K or 300K where they save much more).
    Call it an upper bound: the replay cannot see the work a model does again after a summary. If

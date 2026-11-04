@@ -18,8 +18,8 @@ The tokendoctor tools wait behind ToolSearch: load `mcp__tokendoctor__metrics`,
    its current value and whether a change applies live) and `config_list` (the /config rows).
 3. **Propose.** Pick at most five changes, largest saving first. For each give: the setting, the
    current and new value, the evidence from step 1 in one sentence, the trade-off, and whether it
-   applies now or at the next session. Costs are input-token equivalents: speak in shares, never
-   dollars. Do not propose a change the numbers do not support.
+   applies now or at the next session. Costs are dollars at API list prices, which on a plan are not
+   what the plan's limits count: speak in shares first. Do not propose a change the numbers do not support.
    **The window.** `autoCompactWindow` sets where Claude Code compacts (for example 400000 on a 1M
    model). Propose a smaller one when much of the cost is spent with a large context (the
    `late-compaction` finding, a high `compactAt`): every request re-reads the whole context, so a

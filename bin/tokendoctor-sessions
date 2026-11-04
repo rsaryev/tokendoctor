@@ -22,7 +22,8 @@ function weekly(rows) {
   for (const r of rows) {
     const d = new Date(`${r.date}T12:00:00`)
     d.setDate(d.getDate() - ((d.getDay() + 6) % 7))
-    const x = (out[localDay(d)] ??= { date: localDay(d), cost: 0, mainCost: 0, bigContextCost: 0, turns: 0, sessions: 0, byModel: {} })
+    const x = (out[localDay(d)] ??= { date: localDay(d), unit: 'usd', cost: 0, mainCost: 0, bigContextCost: 0, turns: 0, sessions: 0, byModel: {} })
+    if (r.unit !== 'usd') x.unit = null
     for (const k of ['cost', 'mainCost', 'bigContextCost', 'turns', 'sessions']) x[k] += r[k]
     for (const [m, c] of Object.entries(r.byModel)) x.byModel[m] = (x.byModel[m] ?? 0) + c
   }
@@ -33,11 +34,11 @@ function printTrend(rows) {
   if (args.includes('--json')) return console.log(JSON.stringify(rows, null, 2))
   if (!rows.length) return console.log(`No data for the last ${days} days.`)
   const p = (x, of) => `${Math.round((100 * x) / (of || 1))}%`.padStart(5)
-  console.log(`${by === 'week' ? 'week of   ' : 'day       '}   cost(M IE)  subagents  >400K  opus  turns  sessions`)
+  console.log(`${by === 'week' ? 'week of   ' : 'day       '}      cost($)  subagents  >400K  opus  turns  sessions`)
   for (const r of rows) {
     const top = (r.byModel.opus ?? 0) + (r.byModel.fable ?? 0)
     console.log(
-      `${r.date}  ${(r.cost / 1e6).toFixed(1).padStart(10)}  ${p(r.cost - r.mainCost, r.cost).padStart(9)}  ${p(r.bigContextCost, r.mainCost)}  ${p(top, r.cost)}  ${String(r.turns).padStart(5)}  ${String(r.sessions).padStart(8)}`,
+      `${r.date}  ${(r.unit === 'usd' ? r.cost.toFixed(2) : '–').padStart(11)}  ${p(r.cost - r.mainCost, r.cost).padStart(9)}  ${p(r.bigContextCost, r.mainCost)}  ${p(top, r.cost)}  ${String(r.turns).padStart(5)}  ${String(r.sessions).padStart(8)}`,
     )
   }
 }
@@ -54,7 +55,9 @@ if (args.includes('--json')) {
 } else if (!sessions.length) {
   console.log(`No sessions in the last ${days} days.`)
 } else {
-  console.log(`${t.sessions} sessions in the last ${days} days. Cost in input-token equivalents (cache reads 0.1, output 5).`)
+  console.log(`${t.sessions} sessions in the last ${days} days, $${t.cost.toFixed(2)} at API list prices (on a plan: what the same work would cost on the API).`)
+  if (t.hiddenCost) console.log(`Of it, $${t.hiddenCost.toFixed(2)} is requests the transcripts leave out (summary compactions, titles, WebFetch page reads), from Claude Code's own session totals where they hold, else estimated.`)
+  if (t.unpriced) console.log(`${t.unpriced} responses from models without a known price are left out.`)
   console.log(`Main thread ${pct(t.mainCost)}, subagents ${pct(t.cost - t.mainCost)}; with ${'>'}400K in context ${pct(t.bigContextCost, t.mainCost)} of main.`)
   console.log(`Main thread by model: ${byCost(t.byModel).map(([m, c]) => `${m} ${pct(c)}`).join(', ')}`)
   console.log(`Subagents: ${byCost(t.agents, (a) => a.cost).slice(0, 5).map(([k, a]) => `${k} ${a.runs} runs ${pct(a.cost)}`).join(', ') || 'none'}`)

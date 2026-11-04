@@ -67,7 +67,7 @@ export const STEPS: Step[] = [
     panel: [],
     shot: {
       src: '/dashboard.webp',
-      alt: "The author's tokendoctor dashboard: 75% of the spend was Claude re-reading the conversation",
+      alt: "The author's tokendoctor dashboard: 57% of the spend was Claude re-reading the conversation",
       width: 1600,
       height: 1000,
     },

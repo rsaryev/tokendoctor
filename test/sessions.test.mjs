@@ -15,10 +15,50 @@ const turn = (minute, usage, { model = 'claude-opus-5-5', id } = {}) => ({
 })
 const u = (read, write, out = 100) => ({ input_tokens: 10, cache_read_input_tokens: read, cache_creation_input_tokens: write, output_tokens: out })
 
-test('cost weights cache reads, writes by TTL and output', () => {
-  assert.equal(cost({ input_tokens: 10, cache_read_input_tokens: 1000, output_tokens: 2 }), 10 + 100 + 10)
-  assert.equal(cost({ cache_creation_input_tokens: 100, cache_creation: { ephemeral_1h_input_tokens: 100 } }), 200)
-  assert.equal(cost({ cache_creation_input_tokens: 100 }), 125)
+const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-12, `${a} vs ${b}`)
+
+test('cost is dollars at the model list price: cache reads, writes by TTL and output', () => {
+  // Opus 5.5: $4 input, $20 output, cache read 0.05x, writes 1.25x and 2x.
+  near(cost({ input_tokens: 10, cache_read_input_tokens: 1000, output_tokens: 2 }, 'claude-opus-5-5'), (10 * 4 + 1000 * 0.2 + 2 * 20) / 1e6)
+  near(cost({ cache_creation_input_tokens: 100, cache_creation: { ephemeral_1h_input_tokens: 100 } }, 'claude-opus-5-5'), (100 * 8) / 1e6)
+  near(cost({ cache_creation_input_tokens: 100 }, 'claude-opus-5-5'), (100 * 5) / 1e6)
+  assert.equal(cost({ input_tokens: 10 }, 'some-other-model'), 0)
+})
+
+test('a summary compaction adds an estimate of its own request, which the transcript leaves out', () => {
+  const rows = [
+    turn(0, u(300_000, 1000)),
+    { type: 'system', subtype: 'compact_boundary', timestamp: new Date(Date.UTC(2026, 9, 1, 0, 1)).toISOString(), compactMetadata: { trigger: 'auto', preTokens: 300_000 } },
+    { type: 'user', isCompactSummary: true, timestamp: new Date(Date.UTC(2026, 9, 1, 0, 1)).toISOString(), message: { content: 'x'.repeat(3500) } },
+    turn(2, u(0, 20_000)),
+  ]
+  const s = analyzeSession(rows)
+  // 300K read at Opus 5.5's $0.20, and the summary's ~1,000 tokens written at $20 (its JSON adds 2 characters).
+  near(s.hiddenCost, (300_000 * 0.2 + (3502 / 3.5) * 20) / 1e6)
+  assert.equal(s.hiddenFrom, 'estimate')
+  near(s.mainCost, cost(u(300_000, 1000), 'claude-opus-5-5') + cost(u(0, 20_000), 'claude-opus-5-5') + s.hiddenCost)
+  // A compaction with no summary after it (the slide) adds nothing.
+  assert.equal(analyzeSession(rows.filter((r) => !r.isCompactSummary)).hiddenCost, 0)
+})
+
+test("Claude Code's own session total, where it holds, sets what the transcripts leave out", () => {
+  const start = Date.UTC(2026, 9, 1, 0, 0)
+  // Two responses of 10M cached tokens each, about $2 apiece, so a 1-cent tolerance does not blur the cases.
+  const responses = cost(u(10_000_000, 0), 'claude-opus-5-5') * 2
+  const state = (total, startTime = start) => ({ type: 'cost-state', totalCostUSD: total, startTime, hasUnknownModelCost: false })
+  const rows = [turn(0, u(10_000_000, 0)), turn(1, u(10_000_000, 0))]
+  // It holds: the hidden part is the difference, whatever the summaries' estimate.
+  const own = analyzeSession([...rows, state(responses + 0.5)])
+  near(own.hiddenCost, 0.5)
+  assert.equal(own.hiddenFrom, 'claude code')
+  near(own.cost, responses + 0.5)
+  // It does not: a total that fell (a restart), a process that started long before, a total under
+  // the responses. Then nothing is added where there is no summary to estimate.
+  for (const bad of [[state(responses + 1), state(0.1)], [state(responses + 1, start - 3600e3)], [state(responses / 2)]]) {
+    const s = analyzeSession([...rows, ...bad])
+    assert.equal(s.hiddenFrom, 'estimate')
+    assert.equal(s.hiddenCost, 0)
+  }
 })
 
 test('streamed lines of one response count once', () => {
