@@ -5,7 +5,7 @@
 <h1 align="center">tokendoctor</h1>
 
 <p align="center">
-  <strong>The same Claude Code for up to 40% less</strong>
+  <strong>The same Claude Code for up to 37% less</strong>
 </p>
 
 <p align="center">

@@ -1,6 +1,6 @@
 # tokendoctor
 
-> The same Claude Code for up to 40% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.
+> The same Claude Code for up to 37% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.
 > A Claude Code plugin: it replays your own sessions to show what they overpay, applies the fixes you
 > pick (`/tokendoctor undo` puts any back), and can slide the context window instead of summarizing
 > it. Everything runs locally; it reads usage figures and file paths, never message text.
