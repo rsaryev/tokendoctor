@@ -1,7 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
+- The README and the landing show the dashboard: the top of the author's own, captured at 1440×900;
+  on the landing it is step 2, enlarged on a click.
 - `/tokendoctor:dashboard` and `tokendoctor-dashboard [--days n] [--open]`: a local dashboard of
   every session on this machine, opened in the browser. It leads with what most of the spend was (on
   the author's history: 75% was the conversation read back from the cache), then spend by day, by

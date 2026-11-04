@@ -90,6 +90,8 @@ th { color: var(--muted); font-weight: 500; font-size: 12px; }
 th:first-child, td:first-child { text-align: left; padding-left: 0; }
 tbody tr:hover td { background: var(--track); }
 td.name { max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+#sessions th:nth-child(2), #sessions td:nth-child(2) { text-align: left; }
+abbr { text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; }
 .barcell { width: 36%; }
 .track { display: flex; gap: 2px; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
 .track span { display: block; height: 100%; }
@@ -260,9 +262,9 @@ function bar(x, y, w, h, r, color) {
 }
 
 // A table with an inline bar: main thread and subagents stacked when `split`, else one color.
-function table(entries, { name, split, extra = [] }) {
+function table(entries, { name, split, extra = [], of }) {
   const top = Math.max(1, ...entries.map(([, g]) => g.ie));
-  const all = entries.reduce((s, [, g]) => s + g.ie, 0);
+  const all = of ?? entries.reduce((s, [, g]) => s + g.ie, 0);
   const head = `<thead><tr><th>${name}</th><th class="barcell"></th><th>Cost</th><th>Share</th>${extra.map((e) => `<th>${e[0]}</th>`).join('')}</tr></thead>`;
   const body = entries.map(([k, g, color]) => {
     const t = `<b>${esc(k)}</b>` + (split ? row('s1', 'Main thread', ie(g.main)) + row('s2', 'Subagents', ie(g.agents)) : '') + row('', 'Cost', ie(g.ie)) + row('', 'Requests', num(g.requests)) + row('', 'Cache read', num(g.cacheRead) + ' tokens') + row('', 'Output', num(g.output) + ' tokens');
@@ -273,6 +275,7 @@ function table(entries, { name, split, extra = [] }) {
   }).join('');
   return `<table>${head}<tbody>${body}</tbody></table>`;
 }
+const MODEL_LABEL = (m) => ({ opus: 'Opus', sonnet: 'Sonnet', haiku: 'Haiku', fable: 'Fable' })[m] ?? m;
 const legendMA = `<span><i style="background:${v('s1')}"></i>Main thread</span><span><i style="background:${v('s2')}"></i>Subagents</span>`;
 
 function heatGrid() {
@@ -330,9 +333,9 @@ function draw() {
   const over200 = (ctx.get('400K+')?.ie ?? 0) + (ctx.get('200–400K')?.ie ?? 0);
   const prompt = t.input + t.cacheRead + t.cacheWrite;
   $('vitals').innerHTML = [
-    [ie(t.ie), 'spent in all'],
+    [ie(t.ie), '<abbr title="Input-token equivalents: tokens weighted by the API\'s relative prices (input 1, cache read 0.1, cache write 1.25 or 2, output 5)">input-token equivalents</abbr> spent'],
     [pct(t.agents, t.ie), 'went to subagents'],
-    [topModel ? pct(topModel[1].ie, t.ie) : '–', topModel ? `on ${topModel[0]}` : 'top model'],
+    [topModel ? pct(topModel[1].ie, t.ie) : '–', topModel ? `on ${MODEL_LABEL(topModel[0])}` : 'top model'],
     [pct(over200, mainIe), 'of the main thread above 200K context'],
     [pct(t.cacheRead, prompt), 'of prompt tokens came from the cache'],
   ].map(([val, k]) => `<div class="vital"><div class="v">${val}</div><div class="k">${k}</div></div>`).join('');
@@ -343,19 +346,19 @@ function draw() {
   $('days-legend').innerHTML = legendMA;
   $('days').innerHTML = dayChart(rows);
 
-  $('h-models').textContent = topModel ? `${topModel[0][0].toUpperCase() + topModel[0].slice(1)} did ${pct(topModel[1].ie, t.ie)} of the work, by cost.` : 'No usage in this view.';
+  $('h-models').textContent = topModel ? `${MODEL_LABEL(topModel[0])} did ${pct(topModel[1].ie, t.ie)} of the work, by cost.` : 'No usage in this view.';
   $('models-legend').innerHTML = legendMA;
-  $('models').innerHTML = table([...models].sort((a, b) => MODEL_ORDER.indexOf(a[0]) - MODEL_ORDER.indexOf(b[0])), { name: 'Model', split: true, extra: [['Requests', (g) => num(g.requests)]] });
+  $('models').innerHTML = table([...models].sort((a, b) => MODEL_ORDER.indexOf(a[0]) - MODEL_ORDER.indexOf(b[0])).map(([k, g]) => [MODEL_LABEL(k), g]), { name: 'Model', split: true, of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
 
   const efforts = group(rows, 'effort');
   const highUp = ['high', 'xhigh', 'max'].reduce((s, k) => s + (efforts.get(k)?.ie ?? 0), 0);
   $('h-efforts').textContent = t.ie ? `${pct(highUp, t.ie)} of the spend ran at high effort or above.` : 'No usage in this view.';
-  $('efforts').innerHTML = table([...efforts].sort((a, b) => EFFORT_ORDER.indexOf(a[0]) - EFFORT_ORDER.indexOf(b[0])), { name: 'Effort', extra: [['Thinking', (g) => num(g.thinking)]] });
+  $('efforts').innerHTML = table([...efforts].sort((a, b) => EFFORT_ORDER.indexOf(a[0]) - EFFORT_ORDER.indexOf(b[0])), { name: 'Effort', of: t.ie, extra: [['Thinking', (g) => num(g.thinking)]] });
 
   const threads = ranked(group(rows, (r) => r[F.thread] === 'main' ? 'Main thread' : r[F.thread] === 'sidechain' ? 'subagent (older transcripts)' : r[F.thread].replace('agent:', '')));
   const topAgent = threads.find(([k]) => k !== 'Main thread');
   $('h-threads').textContent = t.agents ? `Subagents took ${pct(t.agents, t.ie)}, most of it ${topAgent[0]}.` : 'No subagents in this view.';
-  $('threads').innerHTML = table(threads.slice(0, 8), { name: 'Thread', extra: [['Requests', (g) => num(g.requests)]] });
+  $('threads').innerHTML = table(threads.slice(0, 8), { name: 'Thread', of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
 
   const order = ['<100K', '100–200K', '200–400K', '400K+'], ramp = ['o1', 'o2', 'o3', 'o4'];
   $('h-contexts').textContent = mainIe ? `${pct(over200, mainIe)} of main-thread spend went out above 200K tokens of context.` : 'No main-thread requests in this view.';
@@ -364,7 +367,7 @@ function draw() {
   const proj = ranked(group(rows, 'project'));
   $('h-projects').textContent = proj[0] ? `${proj[0][0]} took ${pct(proj[0][1].ie, t.ie)} of the spend.` : 'No usage in this view.';
   $('projects-legend').innerHTML = legendMA;
-  $('projects').innerHTML = table(proj.slice(0, 12), { name: 'Project', split: true, extra: [['Requests', (g) => num(g.requests)]] });
+  $('projects').innerHTML = table(proj.slice(0, 12), { name: 'Project', split: true, of: t.ie, extra: [['Requests', (g) => num(g.requests)]] });
 
   const grid = heatGrid();
   let best = [0, 0, 0];

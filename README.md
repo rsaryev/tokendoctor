@@ -56,6 +56,11 @@ your own sessions at smaller windows before anything changes.
   </tr>
 </table>
 
+<p align="center">
+  <img src="docs/dashboard.png" alt="The author's tokendoctor dashboard: 75% of the spend was Claude re-reading the conversation" width="880"><br>
+  <sub><code>/tokendoctor:dashboard</code>: every token by day, model, effort, main thread and each subagent, context size and project. One local file; this is the author's own.</sub>
+</p>
+
 ## Install
 
 ```bash

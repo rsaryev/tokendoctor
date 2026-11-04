@@ -1,11 +1,12 @@
 import { type CSSProperties, useEffect, useRef } from 'react'
 import { HOME_SHELL } from '@/lib/shell'
 import { STEPS } from '@/lib/steps'
+import { StepShot } from './StepShot'
 
 /**
- * The four steps one after another, as llx's landing does it: each card held under the header while
+ * The steps one after another, as llx's landing does it: each card held under the header while
  * the next slides over it, a little lower, so the edges of those under it show. Words on the left,
- * what tokendoctor printed on the right; a panel's lines come in once the card is seen. Without
+ * what tokendoctor printed (or a capture of it) on the right; a panel's lines come in once the card is seen. Without
  * script everything simply stands.
  */
 export function StepStack() {
@@ -44,6 +45,9 @@ export function StepStack() {
               <p>{step.text}</p>
               <code className="step-command">{step.command}</code>
             </div>
+            {step.shot ? (
+              <StepShot shot={step.shot} />
+            ) : (
             <pre className="step-panel" aria-label={`${step.title}: what tokendoctor printed`}>
               {step.panel.map((line, i) => (
                 <span key={i} className="step-row" style={{ '--i': i } as CSSProperties}>
@@ -56,6 +60,7 @@ export function StepStack() {
                 </span>
               ))}
             </pre>
+            )}
           </article>
         ))}
       </div>

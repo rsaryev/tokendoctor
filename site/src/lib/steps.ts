@@ -1,15 +1,19 @@
 /**
- * The four steps of the stack under the hero, each with what tokendoctor printed when it ran: real
+ * The steps of the stack under the hero, each with what tokendoctor printed when it ran: real
  * output, trimmed to fit and with a temporary folder's path written as the settings file it stands
  * for. `see` is `tokendoctor-replay` on the author's last 30 days; `fix` is the audit and a dry run
  * on a fresh Claude Code config; `slide` is two compactions of one real session, a summary at night
- * and the slide in the afternoon; `undo` is `/tokendoctor` and `/tokendoctor undo`.
+ * and the slide in the afternoon; `look` is the author's own dashboard, its top, captured at 1440×900;
+ * `undo` is `/tokendoctor` and `/tokendoctor undo`.
  */
 
 /** A line: parts, each a tone and its text. Tones: '' plain, dim, hi, ok, bad, warn, acc. */
 export type Line = [tone: string, text: string][]
 
-export type Step = { kicker: string; title: string; text: string; command: string; panel: Line[] }
+/** A capture shown in place of the printed lines: 16:10, edge to edge, enlarged on a click. */
+export type Shot = { src: string; alt: string; width: number; height: number }
+
+export type Step = { kicker: string; title: string; text: string; command: string; panel: Line[]; shot?: Shot }
 
 const plain = (text: string): Line => [['', text]]
 
@@ -56,7 +60,20 @@ export const STEPS: Step[] = [
     ],
   },
   {
-    kicker: '2 · fix',
+    kicker: '2 · look',
+    title: 'Every token, on one page',
+    text: 'By day, model, effort, main thread and each subagent, context size and project. One local file.',
+    command: '/tokendoctor:dashboard',
+    panel: [],
+    shot: {
+      src: '/dashboard.webp',
+      alt: "The author's tokendoctor dashboard: 75% of the spend was Claude re-reading the conversation",
+      width: 1600,
+      height: 1000,
+    },
+  },
+  {
+    kicker: '3 · fix',
     title: 'Fixes as a diff',
     text: '31 checks against the docs. Nothing is written until you say so.',
     command: '/tokendoctor:optimize',
@@ -81,7 +98,7 @@ export const STEPS: Step[] = [
     ],
   },
   {
-    kicker: '3 · slide',
+    kicker: '4 · slide',
     title: 'Slide, don’t summarize',
     text: 'Old tool outputs go, the conversation stays word for word. No pause.',
     command: '/tokendoctor slide on',
@@ -102,7 +119,7 @@ export const STEPS: Step[] = [
     ],
   },
   {
-    kicker: '4 · undo',
+    kicker: '5 · undo',
     title: 'Undo anything',
     text: 'Every setting by name, every change reversible. Costs no tokens.',
     command: '/tokendoctor undo',
