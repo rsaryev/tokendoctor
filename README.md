@@ -70,7 +70,8 @@ Update with `claude plugin marketplace update tokendoctor` and `claude plugin up
 | Command | What it does |
 | --- | --- |
 | `/tokendoctor:sessions [days]` | What a smaller window would have saved you (your sessions replayed), then where tokens went over the last 30 days (or `days`), with findings. Read-only. |
-| `/tokendoctor:audit` | Setting checks by severity, each linked to the docs. Read-only. |
+| `/tokendoctor:audit` | Setting checks by severity, each linked to the docs, a read of your memory and CLAUDE.md, then the usage dashboard. Read-only. |
+| `/tokendoctor:dashboard [days]` | Builds and opens a local dashboard of every session on this machine: spend by day, kind of token, model, reasoning effort, main thread and each subagent type, context size, project and hour, with filters. One HTML file, no network. |
 | `/tokendoctor:optimize [focus]` | Proposes up to five changes from your numbers and applies the ones you pick. |
 | `/tokendoctor [name] [value]` | Shows the main settings, explains one or changes it. No model call, no tokens. |
 | `/tokendoctor fix <finding-id>` | Applies one audit fix after showing it, with a backup of the file. |

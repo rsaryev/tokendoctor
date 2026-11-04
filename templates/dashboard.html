@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Usage Report</title>
+<style>
+@font-face { font-family: 'TD Sans'; font-weight: 100 900; font-display: block; src: /*__FONT_SANS__*/; }
+@font-face { font-family: 'TD Heading'; font-weight: 100 1000; font-display: block; src: /*__FONT_HEADING__*/; }
+:root {
+  color-scheme: dark;
+  --page: #070707; --raise: #111110; --ink: #ededeb; --ink-2: #a8a7a0; --muted: #807f79;
+  --line: rgba(255,255,255,0.08); --track: rgba(255,255,255,0.05); --focus: #6da7ec;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --q1: #104281; --q2: #184f95; --q3: #1c5cab; --q4: #256abf; --q5: #3987e5; --q6: #6da7ec; --q7: #9ec5f4;
+  --o1: #184f95; --o2: #256abf; --o3: #3987e5; --o4: #86b6ef;
+  --sans: 'TD Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --heading: 'TD Heading', 'TD Sans', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: light) {
+  :root:where(:not([data-theme="dark"])) {
+    color-scheme: light;
+    --page: #fbfbf9; --raise: #ffffff; --ink: #141413; --ink-2: #52514e; --muted: #77756f;
+    --line: rgba(20,20,19,0.10); --track: rgba(20,20,19,0.05); --focus: #2a78d6;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+    --q1: #cde2fb; --q2: #9ec5f4; --q3: #6da7ec; --q4: #3987e5; --q5: #256abf; --q6: #184f95; --q7: #0d366b;
+    --o1: #86b6ef; --o2: #5598e7; --o3: #2a78d6; --o4: #184f95;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #fbfbf9; --raise: #ffffff; --ink: #141413; --ink-2: #52514e; --muted: #77756f;
+  --line: rgba(20,20,19,0.10); --track: rgba(20,20,19,0.05); --focus: #2a78d6;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --q1: #cde2fb; --q2: #9ec5f4; --q3: #6da7ec; --q4: #3987e5; --q5: #256abf; --q6: #184f95; --q7: #0d366b;
+  --o1: #86b6ef; --o2: #5598e7; --o3: #2a78d6; --o4: #184f95;
+}
+* { box-sizing: border-box; }
+html { background: var(--page); }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 72px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+
+/* Top bar */
+.bar { position: sticky; top: 0; z-index: 5; background: color-mix(in oklab, var(--page) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-top: 12px; padding-bottom: 12px; }
+.brand { font: 650 17px/1 var(--heading); letter-spacing: -0.01em; margin-right: auto; }
+.brand span { color: var(--muted); font-weight: 500; margin-left: 8px; }
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: var(--track); }
+.seg button { border: 0; background: none; color: var(--ink-2); padding: 5px 11px; border-radius: 8px; font: 500 13px/1.2 var(--sans); cursor: pointer; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+select, .icon { border: 1px solid var(--line); border-radius: 10px; background: var(--raise); color: var(--ink); padding: 6px 10px; font: 500 13px/1.2 var(--sans); max-width: 220px; }
+.icon { cursor: pointer; padding: 6px 9px; }
+
+/* Diagnosis */
+.meta { color: var(--muted); font-size: 13.5px; margin: 40px 0 10px; }
+h1 { font: 600 clamp(28px, 4.2vw, 46px)/1.08 var(--heading); letter-spacing: -0.025em; margin: 0 0 26px; max-width: 22ch; text-wrap: balance; }
+.anatomy { display: flex; gap: 3px; height: 72px; }
+.anatomy span { display: block; height: 100%; min-width: 3px; }
+.anatomy span:first-child { border-radius: 12px 0 0 12px; }
+.anatomy span:last-child { border-radius: 0 12px 12px 0; }
+.anatomy span:only-child { border-radius: 12px; }
+.parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 14px; }
+.part .name { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13.5px; }
+.part .name i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.part .share { font: 600 24px/1.2 var(--heading); letter-spacing: -0.01em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.part .note { color: var(--muted); font-size: 12.5px; }
+
+.vitals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 40px 0 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.vital { padding: 16px 16px 16px 0; }
+.vital + .vital { padding-left: 16px; border-left: 1px solid var(--line); }
+.vital .v { font: 600 26px/1.15 var(--heading); letter-spacing: -0.015em; font-variant-numeric: tabular-nums; }
+.vital .k { color: var(--ink-2); font-size: 13px; margin-top: 3px; }
+
+/* Findings */
+section { padding-top: 40px; min-width: 0; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
+.cap { color: var(--muted); font-size: 13px; margin: 0 0 4px; }
+h2 { font: 600 21px/1.25 var(--heading); letter-spacing: -0.012em; margin: 0 0 16px; text-wrap: balance; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--ink-2); margin: -6px 0 10px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--muted); font: 11px var(--sans); font-variant-numeric: tabular-nums; }
+.hit { fill: transparent; }
+.hit:hover { fill: var(--track); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: right; padding: 7px 0 7px 12px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; }
+th:first-child, td:first-child { text-align: left; padding-left: 0; }
+tbody tr:hover td { background: var(--track); }
+td.name { max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+.barcell { width: 36%; }
+.track { display: flex; gap: 2px; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+.track span { display: block; height: 100%; }
+.track span:last-child { border-radius: 0 4px 4px 0; }
+.scroll { overflow-x: auto; }
+#tip { position: fixed; pointer-events: none; background: var(--raise); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 12.5px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); display: none; z-index: 10; min-width: 170px; }
+#tip b { font-weight: 600; display: block; margin-bottom: 4px; }
+#tip .r { display: flex; justify-content: space-between; gap: 16px; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+#tip .r strong { color: var(--ink); font-weight: 600; }
+#tip .r i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+footer { color: var(--muted); font-size: 12.5px; margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); max-width: 80ch; }
+@media (max-width: 860px) {
+  .bar { position: static; }
+  .pair { grid-template-columns: 1fr; }
+  .vitals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vital, .vital + .vital { padding: 14px 12px 14px 0; border-left: 0; border-top: 1px solid var(--line); }
+  .vitals .vital:nth-child(-n+2) { border-top: 0; }
+  .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .barcell { width: 26%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .anatomy span { transform-origin: left; animation: grow 700ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  @keyframes grow { from { transform: scaleX(0); } }
+}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <div class="brand">tokendoctor<span>usage report</span></div>
+  <div class="seg" id="range" role="group" aria-label="Period"></div>
+  <div class="seg" id="thread" role="group" aria-label="Thread"></div>
+  <select id="project" aria-label="Project"></select>
+  <button class="icon" id="theme" type="button" aria-label="Switch light or dark">◐</button>
+</div></div>
+<main class="wrap">
+  <p class="meta" id="meta"></p>
+  <h1 id="headline"></h1>
+  <div class="anatomy" id="anatomy" role="img"></div>
+  <div class="parts" id="parts"></div>
+  <div class="vitals" id="vitals"></div>
+
+  <section><p class="cap">Spend by day, main thread and subagents</p><h2 id="h-days"></h2><div class="legend" id="days-legend"></div><div id="days"></div></section>
+  <div class="pair">
+    <section><p class="cap">By model</p><h2 id="h-models"></h2><div class="legend" id="models-legend"></div><div class="scroll" id="models"></div></section>
+    <section><p class="cap">By reasoning effort; thinking is part of output</p><h2 id="h-efforts"></h2><div class="scroll" id="efforts"></div></section>
+    <section><p class="cap">Main thread and each kind of subagent</p><h2 id="h-threads"></h2><div class="scroll" id="threads"></div></section>
+    <section><p class="cap">Main-thread context size when each request went out</p><h2 id="h-contexts"></h2><div class="scroll" id="contexts"></div></section>
+  </div>
+  <section><p class="cap">By project</p><h2 id="h-projects"></h2><div class="legend" id="projects-legend"></div><div class="scroll" id="projects"></div></section>
+  <section><p class="cap">By weekday and hour, local time, for the period (all projects and threads)</p><h2 id="h-heat"></h2><div class="scroll" id="heat"></div></section>
+  <section><p class="cap">Largest sessions, main thread plus its subagents</p><h2 id="h-sessions"></h2><div class="scroll" id="sessions"></div></section>
+  <footer id="foot"></footer>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+const DATA = /*__TOKENDOCTOR_DATA__*/null;
+const KINDS = [['cacheRead', 'Cache read', 's1', 'the conversation read back from the cache'], ['cacheWrite', 'Cache write', 's2', 'new context written to the cache'], ['output', 'Output', 's3', 'what Claude wrote, thinking included'], ['input', 'Input', 's4', 'uncached input']];
+const MODEL_ORDER = ['opus', 'sonnet', 'haiku', 'fable'];
+const EFFORT_ORDER = ['low', 'medium', 'high', 'xhigh', 'max', 'unknown'];
+const state = { range: 'all', thread: 'all', project: 'all' };
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const num = (n) => n >= 1e12 ? (n / 1e12).toFixed(n >= 1e13 ? 0 : 1) + 'T' : n >= 1e9 ? (n / 1e9).toFixed(n >= 1e10 ? 0 : 1) + 'B' : n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'K' : String(Math.round(n));
+const ie = (n) => num(n) + ' IE';
+const share = (x, of) => !of ? 0 : 100 * x / of;
+const pct = (x, of) => { const p = share(x, of); return of ? (p > 0 && p < 1 ? '<1' : Math.round(p)) + '%' : '–'; };
+const v = (name) => `var(--${name})`;
+const plural = (n, one, many = one + 's') => `${num(n)} ${n === 1 ? one : many}`;
+const day = (d) => new Date(d + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+// Theme: follows the OS; the button pins the other one.
+const root = document.documentElement;
+try { const t = localStorage.getItem('td-theme'); if (t) root.dataset.theme = t } catch {}
+$('theme').onclick = () => {
+  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
+  root.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('td-theme', root.dataset.theme) } catch {}
+};
+
+// Tooltip
+const tip = $('tip');
+const place = (e) => { const w = tip.offsetWidth, h = tip.offsetHeight; tip.style.left = Math.min(e.clientX + 14, innerWidth - w - 8) + 'px'; tip.style.top = Math.min(e.clientY + 14, innerHeight - h - 8) + 'px'; };
+document.addEventListener('mouseover', (e) => { const n = e.target.closest('[data-tip]'); if (!n) { tip.style.display = 'none'; return; } tip.innerHTML = n.dataset.tip; tip.style.display = 'block'; place(e); });
+document.addEventListener('mousemove', (e) => { if (tip.style.display === 'block') place(e); });
+const row = (color, label, value) => `<div class="r"><span>${color ? `<i style="background:${v(color)}"></i>` : ''}${esc(label)}</span><strong>${value}</strong></div>`;
+
+// Data
+const F = Object.fromEntries(DATA.fields.map((f, i) => [f, i]));
+const allDays = [...new Set(DATA.rows.map((r) => r[F.day]))].sort();
+const lastDay = allDays.at(-1);
+const dayAdd = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`; };
+const cutoff = () => state.range === 'all' ? '' : dayAdd(lastDay, -(Number(state.range) - 1));
+const isAgent = (t) => t !== 'main';
+const filtered = () => {
+  const c = cutoff();
+  return DATA.rows.filter((r) => r[F.day] >= c && (state.project === 'all' || r[F.project] === state.project) &&
+    (state.thread === 'all' || (state.thread === 'main' ? !isAgent(r[F.thread]) : isAgent(r[F.thread]))));
+};
+const blank = () => ({ requests: 0, input: 0, cacheWrite: 0, cacheRead: 0, output: 0, thinking: 0, ie: 0, ieBy: { input: 0, cacheWrite: 0, cacheRead: 0, output: 0 }, main: 0, agents: 0 });
+function sumInto(acc, r) {
+  const x = r[r.length - 1];
+  acc.requests += x.requests; acc.thinking += x.thinking;
+  let c = 0;
+  for (const [k] of KINDS) { acc[k] += x[k]; acc.ieBy[k] += x.ie[k]; c += x.ie[k]; }
+  acc.ie += c;
+  if (isAgent(r[F.thread])) acc.agents += c; else acc.main += c;
+  return acc;
+}
+const group = (rows, key) => {
+  const m = new Map();
+  for (const r of rows) { const k = typeof key === 'function' ? key(r) : r[F[key]]; m.set(k, sumInto(m.get(k) ?? blank(), r)); }
+  return m;
+};
+const total = (rows) => rows.reduce(sumInto, blank());
+const ranked = (m) => [...m].sort((a, b) => b[1].ie - a[1].ie);
+
+// Controls
+function seg(id, options, key) {
+  $(id).innerHTML = options.map(([val, label]) => `<button type="button" data-v="${val}" aria-pressed="${state[key] === val}">${label}</button>`).join('');
+  $(id).onclick = (e) => { const b = e.target.closest('button'); if (b) { state[key] = b.dataset.v; draw(); } };
+}
+const projects = ranked(group(DATA.rows, 'project')).map(([p]) => p);
+$('project').innerHTML = `<option value="all">All projects</option>` + projects.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+$('project').onchange = (e) => { state.project = e.target.value; draw(); };
+
+// The headline names the largest kind of spend in words.
+const HEADLINE = {
+  cacheRead: (p) => `${p} of your spend was Claude re-reading the conversation.`,
+  cacheWrite: (p) => `${p} of your spend was writing new context into the cache.`,
+  output: (p) => `${p} of your spend was Claude's own writing.`,
+  input: (p) => `${p} of your spend was uncached input.`,
+};
+
+function dayChart(rows) {
+  const by = group(rows, 'day');
+  const c = cutoff();
+  const first = allDays.find((d) => d >= c);
+  const span = [];
+  for (let d = first; d && d <= lastDay; d = dayAdd(d, 1)) span.push(d);
+  if (!span.length || !span.some((d) => by.get(d)?.ie > 0)) return '<p class="cap">No spend in this view.</p>';
+  const W = 1088, H = 260, L = 44, B = 26, T = 6;
+  const max = Math.max(1, ...span.map((d) => by.get(d)?.ie ?? 0));
+  const p10 = Math.pow(10, Math.floor(Math.log10(max / 4)));
+  const tick = [1, 2, 2.5, 5, 10].map((m) => m * p10).find((t) => max / t <= 4.5);
+  const top = Math.ceil(max / tick) * tick;
+  const y = (n) => T + (H - T - B) * (1 - n / top);
+  const bw = (W - L) / span.length, gap = Math.max(1, Math.min(6, bw * 0.28));
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spend by day">`;
+  for (let t = tick; t <= top + 1e-9; t += tick) s += `<line x1="${L}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="${v('line')}"/><text x="${L - 10}" y="${y(t) + 4}" text-anchor="end">${num(t)}</text>`;
+  s += `<line x1="${L}" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="${v('muted')}" stroke-opacity="0.5"/>`;
+  const every = Math.ceil(span.length / 9);
+  span.forEach((d, i) => {
+    const g = by.get(d) ?? blank();
+    const x = L + i * bw + gap / 2, w = Math.max(1, bw - gap);
+    const ym = y(g.main), ya = y(g.main + g.agents);
+    if (g.main > 0) s += bar(x, ym, w, y(0) - ym, g.agents > 0 ? 0 : 3, 's1');
+    if (g.agents > 0) s += bar(x, ya, w, Math.max(0.5, ym - ya - (g.main > 0 ? 2 : 0)), 3, 's2');
+    if (i % every === 0) s += `<text x="${x + w / 2}" y="${H - 6}" text-anchor="middle">${day(d)}</text>`;
+    const t = `<b>${day(d)}</b>` + row('s1', 'Main thread', ie(g.main)) + row('s2', 'Subagents', ie(g.agents)) + row('', 'Total', ie(g.ie)) + row('', 'Requests', num(g.requests));
+    s += `<rect class="hit" x="${L + i * bw}" y="${T}" width="${bw}" height="${H - T - B}" data-tip="${esc(t)}"/>`;
+  });
+  return s + '</svg>';
+}
+function bar(x, y, w, h, r, color) {
+  if (h <= 0) return '';
+  r = Math.min(r, w / 2, h);
+  return `<path d="M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z" fill="${v(color)}"/>`;
+}
+
+// A table with an inline bar: main thread and subagents stacked when `split`, else one color.
+function table(entries, { name, split, extra = [] }) {
+  const top = Math.max(1, ...entries.map(([, g]) => g.ie));
+  const all = entries.reduce((s, [, g]) => s + g.ie, 0);
+  const head = `<thead><tr><th>${name}</th><th class="barcell"></th><th>Cost</th><th>Share</th>${extra.map((e) => `<th>${e[0]}</th>`).join('')}</tr></thead>`;
+  const body = entries.map(([k, g, color]) => {
+    const t = `<b>${esc(k)}</b>` + (split ? row('s1', 'Main thread', ie(g.main)) + row('s2', 'Subagents', ie(g.agents)) : '') + row('', 'Cost', ie(g.ie)) + row('', 'Requests', num(g.requests)) + row('', 'Cache read', num(g.cacheRead) + ' tokens') + row('', 'Output', num(g.output) + ' tokens');
+    const fill = split
+      ? (g.main > 0 ? `<span style="width:${share(g.main, top)}%;background:${v('s1')}"></span>` : '') + (g.agents > 0 ? `<span style="width:${share(g.agents, top)}%;background:${v('s2')}"></span>` : '')
+      : `<span style="width:${share(g.ie, top)}%;background:${v(color ?? 's1')}"></span>`;
+    return `<tr data-tip="${esc(t)}"><td class="name" title="${esc(k)}">${esc(k)}</td><td class="barcell"><div class="track">${fill}</div></td><td>${ie(g.ie)}</td><td>${pct(g.ie, all)}</td>${extra.map((e) => `<td>${e[1](g)}</td>`).join('')}</tr>`;
+  }).join('');
+  return `<table>${head}<tbody>${body}</tbody></table>`;
+}
+const legendMA = `<span><i style="background:${v('s1')}"></i>Main thread</span><span><i style="background:${v('s2')}"></i>Subagents</span>`;
+
+function heatGrid() {
+  const c = cutoff();
+  const grid = Array.from({ length: 7 }, () => Array(24).fill(0));
+  for (const [d, hours] of Object.entries(DATA.hours)) {
+    if (d < c) continue;
+    const wd = (new Date(d + 'T12:00:00').getDay() + 6) % 7;
+    hours.forEach((x, h) => { grid[wd][h] += x; });
+  }
+  return grid;
+}
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+function heat(grid) {
+  if (!grid.flat().some((x) => x > 0)) return '<p class="cap">No activity in this period.</p>';
+  const max = Math.max(1, ...grid.flat());
+  const steps = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
+  const W = 1088, L = 40, T = 2, cw = (W - L) / 24, ch = 28, H = T + 7 * ch + 22;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spend by weekday and hour">`;
+  grid.forEach((r, wd) => {
+    s += `<text x="${L - 10}" y="${T + wd * ch + ch / 2 + 4}" text-anchor="end">${WEEKDAYS[wd].slice(0, 3)}</text>`;
+    r.forEach((x, h) => {
+      const fill = x > 0 ? v(steps[Math.min(6, Math.floor(7 * Math.sqrt(x / max)))]) : v('track');
+      s += `<rect x="${L + h * cw + 1.5}" y="${T + wd * ch + 1.5}" width="${cw - 3}" height="${ch - 3}" rx="4" fill="${fill}" data-tip="${esc(`<b>${WEEKDAYS[wd]}, ${String(h).padStart(2, '0')}:00</b>` + row('', 'Cost', ie(x)))}"/>`;
+    });
+  });
+  for (let h = 0; h < 24; h += 3) s += `<text x="${L + h * cw + cw / 2}" y="${H - 4}" text-anchor="middle">${String(h).padStart(2, '0')}:00</text>`;
+  return s + '</svg>';
+}
+
+function draw() {
+  seg('range', [['all', 'All time'], ['90', '90 days'], ['30', '30 days'], ['7', '7 days']], 'range');
+  seg('thread', [['all', 'Everything'], ['main', 'Main thread'], ['agents', 'Subagents']], 'thread');
+  const rows = filtered();
+  const t = total(rows);
+  const c = cutoff();
+  const days = allDays.filter((d) => d >= c);
+  const sess = DATA.sessions.filter((x) => x.day >= c && (state.project === 'all' || x.project === state.project));
+  const when = days.length === 1 ? day(days[0]) : `${day(days[0])} to ${day(days.at(-1))}`;
+  $('meta').textContent = days.length ? `${when}, ${plural(days.length, 'active day')}, ${plural(t.requests, 'request')}, ${plural(sess.length, 'session')}` : 'Nothing in this period.';
+
+  // Diagnosis: the headline, the anatomy of the spend, and its parts.
+  const kinds = [...KINDS].sort((a, b) => t.ieBy[b[0]] - t.ieBy[a[0]]);
+  $('headline').textContent = t.ie ? HEADLINE[kinds[0][0]](pct(t.ieBy[kinds[0][0]], t.ie)) : 'No usage in this period.';
+  $('anatomy').setAttribute('aria-label', kinds.map(([k, n]) => `${n} ${pct(t.ieBy[k], t.ie)}`).join(', '));
+  $('anatomy').innerHTML = KINDS.filter(([k]) => t.ieBy[k] > 0).map(([k, n, col]) =>
+    `<span style="flex:${share(t.ieBy[k], t.ie)} 1 0;background:${v(col)}" data-tip="${esc(`<b>${n}</b>` + row('', 'Share of cost', pct(t.ieBy[k], t.ie)) + row('', 'Cost', ie(t.ieBy[k])) + row('', 'Tokens', num(t[k])))}"></span>`).join('');
+  $('parts').innerHTML = KINDS.map(([k, n, col, what]) =>
+    `<div class="part"><div class="name"><i style="background:${v(col)}"></i>${n}</div><div class="share">${pct(t.ieBy[k], t.ie)}</div><div class="note">${num(t[k])} tokens, ${what}</div></div>`).join('');
+
+  const models = group(rows, 'model');
+  const topModel = ranked(models)[0];
+  const ctx = group(rows.filter((r) => !isAgent(r[F.thread])), 'context');
+  const mainIe = [...ctx.values()].reduce((s, g) => s + g.ie, 0);
+  const over200 = (ctx.get('400K+')?.ie ?? 0) + (ctx.get('200–400K')?.ie ?? 0);
+  const prompt = t.input + t.cacheRead + t.cacheWrite;
+  $('vitals').innerHTML = [
+    [ie(t.ie), 'spent in all'],
+    [pct(t.agents, t.ie), 'went to subagents'],
+    [topModel ? pct(topModel[1].ie, t.ie) : '–', topModel ? `on ${topModel[0]}` : 'top model'],
+    [pct(over200, mainIe), 'of the main thread above 200K context'],
+    [pct(t.cacheRead, prompt), 'of prompt tokens came from the cache'],
+  ].map(([val, k]) => `<div class="vital"><div class="v">${val}</div><div class="k">${k}</div></div>`).join('');
+
+  // Findings, each headed by what it shows.
+  const byDay = ranked(group(rows, 'day'))[0];
+  $('h-days').textContent = byDay ? `The heaviest day was ${day(byDay[0])}, with ${pct(byDay[1].ie, t.ie)} of the period's spend.` : 'No days in this period.';
+  $('days-legend').innerHTML = legendMA;
+  $('days').innerHTML = dayChart(rows);
+
+  $('h-models').textContent = topModel ? `${topModel[0][0].toUpperCase() + topModel[0].slice(1)} did ${pct(topModel[1].ie, t.ie)} of the work, by cost.` : 'No usage in this view.';
+  $('models-legend').innerHTML = legendMA;
+  $('models').innerHTML = table([...models].sort((a, b) => MODEL_ORDER.indexOf(a[0]) - MODEL_ORDER.indexOf(b[0])), { name: 'Model', split: true, extra: [['Requests', (g) => num(g.requests)]] });
+
+  const efforts = group(rows, 'effort');
+  const highUp = ['high', 'xhigh', 'max'].reduce((s, k) => s + (efforts.get(k)?.ie ?? 0), 0);
+  $('h-efforts').textContent = t.ie ? `${pct(highUp, t.ie)} of the spend ran at high effort or above.` : 'No usage in this view.';
+  $('efforts').innerHTML = table([...efforts].sort((a, b) => EFFORT_ORDER.indexOf(a[0]) - EFFORT_ORDER.indexOf(b[0])), { name: 'Effort', extra: [['Thinking', (g) => num(g.thinking)]] });
+
+  const threads = ranked(group(rows, (r) => r[F.thread] === 'main' ? 'Main thread' : r[F.thread] === 'sidechain' ? 'subagent (older transcripts)' : r[F.thread].replace('agent:', '')));
+  const topAgent = threads.find(([k]) => k !== 'Main thread');
+  $('h-threads').textContent = t.agents ? `Subagents took ${pct(t.agents, t.ie)}, most of it ${topAgent[0]}.` : 'No subagents in this view.';
+  $('threads').innerHTML = table(threads.slice(0, 8), { name: 'Thread', extra: [['Requests', (g) => num(g.requests)]] });
+
+  const order = ['<100K', '100–200K', '200–400K', '400K+'], ramp = ['o1', 'o2', 'o3', 'o4'];
+  $('h-contexts').textContent = mainIe ? `${pct(over200, mainIe)} of main-thread spend went out above 200K tokens of context.` : 'No main-thread requests in this view.';
+  $('contexts').innerHTML = table(order.filter((k) => ctx.has(k)).map((k) => [k, ctx.get(k), ramp[order.indexOf(k)]]), { name: 'Context', extra: [['Requests', (g) => num(g.requests)]] });
+
+  const proj = ranked(group(rows, 'project'));
+  $('h-projects').textContent = proj[0] ? `${proj[0][0]} took ${pct(proj[0][1].ie, t.ie)} of the spend.` : 'No usage in this view.';
+  $('projects-legend').innerHTML = legendMA;
+  $('projects').innerHTML = table(proj.slice(0, 12), { name: 'Project', split: true, extra: [['Requests', (g) => num(g.requests)]] });
+
+  const grid = heatGrid();
+  let best = [0, 0, 0];
+  grid.forEach((r, wd) => r.forEach((x, h) => { if (x > best[0]) best = [x, wd, h]; }));
+  $('h-heat').textContent = best[0] ? `The busiest hour is ${WEEKDAYS[best[1]]} at ${String(best[2]).padStart(2, '0')}:00.` : 'No activity in this period.';
+  $('heat').innerHTML = heat(grid);
+
+  const periodIe = sess.reduce((s, x) => s + x.ie, 0);
+  $('h-sessions').textContent = sess[0] ? `The largest session took ${pct(sess[0].ie, periodIe)} of all session spend.` : 'No sessions in this period.';
+  $('sessions').innerHTML = `<table><thead><tr><th>Session</th><th>Project</th><th>Day</th><th>Requests</th><th>Subagents</th><th>Cost</th><th>Share</th></tr></thead><tbody>` +
+    sess.slice(0, 12).map((x) => `<tr><td>${esc(x.id)}</td><td class="name">${esc(x.project)}</td><td>${day(x.day)}</td><td>${num(x.requests)}</td><td>${x.agents}</td><td>${ie(x.ie)}</td><td>${pct(x.ie, periodIe)}</td></tr>`).join('') + '</tbody></table>';
+
+  $('foot').textContent = `Built ${new Date(DATA.generated).toLocaleString()} by tokendoctor from the transcripts on this machine; transcripts Claude Code already cleaned up are not counted. ${DATA.units}.`;
+}
+draw();
+</script>
+</body>
+</html>

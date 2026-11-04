@@ -9,3 +9,4 @@ llx/
 # wrote) stays on this machine: Claude Code writes paths and account details into it.
 bench/results/*/*/
 bench/tasks/week/.mutants*
+.preview/

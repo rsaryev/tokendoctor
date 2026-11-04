@@ -2,7 +2,7 @@
 name: audit
 description: Audit this Claude Code setup for settings that waste tokens or silently do nothing.
 disable-model-invocation: true
-allowed-tools: Bash(tokendoctor-audit *), Read, Glob
+allowed-tools: Bash(tokendoctor-audit *), Bash(tokendoctor-dashboard *), Read, Glob
 argument-hint: [project-dir]
 ---
 
@@ -28,3 +28,9 @@ Audit the Claude Code configuration for the current project (or `$ARGUMENTS` if 
    plainly the person's own choice, show what it costs and leave the choice to them.
 6. If `facts.version` is null, say the Claude Code version could not be read and that rules which
    depend on a minimum version were still applied.
+7. Build the usage dashboard: run `tokendoctor-dashboard --open`. It reads every transcript on this
+   machine (usage figures only, never message text), writes one HTML file with no network use, and
+   opens it: spend by day, by kind of token, model, reasoning effort, main thread and each subagent
+   type, context size, project, hour of the week, and the largest sessions, with filters. Give the
+   path it prints, and tie one or two of its numbers to the findings above (for example the share of
+   spend that was the conversation re-read from the cache, or above 200K tokens of context).

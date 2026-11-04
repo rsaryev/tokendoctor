@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- `/tokendoctor:dashboard` and `tokendoctor-dashboard [--days n] [--open]`: a local dashboard of
+  every session on this machine, opened in the browser. It leads with what most of the spend was (on
+  the author's history: 75% was the conversation read back from the cache), then spend by day, by
+  kind of token, model, reasoning effort, main thread and each subagent type, main-thread context
+  size, project, weekday and hour, and the largest sessions, with filters for period, thread and
+  project. One HTML file with its fonts inside, no network; it reads usage figures, never message
+  text. `/tokendoctor:audit` builds and opens it as its last step.
 - Tried and dropped: a decision model (Jev, or Haiku without a key) that picks each subagent's model
   and effort from its brief. Replayed on 30 days of the author's sessions (452 subagents), it would
   have saved under 1%: the expensive subagents had heavy work, and Jev kept them on Opus at high

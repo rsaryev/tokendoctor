@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+// A local dashboard of where the tokens went: every session on this machine (or the last --days),
+// by day, project, model, effort, main thread or subagent type, and kind of token. One HTML file,
+// no network; it holds project names and session ids, so it stays on this machine.
+// Usage: tokendoctor-dashboard [--days <n>] [--out <file>] [--open] [--json]
+import { spawn } from 'node:child_process'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { configDir } from '../lib/collect.mjs'
+import { collect, render } from '../lib/dashboard.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const days = value('--days') !== undefined ? Number(value('--days')) : undefined
+if (days !== undefined && !(Number.isInteger(days) && days > 0)) {
+  console.error('--days takes a whole number of days, such as --days 30')
+  process.exit(2)
+}
+const data = collect(configDir(), { days })
+
+if (args.includes('--json')) {
+  // Written, not exited: an exit right after a large write to a pipe cuts the output short.
+  process.stdout.write(`${JSON.stringify(data)}\n`)
+} else {
+const out = value('--out') ?? join(configDir(), 'tokendoctor', 'dashboard.html')
+mkdirSync(dirname(out), { recursive: true })
+writeFileSync(out, render(data))
+const dayList = [...new Set(data.rows.map((r) => r[0]))].sort()
+console.log(`${out}\n${data.rows.length ? `${dayList[0]} – ${dayList.at(-1)}, ${data.sessions.length} sessions with usage, ${data.runs} subagent runs` : 'No usage found.'}`)
+if (args.includes('--open')) {
+  const [cmd, ...rest] = process.platform === 'darwin' ? ['open'] : process.platform === 'win32' ? ['cmd', '/c', 'start', ''] : ['xdg-open']
+  spawn(cmd, [...rest, out], { detached: true, stdio: 'ignore' }).unref()
+}
+}
