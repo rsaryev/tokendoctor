@@ -13,7 +13,7 @@
 // The drop-in adds three keys (extraKnownMarketplaces, enabledPlugins, appendPlugins) and touches no
 // other managed setting. A machine whose organization delivers server-managed settings or an MDM
 // profile ignores files, so there the administrator has to add it (the command says so).
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, lchownSync, lstatSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describePlan, planOps, valueAt, writePlan } from '../lib/apply.mjs'
@@ -72,6 +72,10 @@ function runSystem() {
   writeFileSync(join(paths.marketplace, '.claude-plugin', 'marketplace.json'), JSON.stringify(marketplaceManifest(), null, 2) + '\n')
   mkdirSync(paths.dropInDir, { recursive: true })
   writeFileSync(paths.dropIn, dropIn)
+  // A copied file keeps its owner: everything the machine loads as its own must be root's, or the
+  // person (or anything running as them) could rewrite the mod the guard trusts (admin.md).
+  rootOwn(paths.marketplace)
+  rootOwn(paths.dropIn)
   say('Done. Now run `tokendoctor-org-install --write` without sudo for your own settings, then restart Claude Code.')
   say('After a tokendoctor update, run this again to refresh the copy.')
 }
@@ -106,6 +110,12 @@ function runUser() {
   say(`  sudo node "${me}" --system${uninstall ? ' --uninstall' : ''} --write`)
   if (!write) say('\nDry run. Re-run with --write to apply your half.')
   if (!uninstall && state.orgInstalled) say('\nThe system half is already in place.')
+}
+
+function rootOwn(path) {
+  lchownSync(path, 0, 0)
+  if (!lstatSync(path).isDirectory()) return
+  for (const name of readdirSync(path)) rootOwn(join(path, name))
 }
 
 function fail(message) {
