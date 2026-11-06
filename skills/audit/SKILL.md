@@ -36,7 +36,7 @@ Audit the Claude Code configuration for the current project (or `$ARGUMENTS` if 
    schedule.
 7. **See what really loaded.** Findings from a debug log (`facts.debugLog` gives its time) come from a
    `claude --debug` run of the last day. To check now, offer `tokendoctor-selfcheck`: it starts
-   `claude -p` once in this project on Haiku, with no saved session (one small request,
+   `claude -p` once in this project on Haiku, with no saved session and no MCP servers (one small request,
    a few cents at most), and reports which copy of tokendoctor loaded and in which tier, whether the
    built-in guard was seated, mods hooking compaction ahead of it, skipped hooks, the window Claude
    Code really compacts at, and a skill listing over its budget. Run it only after the person says

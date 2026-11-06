@@ -5,7 +5,7 @@
 // a skill listing over its budget.
 //
 //   tokendoctor-selfcheck [--project <dir>] [--json]   starts `claude -p` once, in the project, on Haiku,
-//                                                       with no saved session: one small request (its tools stay:
+//                                                       with no saved session and no MCP servers: one small request (its tools stay:
 //                                                       `--tools ""` would also refuse the tools mods register)
 //   tokendoctor-selfcheck --log <file> [--json]        reads a debug log you already have; no request
 import { spawnSync } from 'node:child_process'
@@ -29,7 +29,8 @@ if (value('--log')) {
   const file = join(dir, 'debug.txt')
   const run = spawnSync(
     'claude',
-    ['-p', 'Reply with the word ok.', '--model', 'haiku', '--no-session-persistence', '--max-budget-usd', '0.10', '--debug-file', file],
+    // --strict-mcp-config: no MCP servers start; the log's mod, guard and compaction lines do not need them.
+    ['-p', 'Reply with the word ok.', '--model', 'haiku', '--strict-mcp-config', '--no-session-persistence', '--max-budget-usd', '0.10', '--debug-file', file],
     { cwd: project, encoding: 'utf8', timeout: 180_000, env: { ...process.env, CLAUDECODE: '' } },
   )
   text = existsSync(file) ? readFileSync(file, 'utf8') : ''
