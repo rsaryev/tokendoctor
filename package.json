@@ -8,6 +8,7 @@
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "test:mod": "node scripts/test-mod.mjs",
-    "validate": "claude plugin validate . --strict"
+    "validate": "claude plugin validate . --strict",
+    "docs:check": "node scripts/docs-check.mjs"
   }
 }

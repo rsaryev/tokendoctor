@@ -43,7 +43,7 @@ your own sessions at smaller windows before anything changes.
     </td>
     <td width="25%" valign="top">
       <strong>Fix</strong><br>
-      <code>/tokendoctor:optimize</code> runs 35 checks against the docs and applies the changes you pick, each shown as a diff first.
+      <code>/tokendoctor:optimize</code> runs 38 checks against the docs and applies the changes you pick, each shown as a diff first.
     </td>
     <td width="25%" valign="top">
       <strong>Slide</strong><br>
@@ -103,6 +103,7 @@ tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [-
 tokendoctor-undo [--json] | <n> [--write]
 tokendoctor-replay [--days <n>] [--window 200k,400k] [--json]   # what a smaller window would have saved
 tokendoctor-org-install [--write] [--uninstall]                # the slide under a Team/Enterprise login (see below)
+tokendoctor-selfcheck [--log <file>] [--json]                  # what really loaded, from a debug log (one small Haiku request, or a log you have)
 ```
 
 </details>
@@ -122,7 +123,7 @@ prints nothing, so it adds no tokens. It appends each finished day's totals to
 </details>
 
 <details>
-<summary><strong>The 35 setting checks</strong></summary>
+<summary><strong>The 38 setting checks</strong></summary>
 
 Errors are settings that are wrong or ignored, warnings are likely to cost real money, and info is worth a look. Rules that depend on a Claude Code release are skipped on older versions.
 
@@ -158,6 +159,9 @@ Errors are settings that are wrong or ignored, warnings are likely to cost real 
 | `idle-compaction-off` | info | `idleCompaction: false`: a long conversation is not compacted before its one-hour cache expires. Fix unsets it. |
 | `bash-output-raised` | info | `bashOutputMaxChars` or `BASH_MAX_OUTPUT_LENGTH` above the 30,000 default. |
 | `code-intelligence-missing` | info | The project has files for a language with an official language-server plugin (`typescript-lsp`, `pyright-lsp`, `gopls-lsp`, …) and it is not enabled. |
+| `settings-key-undocumented` | warn | A settings key that is not in today's settings reference: misspelled or removed, so it does nothing. |
+| `env-undocumented` | info | A `CLAUDE_…`/`ANTHROPIC_…`-style variable under `env` that today's docs do not list. |
+| `setting-needs-newer-version` | warn | A key or variable the docs say needs a newer Claude Code than the one installed. |
 | `slide-blocked-by-guard` | warn | The slide is on, but Claude Code's built-in guard sends compaction past the mods you install (a Team or Enterprise login, or managed settings), so it summarizes instead. Says to run `tokendoctor-org-install`. |
 | `compact-pct-override` | info/warn/error | `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`: where it puts the compaction point; a warning below 50%, an error when it is not a percent. |
 | `skill-model-switch` | info | A skill whose frontmatter names another model: each use reads the conversation uncached on that model. `context: fork` avoids it. |
@@ -170,6 +174,31 @@ pinned to a small model with read-only or narrow tools. A plugin cannot override
 or ship `settings.json` keys such as `autoCompactWindow`, `env` or `permissions`, so the apply step
 copies the template into `~/.claude/agents/` or `.claude/agents/` and edits your settings files
 itself, with a backup.
+
+</details>
+
+<details>
+<summary><strong>Checked against today's docs and what really loaded</strong></summary>
+
+Claude Code changes every few days, so the audit does not trust a list frozen into the plugin:
+
+- It reads the current settings reference and environment variable list from code.claude.com, as
+  Markdown (every docs page is served at `…/docs/en/<page>.md`, indexed for models at
+  [llms.txt](https://code.claude.com/docs/llms.txt); a mirror such as context7 re-indexes on its own
+  schedule). Cached a day in `~/.claude/tokendoctor/docs`; `--offline` uses the cache only. Only those
+  public pages are fetched; nothing is sent. It flags settings keys Claude Code does not document
+  (`settings-key-undocumented`: a misspelled or removed key does nothing), variables of Claude Code's
+  own families it does not know (`env-undocumented`), and keys that need a newer release than yours
+  (`setting-needs-newer-version`).
+- It reads a `claude --debug` log of the last day, if you have one, and `tokendoctor-selfcheck` makes
+  one (one `claude -p` request on Haiku with no saved session; `--log <file>` reads one you have, at
+  no cost): which copy of tokendoctor loaded and in which tier, whether the built-in guard was seated,
+  the order of the mods on compaction, hooks that were skipped, the window Claude Code really
+  compacts at, and a skill listing over its budget (descriptions cut short).
+- The `/tokendoctor:audit` and `/tokendoctor:optimize` skills read a finding's doc page before they
+  explain or recommend it.
+- For whoever maintains tokendoctor, `npm run docs:check` checks every settings key and variable it
+  names against the current docs.
 
 </details>
 

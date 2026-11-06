@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+// Checks tokendoctor and the setup around it as Claude Code really loads them, from a debug log:
+// which copy of tokendoctor loaded and in which tier, whether the built-in guard was seated, mods
+// that hook compaction ahead of it, hooks that were skipped, the window Claude Code compacts at, and
+// a skill listing over its budget.
+//
+//   tokendoctor-selfcheck [--project <dir>] [--json]   starts `claude -p` once, in the project, on Haiku,
+//                                                       with no saved session: one small request (its tools stay:
+//                                                       `--tools ""` would also refuse the tools mods register)
+//   tokendoctor-selfcheck --log <file> [--json]        reads a debug log you already have; no request
+import { spawnSync } from 'node:child_process'
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join, resolve } from 'node:path'
+import { settingsPath } from '../lib/collect.mjs'
+import { debugFindings, parseDebugLog } from '../lib/debuglog.mjs'
+
+const args = process.argv.slice(2)
+const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
+const project = resolve(value('--project') ?? process.cwd())
+
+let text
+let source
+if (value('--log')) {
+  source = value('--log')
+  text = readFileSync(source, 'utf8')
+} else {
+  const dir = mkdtempSync(join(tmpdir(), 'tokendoctor-selfcheck-'))
+  const file = join(dir, 'debug.txt')
+  const run = spawnSync(
+    'claude',
+    ['-p', 'Reply with the word ok.', '--model', 'haiku', '--no-session-persistence', '--max-budget-usd', '0.10', '--debug-file', file],
+    { cwd: project, encoding: 'utf8', timeout: 180_000, env: { ...process.env, CLAUDECODE: '' } },
+  )
+  text = existsSync(file) ? readFileSync(file, 'utf8') : ''
+  rmSync(dir, { recursive: true, force: true })
+  source = 'a probe session'
+  if (!text) {
+    console.error(`claude -p wrote no debug log (exit ${run.status}): ${(run.stderr || run.stdout || '').trim().slice(0, 400)}`)
+    process.exit(1)
+  }
+}
+
+const log = parseDebugLog(text)
+if (!log.version && !value('--log')) {
+  log.version = /\d+\.\d+\.\d+/.exec(spawnSync('claude', ['--version'], { encoding: 'utf8' }).stdout ?? '')?.[0] ?? null
+}
+const slideOn = ['user', 'project', 'local'].some((sc) => {
+  try {
+    return JSON.parse(readFileSync(settingsPath(sc, project), 'utf8')).pluginConfigs?.['tokendoctor@tokendoctor']?.options?.slide === true
+  } catch {
+    return false
+  }
+})
+const findings = debugFindings(log, { slideOn, source })
+
+if (args.includes('--json')) {
+  console.log(JSON.stringify({ source, log, findings }, null, 2))
+  process.exit(0)
+}
+const ours = log.modules.find((m) => /tokendoctor@/.test(m.id))
+console.log(`Claude Code ${log.version ?? '?'}, from ${source}`)
+console.log(`  guard (cc-plugin-sec-default): ${log.guard ? `${log.guard.seated ? 'seated' : 'not seated'}, ${log.guard.reason}` : 'no line'}`)
+console.log(`  tokendoctor: ${ours ? `${ours.id}, tier ${ours.tier}, events ${ours.events.join(', ')}` : 'not loaded'}`)
+console.log(`  slide: ${slideOn ? 'on' : 'off'}`)
+if (log.effectiveWindow) console.log(`  compacts at: ${Math.round(log.effectiveWindow / 1000)}K (effective window)`)
+const compactors = log.modules.filter((m) => m.events.includes('session.compact')).map((m) => `${m.id} (${m.tier})`)
+if (compactors.length) console.log(`  mods on session.compact, in order: ${compactors.join(' → ')}`)
+console.log('')
+if (!findings.length) console.log('No findings.')
+for (const f of findings) console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}\n`)

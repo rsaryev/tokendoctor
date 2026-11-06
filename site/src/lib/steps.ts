@@ -75,7 +75,7 @@ export const STEPS: Step[] = [
   {
     kicker: '3 · fix',
     title: 'Fixes as a diff',
-    text: '35 checks against the docs. Nothing is written until you say so.',
+    text: '38 checks against the docs. Nothing is written until you say so.',
     command: '/tokendoctor:optimize',
     panel: [
       [

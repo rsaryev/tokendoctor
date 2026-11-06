@@ -21,7 +21,8 @@ beforeEach(() => {
 })
 afterEach(() => rmSync(dir, { recursive: true, force: true }))
 
-const run = (name, args) => spawnSync(process.execPath, [bin(name), ...args], { env, encoding: 'utf8' })
+// The audit reads the current docs from the network; offline, with no cache, it skips those checks.
+const run = (name, args) => spawnSync(process.execPath, [bin(name), ...args, ...(name === 'tokendoctor-audit' ? ['--offline'] : [])], { env, encoding: 'utf8' })
 
 test('audit --json reports facts and findings and never prints settings', () => {
   writeFileSync(join(dir, 'config', 'settings.json'), JSON.stringify({ autoCompactThreshold: 0.5, secretish: 'do-not-print' }))

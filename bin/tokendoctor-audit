@@ -1,6 +1,13 @@
 #!/usr/bin/env node
-// Read-only audit of a Claude Code configuration. Usage: tokendoctor-audit [--project <dir>] [--json]
-import { collect } from '../lib/collect.mjs'
+// Read-only audit of a Claude Code configuration.
+// Usage: tokendoctor-audit [--project <dir>] [--json] [--offline]
+// Reads the current settings reference and environment variable list from code.claude.com (cached a
+// day in ~/.claude/tokendoctor/docs; --offline uses the cache only) to catch keys Claude Code ignores.
+import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { join } from 'node:path'
+import { collect, configDir } from '../lib/collect.mjs'
+import { debugFindings, parseDebugLog } from '../lib/debuglog.mjs'
+import { docsIndex, loadDocs } from '../lib/docs.mjs'
 import { runRules } from '../lib/rules.mjs'
 
 const args = process.argv.slice(2)
@@ -8,10 +15,40 @@ const flag = (name) => args.includes(name)
 const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
 
 const snapshot = collect(value('--project') ?? process.cwd())
+const docs = await loadDocs(join(configDir(), 'tokendoctor', 'docs'), { offline: flag('--offline') }).catch(() => null)
+snapshot.docs = docs ? docsIndex(docs.pages) : null
 const findings = runRules(snapshot)
 
+// A debug log the person already has (claude --debug) from the last day says what really loaded.
+// tokendoctor-selfcheck makes one on purpose.
+const debug = recentDebugLog(join(configDir(), 'debug'))
+if (debug) {
+  const slideOn = ['user', 'project', 'local'].some((sc) => snapshot.settings[sc].pluginConfigs?.['tokendoctor@tokendoctor']?.options?.slide === true)
+  const seen = new Set(findings.map((f) => f.id))
+  for (const f of debugFindings(parseDebugLog(readFileSync(debug.path, 'utf8')), { slideOn, source: `the debug log of ${debug.at.slice(0, 16).replace('T', ' ')}` })) {
+    if (!seen.has(f.id)) findings.push(f)
+  }
+  const order = { error: 0, warn: 1, info: 2 }
+  findings.sort((a, b) => order[a.severity] - order[b.severity])
+}
+
+function recentDebugLog(dir) {
+  try {
+    const logs = readdirSync(dir)
+      .filter((n) => n.endsWith('.txt'))
+      .map((n) => ({ path: join(dir, n), mtime: statSync(join(dir, n)).mtimeMs }))
+      .filter((l) => Date.now() - l.mtime < 24 * 3600 * 1000)
+      .sort((a, b) => b.mtime - a.mtime)
+    return logs[0] ? { path: logs[0].path, at: new Date(logs[0].mtime).toISOString() } : null
+  } catch {
+    return null
+  }
+}
+
 if (flag('--json')) {
-  const { settings: _settings, ...facts } = snapshot
+  const { settings: _settings, docs: index, ...facts } = snapshot
+  facts.debugLog = debug?.at ?? null
+  facts.docs = index ? { read: docs.fetchedAt, stale: docs.stale, settingsKeys: index.settings.size, envVars: index.env.size } : null
   console.log(JSON.stringify({ facts, findings }, null, 2))
 } else if (!findings.length) {
   console.log('No findings.')
@@ -20,3 +57,4 @@ if (flag('--json')) {
     console.log(`[${f.severity}] ${f.id}: ${f.title}\n  ${f.detail}\n  ${f.doc}${f.fixes ? `\n  fix: tokendoctor-apply ${f.id}` : ''}\n`)
   }
 }
+if (!flag('--json') && !snapshot.docs) console.log('(The current docs could not be read, so keys Claude Code ignores were not checked.)')

@@ -2,11 +2,17 @@
 name: optimize
 description: Look at token metrics, propose setting changes that cut waste, and apply the ones the person approves.
 disable-model-invocation: true
-allowed-tools: mcp__tokendoctor__metrics, mcp__tokendoctor__settings, mcp__tokendoctor__config_list, Bash(tokendoctor-sessions *), Bash(tokendoctor-audit *)
+allowed-tools: mcp__tokendoctor__metrics, mcp__tokendoctor__settings, mcp__tokendoctor__config_list, Bash(tokendoctor-sessions *), Bash(tokendoctor-audit *), WebFetch(domain:code.claude.com)
 argument-hint: [focus]
 ---
 
 Tune this Claude Code setup for token use. Focus on `$ARGUMENTS` if given.
+
+Before recommending a setting you are not sure of, read its page in Claude Code's current docs:
+every page is Markdown at `https://code.claude.com/docs/en/<page>.md` (index:
+`https://code.claude.com/docs/llms.txt`; settings in `settings-reference.md`, variables in
+`env-vars.md`, costs in `costs.md`, caching in `prompt-caching.md`). The release changes often, so
+prefer that to memory or a mirror.
 
 The tokendoctor tools wait behind ToolSearch: load `mcp__tokendoctor__metrics`,
 `mcp__tokendoctor__settings`, `mcp__tokendoctor__config_list`, `mcp__tokendoctor__config_set` and

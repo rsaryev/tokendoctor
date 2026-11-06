@@ -28,6 +28,16 @@
   (every plan-mode toggle is a model switch). `auto-compact-off` covers `DISABLE_COMPACT`;
   `compact-window-unset` stays quiet under `CLAUDE_CODE_DISABLE_1M_CONTEXT`; the main model falls back
   to `ANTHROPIC_DEFAULT_MODEL`.
+- **Today's docs, not a frozen list.** The audit reads Claude Code's current settings reference and
+  variable list from code.claude.com as Markdown (a day's cache, `--offline`), and flags keys the docs
+  do not have (`settings-key-undocumented`), Claude-Code-style variables they do not list
+  (`env-undocumented`) and keys newer than the installed release (`setting-needs-newer-version`). The
+  audit and optimize skills read a finding's page before explaining it. `npm run docs:check` checks
+  every name tokendoctor uses against the docs (27 keys and 29 variables today, all present).
+- **What really loaded.** `tokendoctor-selfcheck` reads a debug log (one `claude -p` on Haiku with no
+  saved session, or `--log <file>`): the tier tokendoctor loaded in, the guard, the mods on
+  compaction in order, skipped hooks, the effective window, a skill listing over its budget. The
+  audit reads a `claude --debug` log of the last day when there is one.
 - `/tokendoctor` changes `idle-compact-at` (`CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS`), `compact-at`
   (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`) and `max-effort` (`maxEffortLevel`); `window-env` takes `1m`.
 
