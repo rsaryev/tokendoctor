@@ -344,3 +344,51 @@ test('a raised bash output limit is reported, and the setting wins over the vari
   s.settings.user.bashOutputMaxChars = 20000
   assert.ok(!ids(s).includes('bash-output-raised'))
 })
+
+test('DISABLE_COMPACT counts as auto-compaction off', () => {
+  const f = only(clean({ env: { CLAUDE_CODE_SUBAGENT_MODEL: 'sonnet', DISABLE_COMPACT: '1' } }), 'auto-compact-off')
+  assert.match(f.detail, /DISABLE_COMPACT/)
+})
+
+test('CLAUDE_CODE_DISABLE_1M_CONTEXT already holds the window, so no window warning', () => {
+  const s = clean({ env: { CLAUDE_CODE_SUBAGENT_MODEL: 'sonnet', CLAUDE_CODE_DISABLE_1M_CONTEXT: '1' } })
+  delete s.settings.user.autoCompactWindow
+  assert.ok(!ids(s).includes('compact-window-unset'))
+})
+
+test('ANTHROPIC_DEFAULT_MODEL is the main model only when nothing else picks one', () => {
+  const s = clean({ env: { CLAUDE_CODE_SUBAGENT_MODEL: 'sonnet', ANTHROPIC_DEFAULT_MODEL: 'opusplan' } })
+  assert.ok(!ids(s).includes('opusplan-cache'))
+  delete s.settings.user.model
+  assert.ok(ids(s).includes('opusplan-cache'))
+})
+
+test('CLAUDE_AUTOCOMPACT_PCT_OVERRIDE: the point it sets, a warning below half, an error when not a percent', () => {
+  const env = (v) => clean({ env: { CLAUDE_CODE_SUBAGENT_MODEL: 'sonnet', CLAUDE_AUTOCOMPACT_PCT_OVERRIDE: v } })
+  const f = only(env('75'), 'compact-pct-override')
+  assert.equal(f.severity, 'info')
+  assert.match(f.detail, /about 225K of the 300K window/)
+  assert.equal(only(env('40'), 'compact-pct-override').severity, 'warn')
+  assert.equal(only(env('abc'), 'compact-pct-override').severity, 'error')
+})
+
+test('a skill naming another model is flagged unless it runs as a fork', () => {
+  const skills = (models) => clean({ skills: { total: 2, autoLoaded: 2, names: [], models } })
+  assert.match(only(skills([{ name: 'cheap', model: 'haiku', fork: false }]), 'skill-model-switch').detail, /cheap \(model: haiku\)/)
+  assert.equal(only(skills([{ name: 'cheap', model: 'haiku', fork: true }]), 'skill-model-switch'), undefined)
+  assert.equal(only(skills([{ name: 'same', model: 'claude-sonnet-5-5', fork: false }]), 'skill-model-switch'), undefined)
+})
+
+test('the slide on under a seated guard is a warning with the way out; not when it can run', () => {
+  const on = (guard) => {
+    const s = clean({ guard })
+    s.settings.user.pluginConfigs = { 'tokendoctor@tokendoctor': { options: { slide: true } } }
+    return s
+  }
+  const blocked = { seated: true, reasons: ['you sign in with a Team plan'], orgInstalled: false, filesHidden: false, slideRuns: false }
+  const f = only(on(blocked), 'slide-blocked-by-guard')
+  assert.equal(f.severity, 'warn')
+  assert.match(f.detail, /tokendoctor-org-install/)
+  assert.equal(only(on({ ...blocked, slideRuns: true }), 'slide-blocked-by-guard'), undefined)
+  assert.equal(only(clean({ guard: blocked }), 'slide-blocked-by-guard'), undefined)
+})

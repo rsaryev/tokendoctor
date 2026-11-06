@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased
+
+- **The slide under a Team or Enterprise login.** Where Claude Code seats its built-in guard
+  (`cc-plugin-sec-default`: any machine with managed settings, or a Team or Enterprise `/login`), the
+  guard sends compaction past the mods a person installs (`on('session.compact', … next.to(e,
+  'append'))` in anthropics/claude-code `mods/sec-default`), so the slide never ran and Claude Code
+  summarized with no word. No other mod event can rewrite rows already in the conversation. Now:
+  - the audit warns (`slide-blocked-by-guard`), `/tokendoctor` and `/tokendoctor slide` say why, and
+    a session that starts with the slide on shows a toast;
+  - `tokendoctor-org-install` installs tokendoctor as the machine's own mod, which runs after the
+    guard: a root-owned copy in the system folder, a marketplace that loads it in place and
+    `managed-settings.d/50-tokendoctor.json` with `appendPlugins` (an existing managed-settings.json
+    is not touched). Dry run by default, one `sudo` command, `--uninstall` undoes it. Where the
+    organization delivers server-managed settings or an MDM profile, files are ignored and it says to
+    ask an administrator. The machine copy reads the options `/tokendoctor` writes.
+- The slide also takes the compactions Claude Code starts on its own besides the threshold (idle
+  compaction before the hour's cache expires); `/compact` and a plugin's `$.session.compact` still
+  summarize.
+- `/tokendoctor:sessions` counts the files read before a compaction and read again within the next
+  10 requests, by kind: `rereads-after-compaction`. On the author's last 60 days: 1.31 files after a
+  summary (32), 0.97 after a slide (349); at least one re-read after 28% of summaries and 19% of slides.
+  Different sessions and work, not a controlled test.
+- New checks: `compact-pct-override` (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`: where it sets the point, a
+  warning below half, an error when not a percent), `skill-model-switch` (a skill whose frontmatter
+  names another model reads the conversation uncached; `context: fork` avoids it), `opusplan-cache`
+  (every plan-mode toggle is a model switch). `auto-compact-off` covers `DISABLE_COMPACT`;
+  `compact-window-unset` stays quiet under `CLAUDE_CODE_DISABLE_1M_CONTEXT`; the main model falls back
+  to `ANTHROPIC_DEFAULT_MODEL`.
+- `/tokendoctor` changes `idle-compact-at` (`CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS`), `compact-at`
+  (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`) and `max-effort` (`maxEffortLevel`); `window-env` takes `1m`.
+
 ## 0.5.1
 
 - Costs are dollars at each model's Claude API list price (`lib/prices.mjs`, from

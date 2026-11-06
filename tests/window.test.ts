@@ -147,6 +147,9 @@ test('the summary computed ahead of time is skipped, /compact still summarizes',
   expect((await $.session.compact({ trigger: 'precompute', messages })).skip).toContain('slides')
   await $.session.compact({ trigger: 'manual', messages })
   expect(summarized).toBe(1)
+  // A plugin's $.session.compact asks for a summary as /compact does.
+  await $.session.compact({ trigger: 'plugin', messages })
+  expect(summarized).toBe(2)
 })
 
 test('with nothing worth eliding it falls back to the summary', { options: { slide: true } }, async ($, on) => {

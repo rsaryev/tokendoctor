@@ -1,0 +1,114 @@
+#!/usr/bin/env node
+// Installs tokendoctor as this machine's own mod, so the slide runs where Claude Code's built-in guard
+// (cc-plugin-sec-default) sends compaction past the mods a person installs: a Team or Enterprise
+// /login, or any machine with managed settings. See lib/guard.mjs.
+//
+// Two halves, dry run by default:
+//   tokendoctor-org-install [--write]                 your settings: turn the marketplace copy off and
+//                                                     carry its options over to the machine copy
+//   sudo tokendoctor-org-install --system [--write]   the system folder: a root-owned copy of the plugin,
+//                                                     a marketplace naming it, and managed-settings.d/50-tokendoctor.json
+//   ... --uninstall                                   undoes the half it is run for
+//
+// The drop-in adds three keys (extraKnownMarketplaces, enabledPlugins, appendPlugins) and touches no
+// other managed setting. A machine whose organization delivers server-managed settings or an MDM
+// profile ignores files, so there the administrator has to add it (the command says so).
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { describePlan, planOps, valueAt, writePlan } from '../lib/apply.mjs'
+import { guardInputs, settingsPath } from '../lib/collect.mjs'
+import { blockedNote, dropInSettings, guardState, marketplaceManifest, orgPaths, USER_ID } from '../lib/guard.mjs'
+
+const args = process.argv.slice(2)
+const write = args.includes('--write')
+const uninstall = args.includes('--uninstall')
+const system = args.includes('--system')
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const paths = orgPaths()
+// What the plugin needs at run time; the site, the benchmark and the tests stay out.
+const PARTS = ['.claude-plugin/plugin.json', '.claude-plugin/icon.png', 'bin', 'hooks', 'lib', 'skills', 'templates', 'package.json', 'LICENSE', 'README.md']
+
+const state = guardState(guardInputs())
+const say = (s = '') => console.log(s)
+
+if (system) runSystem()
+else runUser()
+
+function runSystem() {
+  if (process.platform === 'win32') {
+    say('On Windows, copy the files by hand: see the comment at the top of this script.')
+    process.exit(2)
+  }
+  const isRoot = process.getuid?.() === 0
+  if (uninstall) {
+    say(`${write ? 'Removing' : 'Would remove'}:\n  ${paths.dropIn}\n  ${paths.marketplace}`)
+    if (!write) return say('\nDry run. Re-run with --write (as root) to apply.')
+    if (!isRoot) fail('Needs root: run it with sudo.')
+    rmSync(paths.dropIn, { force: true })
+    rmSync(paths.marketplace, { recursive: true, force: true })
+    return say('Done. Restart Claude Code.')
+  }
+  if (state.filesHidden) {
+    say('This machine takes its policy from server-managed settings or an MDM profile, which hide managed')
+    say('settings files: a drop-in here would do nothing. Ask an administrator to add tokendoctor as an')
+    say('organization mod: https://code.claude.com/docs/en/plugins/mods/admin.md#install-your-organizations-mods')
+    process.exit(1)
+  }
+  const dropIn = JSON.stringify(dropInSettings(), null, 2) + '\n'
+  say(`${write ? 'Installing' : 'Would install'}:`)
+  say(`  ${paths.plugin}   a root-owned copy of ${root}`)
+  say(`  ${join(paths.marketplace, '.claude-plugin', 'marketplace.json')}`)
+  say(`  ${paths.dropIn}:`)
+  say(dropIn.replace(/^/gm, '    '))
+  if (!write) return say('Dry run. Re-run with --write, as root (sudo), to apply.')
+  if (!isRoot) fail('Needs root: managed settings and what they load must be writable only by an administrator.')
+  rmSync(paths.plugin, { recursive: true, force: true })
+  for (const part of PARTS) {
+    const from = join(root, part)
+    if (existsSync(from)) cpSync(from, join(paths.plugin, part), { recursive: true })
+  }
+  mkdirSync(join(paths.marketplace, '.claude-plugin'), { recursive: true })
+  writeFileSync(join(paths.marketplace, '.claude-plugin', 'marketplace.json'), JSON.stringify(marketplaceManifest(), null, 2) + '\n')
+  mkdirSync(paths.dropInDir, { recursive: true })
+  writeFileSync(paths.dropIn, dropIn)
+  say('Done. Now run `tokendoctor-org-install --write` without sudo for your own settings, then restart Claude Code.')
+  say('After a tokendoctor update, run this again to refresh the copy.')
+}
+
+function runUser() {
+  if (process.getuid?.() === 0) fail('Run this half as yourself, not root: it edits your own settings.')
+  if (!uninstall) {
+    if (!state.seated) {
+      say('No guard is seated here (no managed settings, not a Team or Enterprise login): the slide already')
+      say('runs from the plugin as you installed it. Nothing to do.')
+      return
+    }
+    const note = blockedNote(state)
+    if (note) say(note + '\n')
+  }
+  // Two copies would each register the hooks, the tools and /tokendoctor: the marketplace one goes
+  // off. The options stay under its id, where /tokendoctor writes them and the machine copy reads them.
+  const user = JSON.parse(existsSync(settingsPath('user')) ? readFileSync(settingsPath('user'), 'utf8') : '{}')
+  const wasOn = valueAt(user, `enabledPlugins.${USER_ID}`)
+  const ops = uninstall
+    ? wasOn === false ? [{ op: 'set', key: `enabledPlugins.${USER_ID}`, value: true }] : []
+    : [{ op: 'set', key: `enabledPlugins.${USER_ID}`, value: false }]
+  const plan = planOps(settingsPath('user'), 'user', ops)
+  say(`${write ? 'Applying' : 'Would change'} (user): ${describePlan(plan)}`)
+  if (write) {
+    const r = writePlan(plan)
+    say(r.written ? `  written${r.backup ? `, backup: ${r.backup}` : ''}` : `  skipped: ${r.reason}`)
+  }
+  const me = join(root, 'bin', 'tokendoctor-org-install')
+  say('')
+  say(uninstall ? 'And the system half:' : 'The system half (needs your password once):')
+  say(`  sudo node "${me}" --system${uninstall ? ' --uninstall' : ''} --write`)
+  if (!write) say('\nDry run. Re-run with --write to apply your half.')
+  if (!uninstall && state.orgInstalled) say('\nThe system half is already in place.')
+}
+
+function fail(message) {
+  console.error(message)
+  process.exit(1)
+}

@@ -43,7 +43,7 @@ your own sessions at smaller windows before anything changes.
     </td>
     <td width="25%" valign="top">
       <strong>Fix</strong><br>
-      <code>/tokendoctor:optimize</code> runs 31 checks against the docs and applies the changes you pick, each shown as a diff first.
+      <code>/tokendoctor:optimize</code> runs 35 checks against the docs and applies the changes you pick, each shown as a diff first.
     </td>
     <td width="25%" valign="top">
       <strong>Slide</strong><br>
@@ -102,6 +102,7 @@ tokendoctor-set --list | <key> <value>|--unset [--scope user|project|local] [--w
 tokendoctor-apply <finding-id> [--scope user|project|local] [--project <dir>] [--write]
 tokendoctor-undo [--json] | <n> [--write]
 tokendoctor-replay [--days <n>] [--window 200k,400k] [--json]   # what a smaller window would have saved
+tokendoctor-org-install [--write] [--uninstall]                # the slide under a Team/Enterprise login (see below)
 ```
 
 </details>
@@ -121,7 +122,7 @@ prints nothing, so it adds no tokens. It appends each finished day's totals to
 </details>
 
 <details>
-<summary><strong>The 31 setting checks</strong></summary>
+<summary><strong>The 35 setting checks</strong></summary>
 
 Errors are settings that are wrong or ignored, warnings are likely to cost real money, and info is worth a look. Rules that depend on a Claude Code release are skipped on older versions.
 
@@ -157,6 +158,10 @@ Errors are settings that are wrong or ignored, warnings are likely to cost real 
 | `idle-compaction-off` | info | `idleCompaction: false`: a long conversation is not compacted before its one-hour cache expires. Fix unsets it. |
 | `bash-output-raised` | info | `bashOutputMaxChars` or `BASH_MAX_OUTPUT_LENGTH` above the 30,000 default. |
 | `code-intelligence-missing` | info | The project has files for a language with an official language-server plugin (`typescript-lsp`, `pyright-lsp`, `gopls-lsp`, …) and it is not enabled. |
+| `slide-blocked-by-guard` | warn | The slide is on, but Claude Code's built-in guard sends compaction past the mods you install (a Team or Enterprise login, or managed settings), so it summarizes instead. Says to run `tokendoctor-org-install`. |
+| `compact-pct-override` | info/warn/error | `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`: where it puts the compaction point; a warning below 50%, an error when it is not a percent. |
+| `skill-model-switch` | info | A skill whose frontmatter names another model: each use reads the conversation uncached on that model. `context: fork` avoids it. |
+| `opusplan-cache` | info | `opusplan` switches models, and so caches, on every plan-mode toggle. |
 | `no-statusline` | info | No status line. Fix installs `tokendoctor-statusline.sh` and points `statusLine` at it (needs `jq`). One quiet line: `Opus 5.5 · api main* · 120k/367k · cache 1h · 5h 51% · week 35% · $24`. Tokens are shown against the point where Claude Code compacts; `cache 1h` is how long the prompt cache stays warm; a limit adds `→ 100% in 48m` only when, at the recent pace (5h: the last hour, week: the last day), it runs out before it resets. The finding also mentions the `token-weather` mod from [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods/token-weather) as an alternative (needs Claude Code 2.1.287+, shared as-is). |
 
 `templates/statusline.sh` is the status line script the fix installs into your Claude config folder.
@@ -178,6 +183,7 @@ itself, with a backup.
 | `long-sessions` | info | Sessions of 500+ turns, with their share of cost. |
 | `idle-cache-rebuilds` | info | The prompt cache rebuilt after it expired during a break. |
 | `images-read-repeatedly` | info | The same image read three or more times. |
+| `rereads-after-compaction` | info | Files read before a summary and read again within the next 10 requests: what the summary lost. Shown against slides when there are some. |
 
 </details>
 
@@ -196,6 +202,15 @@ does. Every prompt, answer and decision stays word for word, and there is no sum
   are rare. Each one re-sends the context once, as a summary does; a pointer is never touched again.
 - `/compact` still summarizes, and so does a slide that cannot free enough. Set a smaller window with
   `autoCompactWindow` (for example 400000) and the slide works from it.
+- It takes idle compaction too (before the hour's cache expires); `/compact` and a plugin's
+  `$.session.compact` still summarize.
+- **Team and Enterprise logins, and machines with managed settings.** There Claude Code seats its
+  built-in guard, `cc-plugin-sec-default`, ahead of the mods you install, and it sends compaction past
+  them: the slide cannot run, and the audit and `/tokendoctor slide` say so. `tokendoctor-org-install`
+  installs tokendoctor as the machine's own mod, which runs after the guard: a root-owned copy in
+  the system folder and `managed-settings.d/50-tokendoctor.json` with `appendPlugins` (dry run first,
+  then one `sudo` command; `--uninstall` undoes it). Where your organization delivers its own managed
+  settings, files are ignored and only an administrator can add it.
 
 In one real session, at the same size: Claude Code's summary took 367K to 35K in **65.3 s**; the slide
 took 368K to 36K in **0.04 s**. Summaries in the author's real sessions take 79 s on average (109 of them, 22 September to 1 November).

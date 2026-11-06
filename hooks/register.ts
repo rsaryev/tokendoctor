@@ -8,6 +8,7 @@ import * as menu from '../lib/console.mjs'
 // ($.ui.ask rejects in -p) nothing changes. The tools wait behind ToolSearch, so they add nothing
 // to context until the optimize skill loads them.
 const PLUGIN = 'tokendoctor'
+const USER_ID = 'tokendoctor@tokendoctor'
 const tool = <N extends string>(name: N) => `mcp__${PLUGIN}__${name}` as const
 const READS: string[] = [tool('metrics'), tool('settings'), tool('config_list')]
 const WRITES: string[] = [tool('config_set'), tool('set_setting')]
@@ -15,8 +16,11 @@ const WRITES: string[] = [tool('config_set'), tool('set_setting')]
 const text = (value: unknown) => ({ result: typeof value === 'string' ? value : JSON.stringify(value, null, 1) })
 
 export const register: Register = (on, options) => {
-  const slideOn = options.slide === true
-  const slideTo = typeof options.slideTo === 'number' ? Math.min(90, Math.max(20, options.slideTo)) : 25
+  // The options are the ones /tokendoctor writes (pluginConfigs of tokendoctor@tokendoctor). The copy
+  // tokendoctor-org-install puts in the system folder has another id, so it reads them from there at
+  // session start rather than keep a second set that could disagree.
+  let slideOn = options.slide === true
+  let slideTo = clampSlideTo(options.slideTo)
   // How long the conversation was after the last slide. Back at the window within a few steps of it
   // means a slide cannot keep up (an output nearly as large as the window): the summary takes over,
   // before Claude Code stops the session for compacting over and over.
@@ -39,6 +43,12 @@ export const register: Register = (on, options) => {
 
   on('session.start', async ($, e, next) => {
     const result = await next(e)
+    const shared = await $.settings
+      .read()
+      .then(s => (s as { pluginConfigs?: Record<string, { options?: Record<string, unknown> }> }).pluginConfigs?.[USER_ID]?.options)
+      .catch(() => undefined)
+    if (shared && 'slide' in shared) slideOn = shared.slide === true
+    if (shared && 'slideTo' in shared) slideTo = clampSlideTo(shared.slideTo)
     await $.tool.register({
       name: 'metrics',
       description:
@@ -77,7 +87,14 @@ export const register: Register = (on, options) => {
       description: 'Show and change token settings by name (no model call)',
       argumentHint: '[window|slide|cache|effort|model|subagents|all|fix|undo] [value|reset]',
     })
-    void audit($).catch(() => {})
+    void audit($)
+      .then(found => {
+        // Where Claude Code's guard sends compaction past the mods a person installs, the slide would
+        // be on and never run: say so once, with the way out (lib/guard.mjs).
+        const blocked = slideOn && found.find(f => f.id === 'slide-blocked-by-guard')
+        if (blocked) $.ui.toast('tokendoctor: the slide cannot run under this login, Claude Code will summarize. /tokendoctor slide says why.', { timeoutMs: 12_000 })
+      })
+      .catch(() => {})
     return result
   })
 
@@ -126,7 +143,10 @@ export const register: Register = (on, options) => {
     if (e.trigger === 'precompute') return { skip: 'tokendoctor slides the window instead' }
     // A summary leaves a few messages: the next compaction counts from none.
     const summarize = () => ((afterSlide = -Infinity), next(e))
-    if (e.trigger !== 'auto') return summarize()
+    // What the person (`/compact`) or a plugin asks for is a summary. Every compaction Claude Code
+    // starts on its own slides: at the window, and idle compaction before the hour's cache expires,
+    // whatever trigger a build names it with.
+    if (e.trigger === 'manual' || e.trigger === 'plugin') return summarize()
     const messages = dedupe(e.messages)
     // Just slid and barely grown since: a summary this time, and the next compaction starts afresh.
     if (messages.length - afterSlide < 6) return summarize()
@@ -300,6 +320,10 @@ async function confirm($: EngineInterface, change: string) {
 async function bin($: EngineInterface, name: string, args: string[]) {
   const { exitCode, stdout, stderr } = await $.process.run(['node', `${$.plugin.root}/bin/${name}`, ...args], { timeoutMs: 120_000 })
   return exitCode === 0 ? stdout : `${name} failed (${exitCode}): ${stderr || stdout}`
+}
+
+function clampSlideTo(v: unknown) {
+  return typeof v === 'number' ? Math.min(90, Math.max(20, v)) : 25
 }
 
 function k(tokens: number) {

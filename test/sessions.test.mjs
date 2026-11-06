@@ -147,3 +147,27 @@ test('usage counts tools, Bash prints of files, sleeps and subagent run sizes', 
   assert.equal(usage.subagentRuns.requests.max, 4)
   assert.equal(usage.subagentRuns.over200KContext, 1)
 })
+
+test('files read before a compaction and read again right after are counted, by kind of compaction', () => {
+  const at = (minute) => new Date(Date.UTC(2026, 9, 1, 0, minute)).toISOString()
+  const read = (minute, path, id) => ({ type: 'assistant', timestamp: at(minute), message: { id, model: 'claude-opus-5-5', usage: u(1000, 10), content: [{ type: 'tool_use', id: `t-${id}`, name: 'Read', input: { file_path: path } }] } })
+  const boundary = (minute) => ({ type: 'system', subtype: 'compact_boundary', timestamp: at(minute), compactMetadata: { trigger: 'auto', preTokens: 300_000 } })
+  const summary = (minute) => ({ type: 'user', isCompactSummary: true, timestamp: at(minute), message: { content: 'summary' } })
+  const session = (withSummary) =>
+    analyzeSession([
+      read(0, '/p/a.ts', 'r1'),
+      read(1, '/p/b.ts', 'r2'),
+      boundary(2),
+      ...(withSummary ? [summary(2)] : []),
+      read(3, '/p/a.ts', 'r3'),
+      read(4, '/p/b.ts', 'r4'),
+      read(5, '/p/c.ts', 'r5'),
+    ])
+  const s = session(true)
+  assert.equal(s.compactions[0].summary, true)
+  assert.equal(s.compactions[0].rereads, 2, 'a.ts and b.ts again, c.ts is new')
+  assert.equal(session(false).compactions[0].summary, false)
+  const t = summarize([s, session(true), session(true)])
+  const f = t.findings.find((x) => x.id === 'rereads-after-compaction')
+  assert.match(f.title, /2\.0 files again/)
+})
