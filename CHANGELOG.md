@@ -15,6 +15,11 @@
     is not touched). Dry run by default, one `sudo` command, `--uninstall` undoes it. Where the
     organization delivers server-managed settings or an MDM profile, files are ignored and it says to
     ask an administrator. The machine copy reads the options `/tokendoctor` writes.
+  - Checked live on a Team login with the guard seated (Haiku 5.5, a 100K window, 40 files read):
+    the machine copy's hook ran on every compaction; 5 of 6 slid in 4 to 9 ms (66K → 34K and the
+    like) and one, with too little left to elide, fell back to a summary (12 s). The answer was right.
+    A first probe with 14 large files never slid: at a 100K window each output was too big a share,
+    and the slide handed every compaction to the summary, as it should.
 - The slide also takes the compactions Claude Code starts on its own besides the threshold (idle
   compaction before the hour's cache expires); `/compact` and a plugin's `$.session.compact` still
   summarize.

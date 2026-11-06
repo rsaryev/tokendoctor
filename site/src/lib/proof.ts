@@ -75,5 +75,5 @@ export const FIGURES = [
 export const SLIDE = [
   { value: '< 1 s', label: 'per compaction', detail: 'a summary takes 79 s' },
   { value: '−19%', label: 'cost', detail: 'same work, all tests pass' },
-  { value: '−33%', label: 'time', detail: 'nothing read again' },
+  { value: '−33%', label: 'time', detail: 'no summary to wait for' },
 ]

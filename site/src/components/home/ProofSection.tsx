@@ -8,6 +8,7 @@ const CAVEATS = [
   'Rarely past 400K tokens? The window won’t help.',
   'A summary just before you finish can cost more.',
   'Models, effort and the work itself move the number.',
+  'On a Team or Enterprise login, the slide needs one sudo install.',
 ]
 
 /**

@@ -3,7 +3,8 @@
 > The same Claude Code for up to 38% less. See what your Claude Code use overpays, fix it, undo it any time. Runs on your machine.
 > A Claude Code plugin: it replays your own sessions to show what they overpay, applies the fixes you
 > pick (`/tokendoctor undo` puts any back), and can slide the context window instead of summarizing
-> it. Everything runs locally; it reads usage figures and file paths, never message text.
+> it. Everything runs locally; it reads usage figures and file paths, never message text. The audit
+> fetches two public pages of Claude Code's docs once a day to check settings against the current release.
 
 ## Install
 
@@ -14,10 +15,12 @@
 
 - `/tokendoctor` shows the main settings and the audit's fixes; `/tokendoctor <name> <value>` sets one, `/tokendoctor fix <id>` applies a fix, `/tokendoctor undo` lists every change and puts one back.
 - `/tokendoctor:sessions [days]` measures spend from local transcripts: main thread against subagents, spend with a very full context, subagent types, cache rebuilds. `tokendoctor-sessions --by day|week` shows the trend.
-- `/tokendoctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only.
+- `/tokendoctor:audit` lists findings by severity, each with a link to the documentation page it rests on. Read-only. It checks settings keys and variables against Claude Code's current docs (fetched as Markdown from code.claude.com, cached a day) and reads a `claude --debug` log of the last day when there is one.
+- `/tokendoctor slide on`: where Claude Code would compact, old tool outputs are elided into pointers instead of a summary. On a Team or Enterprise login, or with managed settings, Claude Code's built-in guard (`cc-plugin-sec-default`) sends compaction past user-installed mods; `tokendoctor-org-install` installs tokendoctor as the machine's own mod, which runs after it (one `sudo` command, `--uninstall` undoes it).
+- `tokendoctor-selfcheck` shows what really loaded, from a debug log: the tier tokendoctor runs in, the guard, the mods on compaction in order, skipped hooks, the effective window (one small Haiku request, or `--log <file>` at no cost).
 - `/tokendoctor:optimize [focus]` proposes setting changes backed by the measurements and applies the ones the person picks, each through a dialog that shows the change.
 - `/tokendoctor:apply <finding-id>` shows a dry run, asks for confirmation, then writes. An existing file is copied to `<file>.tokendoctor-<timestamp>.bak` first.
-- From a shell: `tokendoctor-sessions`, `tokendoctor-audit`, `tokendoctor-set`, `tokendoctor-apply`.
+- From a shell: `tokendoctor-sessions`, `tokendoctor-audit`, `tokendoctor-set`, `tokendoctor-apply`, `tokendoctor-undo`, `tokendoctor-replay`, `tokendoctor-dashboard`, `tokendoctor-org-install`, `tokendoctor-selfcheck`.
 
 ## Links
 

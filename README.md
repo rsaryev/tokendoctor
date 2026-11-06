@@ -279,8 +279,12 @@ or worse: it saves time and money, not quality.
 <details>
 <summary><strong>Limits</strong></summary>
 
-- It reads user, project and local settings files, `~/.claude.json` (only the MCP server names, to
-  count them) and your skill and agent folders. It cannot see managed (organisation) settings.
+- It reads user, project and local settings files, `~/.claude.json` (the MCP server names, to count
+  them, and the plan type, to tell whether Claude Code's guard is seated), the managed settings files
+  in the system folder and the cached server-managed ones (only to find the guard and its own machine
+  copy), and your skill and agent folders. Managed settings it does not check against the rules.
+- The audit fetches two public pages of Claude Code's docs once a day (`--offline` to skip); nothing
+  else goes over the network, and nothing of yours is sent.
 - Whether a rule helps depends on your plan and workload. Findings explain the trade-off and link
   to the documentation; decide for yourself.
 - Deny rules in `permissions.deny` are best-effort for search tools and do not stop a read through
