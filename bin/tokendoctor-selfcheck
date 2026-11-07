@@ -14,6 +14,7 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { settingsPath } from '../lib/collect.mjs'
 import { debugFindings, parseDebugLog } from '../lib/debuglog.mjs'
+import { lines } from '../lib/transcript.mjs'
 
 const args = process.argv.slice(2)
 const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined)
@@ -23,7 +24,8 @@ let text
 let source
 if (value('--log')) {
   source = value('--log')
-  text = readFileSync(source, 'utf8')
+  // Its lines, not one string: a long session's log can pass the longest string Node makes.
+  text = lines(source)
 } else {
   const dir = mkdtempSync(join(tmpdir(), 'tokendoctor-selfcheck-'))
   const file = join(dir, 'debug.txt')

@@ -3,12 +3,13 @@
 // Usage: tokendoctor-audit [--project <dir>] [--json] [--offline]
 // Reads the current settings reference and environment variable list from code.claude.com (cached a
 // day in ~/.claude/tokendoctor/docs; --offline uses the cache only) to catch keys Claude Code ignores.
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { collect, configDir } from '../lib/collect.mjs'
 import { debugFindings, parseDebugLog } from '../lib/debuglog.mjs'
 import { docsIndex, loadDocs } from '../lib/docs.mjs'
 import { runRules } from '../lib/rules.mjs'
+import { lines, readOr } from '../lib/transcript.mjs'
 
 const args = process.argv.slice(2)
 const flag = (name) => args.includes(name)
@@ -25,7 +26,9 @@ const debug = recentDebugLog(join(configDir(), 'debug'))
 if (debug) {
   const slideOn = ['user', 'project', 'local'].some((sc) => snapshot.settings[sc].pluginConfigs?.['tokendoctor@tokendoctor']?.options?.slide === true)
   const seen = new Set(findings.map((f) => f.id))
-  for (const f of debugFindings(parseDebugLog(readFileSync(debug.path, 'utf8')), { slideOn, source: `the debug log of ${debug.at.slice(0, 16).replace('T', ' ')}` })) {
+  // A line at a time: a long session's debug log can be larger than one string can hold.
+  const log = readOr(debug.path, (p) => parseDebugLog(lines(p)))
+  for (const f of log ? debugFindings(log, { slideOn, source: `the debug log of ${debug.at.slice(0, 16).replace('T', ' ')}` }) : []) {
     if (!seen.has(f.id)) findings.push(f)
   }
   const order = { error: 0, warn: 1, info: 2 }

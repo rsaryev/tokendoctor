@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 // Records finished days into <config>/tokendoctor/history.jsonl. Run by the plugin's async
-// SessionStart hook; prints nothing, so nothing reaches the conversation.
+// SessionStart hook; prints nothing to stdout, so nothing reaches the conversation. A failure goes to
+// stderr, which Claude Code shows in verbose mode (Ctrl+O) and the debug log, never to Claude.
 import { configDir } from '../lib/collect.mjs'
 import { recordHistory } from '../lib/history.mjs'
 
 try {
   recordHistory(configDir())
-} catch {}
+} catch (e) {
+  process.stderr.write(`tokendoctor-record: ${e.message}\n`)
+}

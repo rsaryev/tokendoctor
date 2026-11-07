@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- **Transcripts of any size.** `sessions`, `replay`, `dashboard` and the history hook read each
+  transcript whole as one string, and a long session's passes the longest string Node makes
+  (`0x1fffffe8` characters, about 512 MiB): a 782 MB transcript stopped every report with `Cannot create
+  a string longer than 0x1fffffe8 characters`, and the SessionStart hook stopped recording history
+  without a word. Now a transcript is read a line at a time and each row keeps only what is counted
+  (`lib/transcript.mjs`). A line over 64 MiB is skipped: only a tool output or an attachment gets that
+  long, never a response with usage. A file that cannot be read is left out with a line on stderr, not
+  the whole report. The audit and `tokendoctor-selfcheck --log` read a debug log the same way, and the
+  hook says why it failed on stderr (seen in verbose mode, never by Claude). On the author's 371 sessions
+  (5.5 GB) every report is byte for byte the same as before, in half the time and 0.55 GB of memory
+  instead of 2.7 to 3.2 GB; an 800 MB transcript reads in under a second.
 - **The slide under a Team or Enterprise login.** Where Claude Code seats its built-in guard
   (`cc-plugin-sec-default`: any machine with managed settings, or a Team or Enterprise `/login`), the
   guard sends compaction past the mods a person installs (`on('session.compact', … next.to(e,
