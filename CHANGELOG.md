@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.0
 
 - **Transcripts of any size.** `sessions`, `replay`, `dashboard` and the history hook read each
   transcript whole as one string, and a long session's passes the longest string Node makes
